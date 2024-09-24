@@ -1,3 +1,22 @@
 [
-    {}
+    {
+        "Id": "b3d9a4a4-5b74-49fd-9846-7e449cece4f3",
+        "Title": "Meeting",
+        "Description": "Meeting in office",
+        "Date": "2024-09-25",
+        "Start_time": "09:00",
+        "End_time": "11:00",
+        "Location": "Rotterdam",
+        "Admin_approval": "true"
+    },
+    {
+        "Id": "b3d5t7a4-5b74-49fd-9846-7e449cece4f3",
+        "Title": "Meeting",
+        "Description": "Meeting in office",
+        "Date": "2024-09-25",
+        "Start_time": "09:00",
+        "End_time": "11:00",
+        "Location": "Rotterdam",
+        "Admin_approval": "true"
+    }
 ]

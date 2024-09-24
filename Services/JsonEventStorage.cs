@@ -1,14 +1,18 @@
+using System.Text.Json;
+
 namespace Services
 {
     public class JsonEventStorage : IEventStorage
     {
         public async Task<List<Event>> ReadEvents()
         {
-            var path = $"events.json";
+            string path = $"events.json";
+            List<Event> events = new List<Event>();
             if (System.IO.File.Exists(path))
             {
-                var events = JsonSerializer.Deserialize<Event>(await System.IO.File.ReadAllTextAsync(path));
+                events = JsonSerializer.Deserialize<List<Event>>(await System.IO.File.ReadAllTextAsync(path));
             }
             return events;
         }
     }
+}

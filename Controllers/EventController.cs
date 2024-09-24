@@ -3,7 +3,7 @@ using Services;
 
 namespace Controllers
 {
-    [Route("/event")]
+    [Route("events")]
     public class EventController : Controller
     {
         private readonly IEventStorage EventStorage;
@@ -15,7 +15,7 @@ namespace Controllers
         [HttpGet()]
         public async Task<IActionResult> GetEvents()
         {
-            await EventStorage.ReadEvents(address);
+            await EventStorage.ReadEvents();
             return Ok();
         }
     }
