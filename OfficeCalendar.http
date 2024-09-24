@@ -1,0 +1,6 @@
+@OfficeCalendar_HostAddress = http://localhost:5241
+
+GET {{OfficeCalendar_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
