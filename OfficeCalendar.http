@@ -1,6 +1,6 @@
-@OfficeCalendar_HostAddress = http://localhost:5241
+@OfficeCalendar_HostAddress = http://localhost:5000
 
-GET {{OfficeCalendar_HostAddress}}/weatherforecast/
+GET {{OfficeCalendar_HostAddress}}/events/
 Accept: application/json
 
 ###

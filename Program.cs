@@ -1,5 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
-
+using Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -9,7 +8,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IEventStorage, JsonEventStorage>();
+
 var app = builder.Build();
+app.Urls.Add("http://localhost:5000");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

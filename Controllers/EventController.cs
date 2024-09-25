@@ -6,17 +6,17 @@ namespace Controllers
     [Route("events")]
     public class EventController : Controller
     {
-        private readonly IEventStorage EventStorage;
+        private readonly IEventStorage JsonEventStorage;
         public EventController(IEventStorage eventStorage)
         {
-            EventStorage = eventStorage;
+            JsonEventStorage = eventStorage;
         }
 
         [HttpGet()]
         public async Task<IActionResult> GetEvents()
         {
-            await EventStorage.ReadEvents();
-            return Ok();
+            var events = await JsonEventStorage.ReadEvents();
+            return Ok(events);
         }
     }
 }
