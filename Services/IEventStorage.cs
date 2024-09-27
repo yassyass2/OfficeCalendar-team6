@@ -22,7 +22,7 @@ namespace Services
     {
         public async Task<List<Event>> ReadEvents()
         {
-            string path = $"events.json";
+            string path = $"Data/events.json";
             List<Event> events = new List<Event>();
             if (File.Exists(path))
             {
