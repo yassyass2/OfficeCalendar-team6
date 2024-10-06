@@ -46,8 +46,8 @@ namespace Services
                 // maakt sessie met admin username en logged in
                 var session = _httpContextAccessor.HttpContext.Session;
                 session.SetString("IsLoggedIn", "true");
-                session.SetString("AdminUsername", admin.Username);
-                session.SetString("IsAdmin", "true");
+                session.SetString("Username", admin.Username);
+                session.SetString("Role", "admin");
                 return true;
             }
             return false;
@@ -56,12 +56,10 @@ namespace Services
         public bool ActiveSession(out string adminUsername)
         {
             var session = _httpContextAccessor.HttpContext.Session;
-            string LoggedIn = session.GetString("IsLoggedIn");
-
-            // kijkt of de sessie logged in is
-            if (LoggedIn != null && LoggedIn == "true")
+            string role = session.GetString("Role");
+            if (role == "admin")
             {
-                adminUsername = session.GetString("AdminUsername");
+                adminUsername = session.GetString("Username");
                 return true;
             }
             adminUsername = "";
