@@ -47,6 +47,7 @@ namespace Services
                 var session = _httpContextAccessor.HttpContext.Session;
                 session.SetString("IsLoggedIn", "true");
                 session.SetString("AdminUsername", admin.Username);
+                session.SetString("IsAdmin", "true");
                 return true;
             }
             return false;

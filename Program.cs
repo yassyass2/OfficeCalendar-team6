@@ -13,6 +13,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true; // sessie cookie altijd gestuurd
 });
 
+
 // services van Swagger UI toevoegen (optioneel)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
