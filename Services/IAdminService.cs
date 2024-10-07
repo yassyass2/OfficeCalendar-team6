@@ -2,22 +2,6 @@ using System.Text.Json;
 
 namespace Services
 {
-    public class Admin
-    {
-        public Guid Id { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
-
-        public Admin(string username, string password, string email = "")
-        {
-            Id = Guid.NewGuid();
-            Username = username;
-            Password = password;
-            Email = email;
-        }
-    }
-
     public interface IAdminService
     {
         Task<bool> CheckAdmin(Admin admin);
@@ -46,8 +30,8 @@ namespace Services
                 // maakt sessie met admin username en logged in
                 var session = _httpContextAccessor.HttpContext.Session;
                 session.SetString("IsLoggedIn", "true");
-                session.SetString("AdminUsername", admin.Username);
-                session.SetString("IsAdmin", "true");
+                session.SetString("Username", admin.Username);
+                session.SetString("Role", "admin");
                 return true;
             }
             return false;
@@ -56,12 +40,10 @@ namespace Services
         public bool ActiveSession(out string adminUsername)
         {
             var session = _httpContextAccessor.HttpContext.Session;
-            string LoggedIn = session.GetString("IsLoggedIn");
-
-            // kijkt of de sessie logged in is
-            if (LoggedIn != null && LoggedIn == "true")
+            string role = session.GetString("Role");
+            if (role == "admin")
             {
-                adminUsername = session.GetString("AdminUsername");
+                adminUsername = session.GetString("Username");
                 return true;
             }
             adminUsername = "";

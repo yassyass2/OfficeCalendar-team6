@@ -21,6 +21,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IEventStorage, JsonEventStorage>();
 builder.Services.AddScoped<IAdminService, JsonAdminService>();
+builder.Services.AddScoped<IUserService, JsonUserService>();
+
 // builder.Services.AddDbContext<naam van je class>(options => 
 //options.UsePostGresSql(builder.Configuration.GetConnectionString("DefaultConnection")))
 //^^^ toevoegen voor database gebruiken ^^^
