@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Services
 {
@@ -60,8 +61,8 @@ namespace Services
 
     public class DbEventStorage : IEventStorage
     {
-        private readonly AppDbContext _context;
-        public DbEventStorage DbEventStorage(AppDbContext context)
+        private readonly MyContext _context;
+        public DbEventStorage(MyContext context)
         {
             _context = context;
         }
@@ -80,12 +81,15 @@ namespace Services
         {
             try
             {
-                if (_context.Events.FirstOrDefault(e => e.Id == Id) != null)
+                var eventToRemove = await _context.Events.FirstOrDefaultAsync(e => e.Id == Id);
+
+                if (eventToRemove != null)
                 {
-                    _context.Events.RemoveAll(e => e.Id == Id)
+                    _context.Events.Remove(eventToRemove);
                     await _context.SaveChangesAsync();
                     return true;
                 }
+                return false;
             }
             catch
             {
@@ -93,15 +97,12 @@ namespace Services
             }
         }
 
-        public async Task<bool> Put(Guid Id, Event e)
+        public async Task<bool> Put(Guid Id, Event ev)
         {
             try
             {
-                if (_context.Events.FirstOrDefault(e => e.Id == Id) != null)
-                {
-                    _context.Events.FirstOrDefault(e => e.Id == Id) = e;
-                    await _context.SaveChangesAsync();
-                }
+                _context.Events.Update(ev);
+                await _context.SaveChangesAsync();
                 return true;
             }
             catch

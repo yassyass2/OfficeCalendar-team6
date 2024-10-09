@@ -1,4 +1,5 @@
 using Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -23,7 +24,7 @@ builder.Services.AddScoped<IEventStorage, JsonEventStorage>();
 builder.Services.AddScoped<IAdminService, JsonAdminService>();
 builder.Services.AddScoped<IUserService, JsonUserService>();
 
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContext<MyContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
