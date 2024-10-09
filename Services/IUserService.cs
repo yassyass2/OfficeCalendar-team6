@@ -55,4 +55,50 @@ namespace Services
             return false;
         }
     }
+
+    public class DbUserService : IUserService
+    {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly MyContext _context;
+
+        public DbUserService(IHttpContextAccessor httpContextAccessor, MyContext context)
+        {
+            _httpContextAccessor = httpContextAccessor;
+            _context = context;
+        }
+
+        public async Task<bool> CheckUser(User user)
+        {
+            try
+            {
+                if (_context.Users.FirstOrDefault(x => x.Email == user.Email && x.Password == user.Password) != null)
+                {
+                    var session = _httpContextAccessor.HttpContext.Session;
+                    session.SetString("IsLoggedIn", "true");
+                    session.SetString("Username", user.Email);
+                    session.SetString("Role", "user");
+                    return true;
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool ActiveSession(out string username)
+        {
+            var session = _httpContextAccessor.HttpContext.Session;
+            string role = session.GetString("Role");
+            if (role == "user")
+            {
+                username = session.GetString("Username");
+                return true;
+            }
+
+            username = "";
+            return false;
+        }
+    }
 }
