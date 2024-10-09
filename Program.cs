@@ -1,4 +1,5 @@
 using Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -18,14 +19,14 @@ builder.Services.AddSession(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// dependency injection voor services
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<IEventStorage, JsonEventStorage>();
-builder.Services.AddScoped<IAdminService, JsonAdminService>();
-builder.Services.AddScoped<IUserService, JsonUserService>();
+builder.Services.AddScoped<IEventStorage, DbEventStorage>();
+builder.Services.AddScoped<IAdminService, DbAdminService>();
+builder.Services.AddScoped<IUserService, DbUserService>();
 
-// builder.Services.AddDbContext<naam van je class>(options => 
-//options.UsePostGresSql(builder.Configuration.GetConnectionString("DefaultConnection")))
-//^^^ toevoegen voor database gebruiken ^^^
+builder.Services.AddDbContext<MyContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 app.Urls.Add("http://localhost:5000");
