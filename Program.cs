@@ -23,9 +23,9 @@ builder.Services.AddScoped<IEventStorage, JsonEventStorage>();
 builder.Services.AddScoped<IAdminService, JsonAdminService>();
 builder.Services.AddScoped<IUserService, JsonUserService>();
 
-// builder.Services.AddDbContext<naam van je class>(options => 
-//options.UsePostGresSql(builder.Configuration.GetConnectionString("DefaultConnection")))
-//^^^ toevoegen voor database gebruiken ^^^
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
 
 var app = builder.Build();
 app.Urls.Add("http://localhost:5000");

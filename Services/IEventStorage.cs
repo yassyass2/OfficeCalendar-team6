@@ -57,4 +57,57 @@ namespace Services
             return false;
         }
     }
+
+    public class DbEventStorage : IEventStorage
+    {
+        private readonly AppDbContext _context;
+        public DbEventStorage DbEventStorage(AppDbContext context)
+        {
+            _context = context;
+        }
+        public async Task<List<Event>> ReadEvents()
+        {
+            return await _context.Events.ToListAsync();
+        }
+
+        public async Task CreateEvent(Event e)
+        {
+            _context.Events.Add(e);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> DeleteEvent(Guid Id)
+        {
+            try
+            {
+                if (_context.Events.FirstOrDefault(e => e.Id == Id) != null)
+                {
+                    _context.Events.RemoveAll(e => e.Id == Id)
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> Put(Guid Id, Event e)
+        {
+            try
+            {
+                if (_context.Events.FirstOrDefault(e => e.Id == Id) != null)
+                {
+                    _context.Events.FirstOrDefault(e => e.Id == Id) = e;
+                    await _context.SaveChangesAsync();
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+    }
 }
