@@ -1,8 +1,32 @@
 using Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
+
+//Configuring the JWT authenticationn
+var key = Encoding.ASCII.GetBytes("12345"); // we need to change this later to a better key, can be generated online
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false, // Set to true if you want to validate the issuer
+        ValidateAudience = false, // Set to true if you want to validate the audience
+        ValidateLifetime = true, // Ensure token is not expired
+        ClockSkew = TimeSpan.Zero // Eliminate delay of token expiration
+    };
+});
 
 
 builder.Services.AddDistributedMemoryCache(); // sessie data in memory, niet persistent

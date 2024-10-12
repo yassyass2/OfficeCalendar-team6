@@ -5,7 +5,6 @@ namespace Services
     public interface IAdminService
     {
         Task<bool> CheckAdmin(Admin admin);
-        bool ActiveSession(out string adminUsername);
 
     }
 
@@ -16,6 +15,7 @@ namespace Services
         {
             _httpContextAccessor = httpContextAccessor;
         }
+
         public async Task<bool> CheckAdmin(Admin admin)
         {
             string path = $"Data/admins.json";
@@ -37,18 +37,7 @@ namespace Services
             return false;
         }
 
-        public bool ActiveSession(out string adminUsername)
-        {
-            var session = _httpContextAccessor.HttpContext.Session;
-            string role = session.GetString("Role");
-            if (role == "admin")
-            {
-                adminUsername = session.GetString("Username");
-                return true;
-            }
-            adminUsername = "";
-            return false;
-        }
+        
     }
 
     public class DbAdminService : IAdminService
