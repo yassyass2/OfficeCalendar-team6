@@ -4,66 +4,33 @@ namespace Services
 {
     public interface IUserService
     {
-        Task<bool> CheckUser(User user);
-        bool ActiveSession(out string username);
+        Task<bool> CheckUser(User user); // Verifies user credentials
     }
 
     public class JsonUserService : IUserService
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public JsonUserService(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
-
         public async Task<bool> CheckUser(User user)
         {
             string path = $"Data/users.json";
             List<User> users = new List<User>();
 
+            // Load users from the JSON file
             if (File.Exists(path))
             {
-                users = JsonSerializer.Deserialize<List<User>>(await System.IO.File.ReadAllTextAsync(path));
+                users = JsonSerializer.Deserialize<List<User>>(await File.ReadAllTextAsync(path));
             }
 
             // Check if the user exists in the file
-            if (users.FirstOrDefault(_ => _.Email == user.Email && _.Password == user.Password) != null)
-            {
-                // Create session with user details
-                var session = _httpContextAccessor.HttpContext.Session;
-                session.SetString("IsLoggedIn", "true");
-                session.SetString("Username", user.Email);
-                session.SetString("Role", "user");    // User is not an admin
-                return true;
-            }
-
-            return false;
-        }
-
-        public bool ActiveSession(out string username)
-        {
-            var session = _httpContextAccessor.HttpContext.Session;
-            string role = session.GetString("Role");
-            if (role == "user")
-            {
-                username = session.GetString("Username");
-                return true;
-            }
-
-            username = "";
-            return false;
+            return users.FirstOrDefault(_ => _.Email == user.Email && _.Password == user.Password) != null;
         }
     }
 
     public class DbUserService : IUserService
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly MyContext _context;
 
-        public DbUserService(IHttpContextAccessor httpContextAccessor, MyContext context)
+        public DbUserService(MyContext context)
         {
-            _httpContextAccessor = httpContextAccessor;
             _context = context;
         }
 
@@ -71,34 +38,20 @@ namespace Services
         {
             try
             {
-                if (_context.Users.FirstOrDefault(x => x.Email == user.Email && x.Password == user.Password) != null)
+                // Check if the user credentials exist in the database
+                var dbUser = _context.Users.FirstOrDefault(x => x.Email == user.Email && x.Password == user.Password);
+                if (dbUser != null)
                 {
-                    var session = _httpContextAccessor.HttpContext.Session;
-                    session.SetString("IsLoggedIn", "true");
-                    session.SetString("Username", user.Email);
-                    session.SetString("Role", "user");
-                    return true;
+                    return true; // Return true if the credentials are valid
                 }
-                return false;
+                return false; // Return false if the credentials are invalid
             }
-            catch
+            catch (Exception ex)
             {
-                return false;
+                // Log the error (if logging is set up)
+                Console.WriteLine("Error checking user credentials: " + ex.Message);
+                return false; // Return false if any exception occurs
             }
-        }
-
-        public bool ActiveSession(out string username)
-        {
-            var session = _httpContextAccessor.HttpContext.Session;
-            string role = session.GetString("Role");
-            if (role == "user")
-            {
-                username = session.GetString("Username");
-                return true;
-            }
-
-            username = "";
-            return false;
         }
     }
 }

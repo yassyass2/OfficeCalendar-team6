@@ -1,63 +1,49 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 
 namespace Controllers
 {
     [Route("events")]
-    public class EventController : Controller
+    [ApiController]
+    public class EventController : ControllerBase
     {
-        private readonly IEventStorage EventStorage;
+        private readonly IEventStorage _eventStorage;
 
         public EventController(IEventStorage eventStorage)
         {
-            EventStorage = eventStorage;
+            _eventStorage = eventStorage;
         }
 
         // Users can access this
         [HttpGet]
+        [Authorize] // Allow any authenticated user (both admins and regular users)
         public async Task<IActionResult> GetEvents()
         {
-            return Ok(await EventStorage.ReadEvents());
+            return Ok(await _eventStorage.ReadEvents());
         }
 
-        // Only Admins can create events
+        // Only Admins can create/delete/update events
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateEvent([FromBody] Event e)
         {
-            // Check if the user is an admin from the session
-            if (HttpContext.Session.GetString("Role") != "admin")
-            {
-                return Unauthorized("Only admins can create events.");
-            }
-
-            await EventStorage.CreateEvent(e);
+            await _eventStorage.CreateEvent(e);
             return Ok("Event has been created");
         }
 
-        // Only Admins can delete events
         [HttpDelete("{Event_Id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteEvent([FromRoute] Guid Event_Id)
         {
-            // Check if the user is an admin from the session
-            if (HttpContext.Session.GetString("Role") != "admin")
-            {
-                return Unauthorized("Only admins can delete events.");
-            }
-
-            return await EventStorage.DeleteEvent(Event_Id) ? Ok($"Event with id {Event_Id} deleted") : NotFound("Event with that Id doesn't exist.");
+            return await _eventStorage.DeleteEvent(Event_Id) ? Ok($"Event with id {Event_Id} deleted") : NotFound("Event with that Id doesn't exist.");
         }
 
-        // Only Admins can update events
         [HttpPut("{Event_Id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateEvent([FromRoute] Guid Event_Id, [FromBody] Event e)
         {
-            // Check if the user is an admin from the session
-            if (HttpContext.Session.GetString("Role") != "admin")
-            {
-                return Unauthorized("Only admins can update events.");
-            }
-
-            return await EventStorage.Put(Event_Id, e) ? Ok($"Event with id {Event_Id} updated") : NotFound("Event with that Id doesn't exist.");
+            return await _eventStorage.Put(Event_Id, e) ? Ok($"Event with id {Event_Id} updated") : NotFound("Event with that Id doesn't exist.");
         }
     }
 }
