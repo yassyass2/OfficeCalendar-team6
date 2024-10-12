@@ -19,7 +19,7 @@ namespace Controllers
             _userService = userService;
         }
 
-        // POST: Unified login for both Admin and User with JWT token generation
+        // POST: login for both Admin and User with JWT
         [HttpPost()]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
@@ -30,18 +30,17 @@ namespace Controllers
 
             // JWT token creation logic
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("12345"); // Use the same secret key as in Program.cs
+            var key = Encoding.ASCII.GetBytes("H7zV4zJ5uQxB8eX2pT9gR1bY8fF5wQ3x"); // Use the same secret key as in Program.cs
 
             // Check if the user is an admin
             if (await _adminService.CheckAdmin(new Admin(model.Username, model.Password)))
             {
-                // Create claims for the admin
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new[]
                     {
                         new Claim(ClaimTypes.Name, model.Username),
-                        new Claim(ClaimTypes.Role, "admin")
+                        new Claim(ClaimTypes.Role, "Admin")
                     }),
                     Expires = DateTime.UtcNow.AddHours(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -56,13 +55,12 @@ namespace Controllers
             // Check if the user is a regular user
             if (await _userService.CheckUser(new User(model.Username, model.Password)))
             {
-                // Create claims for the user
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new[]
                     {
                         new Claim(ClaimTypes.Name, model.Username),
-                        new Claim(ClaimTypes.Role, "user")
+                        new Claim(ClaimTypes.Role, "User")
                     }),
                     Expires = DateTime.UtcNow.AddHours(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -74,7 +72,6 @@ namespace Controllers
                 return Ok(new { Token = tokenString, Message = $"Successfully logged in as User {model.Username}" });
             }
 
-            // If neither, return unauthorized
             return Unauthorized("Invalid credentials.");
         }
 
@@ -85,11 +82,11 @@ namespace Controllers
             var role = User.FindFirst(ClaimTypes.Role)?.Value;
             var username = User.FindFirst(ClaimTypes.Name)?.Value;
 
-            if (role == "admin")
+            if (role == "Admin")
             {
                 return Ok(new { IsLoggedIn = true, Role = "Admin", Username = username });
             }
-            else if (role == "user")
+            else if (role == "User")
             {
                 return Ok(new { IsLoggedIn = true, Role = "User", Username = username });
             }
@@ -97,15 +94,10 @@ namespace Controllers
             return Ok(new { IsLoggedIn = false });
         }
 
-        // POST: ni echt nodig van jwt gebruikt geen session 
-        [HttpPost("logout")]
-        public IActionResult Logout()
-        {
-            return Ok("User has been logged out (JWT does not use sessions).");
-        }
+        
     }
 
-    // LoginModel to handle login data
+    // LoginModel to handle login data/ moet even naar eigen model file als alles goed werkt 
     public class LoginModel
     {
         public string Username { get; set; }

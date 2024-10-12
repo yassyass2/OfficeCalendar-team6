@@ -4,82 +4,52 @@ namespace Services
 {
     public interface IAdminService
     {
-        Task<bool> CheckAdmin(Admin admin);
-
+        Task<bool> CheckAdmin(Admin admin); // Verifies admin credentials
     }
 
     public class JsonAdminService : IAdminService
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public JsonAdminService(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
-
         public async Task<bool> CheckAdmin(Admin admin)
         {
             string path = $"Data/admins.json";
             List<Admin> admins = new List<Admin>();
+
+            // Load admins from the JSON file
             if (File.Exists(path))
             {
-                admins = JsonSerializer.Deserialize<List<Admin>>(await System.IO.File.ReadAllTextAsync(path));
+                admins = JsonSerializer.Deserialize<List<Admin>>(await File.ReadAllTextAsync(path));
             }
 
-            if (admins.FirstOrDefault(_ => _.Username == admin.Username && _.Password == admin.Password) != null)
-            {
-                // maakt sessie met admin username en logged in
-                var session = _httpContextAccessor.HttpContext.Session;
-                session.SetString("IsLoggedIn", "true");
-                session.SetString("Username", admin.Username);
-                session.SetString("Role", "admin");
-                return true;
-            }
-            return false;
+
+            // Check if the provided credentials match any admin in the list
+            return admins.FirstOrDefault(_ => _.Username == admin.Username && _.Password == admin.Password) != null;
         }
-
-        
     }
 
     public class DbAdminService : IAdminService
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly MyContext _context;
-        public DbAdminService(IHttpContextAccessor httpContextAccessor, MyContext context)
+
+        public DbAdminService(MyContext context)
         {
-            _httpContextAccessor = httpContextAccessor;
             _context = context;
         }
+
         public async Task<bool> CheckAdmin(Admin admin)
         {
             try
             {
+                // Check if the admin credentials exist in the database
                 if (_context.Admins.FirstOrDefault(x => x.Username == admin.Username && x.Password == admin.Password) != null)
                 {
-                    var session = _httpContextAccessor.HttpContext.Session;
-                    session.SetString("IsLoggedIn", "true");
-                    session.SetString("Username", admin.Username);
-                    session.SetString("Role", "admin");
-                    return true;
+                    return true; // Return true if the credentials are valid
                 }
-                return false;
+                return false; // Return false if the credentials are invalid
             }
             catch
             {
-                return false;
+                return false; // Return false if any exception occurs
             }
-        }
-
-        public bool ActiveSession(out string adminUsername)
-        {
-            var session = _httpContextAccessor.HttpContext.Session;
-            string role = session.GetString("Role");
-            if (role == "admin")
-            {
-                adminUsername = session.GetString("Username");
-                return true;
-            }
-            adminUsername = "";
-            return false;
         }
     }
 }

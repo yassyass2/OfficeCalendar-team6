@@ -18,5 +18,16 @@
         "End_time": "11:00",
         "Location": "Rotterdam",
         "Admin_approval": true
+    },
+    {
+        "Id": "1b79cb36-86ce-462e-81e1-811d9c047f5c",
+        "Title": "Meeting",
+        "Description": "Meeting in office",
+        "Date": "2024-09-25",
+        "Start_time": "09:00",
+        "End_time": "11:00",
+        "Location": "Rotterdam",
+        "Admin_approval": true
     }
+
 ]
