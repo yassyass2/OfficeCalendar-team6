@@ -6,8 +6,8 @@ namespace Services
 {
     public interface IAttendanceService
     {
-        Task<bool> ModifyAttendance(Guid userId, OfficeAttendanceRequest request);
-        Task<OfficeAttendance> GetAttendance(Guid userId, DateTime date);
+        Task<bool> CreateAttendance(EventAttendance request);
+        Task<IEnumerable<Guid>> GetAttending(Guid event_Id);
     }
 
     public class AttendanceService : IAttendanceService
@@ -19,35 +19,37 @@ namespace Services
             _context = context;
         }
 
-        public async Task<bool> ModifyAttendance(Guid userId, OfficeAttendanceRequest request)
+        public async Task<bool> CreateAttendance([FromBody] EventAttendance request)
         {
-            // Check if attendance for the specified date already exists
-            var existingAttendance = await _context.OfficeAttendances
-                .FirstOrDefaultAsync(a => a.UserId == userId && a.Date.Date == request.Date.Date);
-
-            if (existingAttendance != null)
+            // Attendances moet nog in MyContext
+            var eventToAttend = _context.Events.FirstOrDefault(e => e.Id == request.EventId);
+            if (eventToAttend == null)
             {
-                // If it exists, you can choose to either update or return false
-                return false; // Indicating that the date is already occupied
+                //event niet gevonden
+                return false;
             }
 
-            // Create a new attendance record
-            var newAttendance = new OfficeAttendance
-            {
-                UserId = userId,
-                Date = request.Date,
-                IsPresent = request.IsPresent
-            };
+            // Check event availability (based on date and start time)
+            DateTime eventDate = DateTime.Parse(eventToAttend.Date);
+            TimeSpan eventStartTime = TimeSpan.Parse(eventToAttend.Start_time);
+            DateTime start = eventDate + eventStartTime;
 
-            _context.OfficeAttendances.Add(newAttendance);
+            if (start < DateTime.Now)
+            {
+                // event is al begonnen
+                return false;
+            }
+
+            // Add attendance
+            await Task.Run(() => _context.Attendances.Add(request));
             await _context.SaveChangesAsync();
             return true; // Attendance modification succeeded
         }
 
-        public async Task<OfficeAttendance> GetAttendance(Guid userId, DateTime date)
+        public async Task<IEnumerable<Guid>> GetAttending(Guid event_Id)
         {
-            return await _context.OfficeAttendances
-                .FirstOrDefaultAsync(a => a.UserId == userId && a.Date.Date == date.Date);
+            return await _context.Attendances
+                .Where(a => a.Event_Id == event_Id).Select(_ => _.User_Id);
         }
     }
 }
