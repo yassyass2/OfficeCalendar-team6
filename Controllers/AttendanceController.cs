@@ -33,25 +33,14 @@ namespace Controllers
 
         // GET: api/event/attendees
         [HttpGet("attendees")]
-        public async Task<IActionResult> GetAttendees()
+        public async Task<IActionResult> GetAttendees([FromQuery] Guid Event_id)
         {
             // Check if the user is a "user" from the session
             if (HttpContext.Session.GetString("Role") != "user")
             {
                 return Unauthorized("Only logged-in users can view attendees.");
             }
-
-            var attendees = await Task.Run(() =>
-            {
-                return _attendances
-                    .GroupBy(a => a.EventId)
-                    .Select(group => new
-                    {
-                        EventId = group.Key,
-                        Attendees = group.Select(a => a.UserId).ToList()
-                    });
-            });
-
+            var attendees = await _attendanceService.GetAttending(Event_id);
             return Ok(attendees);
         }
 
