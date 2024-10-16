@@ -20,7 +20,6 @@ namespace Services
                 admins = JsonSerializer.Deserialize<List<Admin>>(await File.ReadAllTextAsync(path));
             }
 
-
             // Check if the provided credentials match any admin in the list
             return admins.FirstOrDefault(_ => _.Username == admin.Username && _.Password == admin.Password) != null;
         }
@@ -42,13 +41,13 @@ namespace Services
                 // Check if the admin credentials exist in the database
                 if (_context.Admins.FirstOrDefault(x => x.Username == admin.Username && x.Password == admin.Password) != null)
                 {
-                    return true; // Return true if the credentials are valid
+                    return true;
                 }
-                return false; // Return false if the credentials are invalid
+                return false;
             }
             catch
             {
-                return false; // Return false if any exception occurs
+                return false;
             }
         }
     }
