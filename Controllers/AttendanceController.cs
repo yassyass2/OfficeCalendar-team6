@@ -33,7 +33,7 @@ namespace Controllers
 
         // GET: api/event/attendees
         [HttpGet("attendees")]
-        public async Task<IActionResult> GetAttendees([FromQuery] Guid Event_id)
+        public async Task<IActionResult> GetAttendees([FromRoute] Guid Event_id)
         {
             // Check if the user is a "user" from the session
             if (HttpContext.Session.GetString("Role") != "user")
@@ -46,7 +46,7 @@ namespace Controllers
 
         // DELETE: api/event/attend
         [HttpDelete("attend")]
-        public async Task<IActionResult> DeleteAttendance([FromBody] EventAttendance request)
+        public async Task<IActionResult> DeleteAttendance([FromRoute] EventAttendance request)
         {
             // Check if the user is a "user" from the session
             if (HttpContext.Session.GetString("Role") != "user")
@@ -54,16 +54,14 @@ namespace Controllers
                 return Unauthorized("Only logged-in users can delete attendance.");
             }
 
-            var attendance = await Task.Run(() =>
-                _attendances.FirstOrDefault(a => a.UserId == request.UserId && a.EventId == request.EventId)
-            );
+            var attendance = await _context.Attendances.FirstOrDefault(a => a.UserId == request.UserId && a.EventId == request.EventId);
 
             if (attendance == null)
             {
                 return NotFound("No attendance found for the given user and event.");
             }
 
-            await Task.Run(() => _attendances.Remove(attendance));
+            await _context.Attendances.Remove(attendance);
             return Ok("Attendance deleted successfully.");
         }
     }
