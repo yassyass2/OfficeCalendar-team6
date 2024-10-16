@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Services;
+using SQLitePCL;
 
 namespace Controllers
 {
@@ -6,100 +9,41 @@ namespace Controllers
     [ApiController]
     public class AttendanceController : Controller
     {
-        private static List<Event> _events = new List<Event>();
-        private static List<EventAttendance> _attendances = new List<EventAttendance>();
-
-        public AttendanceController()
+        private readonly IAttendanceService _attendanceService;
+        public AttendanceController(IAttendanceService attendanceService)
         {
-            // Example event
-            if (!_events.Any())
-            {
-                _events.Add(new Event("Sample Event", "This is a sample event.", "2024-10-09", "14:00", "16:00", "Online"));
-            }
+            _attendanceService = attendanceService;
         }
 
         // POST: api/event/attend
         [HttpPost("attend")]
+        // Check if the user is a "user" from the session
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> AttendEvent([FromBody] EventAttendance request)
         {
-            // Check if the user is a "user" from the session
-            if (HttpContext.Session.GetString("Role") != "user")
+            if (await _attendanceService.CreateAttendance(request))
             {
-                return Unauthorized("Only logged-in users can attend events.");
+                return Ok("event succesfully attended");
             }
-
-            var userId = request.UserId;
-            var eventId = request.EventId;
-
-            var eventToAttend = await Task.Run(() => _events.FirstOrDefault(e => e.Id == eventId));
-            if (eventToAttend == null)
-            {
-                return NotFound("Event not found.");
-            }
-
-            // Check event availability (based on date and start time)
-            DateTime eventDate;
-            DateTime eventStartTime;
-            if (!DateTime.TryParse(eventToAttend.Date, out eventDate) || !DateTime.TryParse(eventToAttend.Start_time, out eventStartTime))
-            {
-                return BadRequest("Invalid event date or start time.");
-            }
-
-            if (eventDate < DateTime.Now || eventStartTime < DateTime.Now)
-            {
-                return BadRequest("The event has already started or is not available.");
-            }
-
-            // Add attendance
-            await Task.Run(() => _attendances.Add(new EventAttendance { UserId = userId, EventId = eventId }));
-            return Ok(eventToAttend);
+            return NotFound("Event not found or has already started");
         }
 
         // GET: api/event/attendees
         [HttpGet("attendees")]
-        public async Task<IActionResult> GetAttendees()
+        // Check if the user is a "user" using token
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> GetAttendees([FromRoute] Guid Event_id)
         {
-            // Check if the user is a "user" from the session
-            if (HttpContext.Session.GetString("Role") != "user")
-            {
-                return Unauthorized("Only logged-in users can view attendees.");
-            }
-
-            var attendees = await Task.Run(() =>
-            {
-                return _attendances
-                    .GroupBy(a => a.EventId)
-                    .Select(group => new
-                    {
-                        EventId = group.Key,
-                        Attendees = group.Select(a => a.UserId).ToList()
-                    });
-            });
-
+            var attendees = await _attendanceService.GetAttending(Event_id);
             return Ok(attendees);
         }
 
         // DELETE: api/event/attend
         [HttpDelete("attend")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> DeleteAttendance([FromBody] EventAttendance request)
         {
-            // Check if the user is a "user" from the session
-            if (HttpContext.Session.GetString("Role") != "user")
-            {
-                return Unauthorized("Only logged-in users can delete attendance.");
-            }
-
-            var attendance = await Task.Run(() =>
-                _attendances.FirstOrDefault(a => a.UserId == request.UserId && a.EventId == request.EventId)
-            );
-
-            if (attendance == null)
-            {
-                return NotFound("No attendance found for the given user and event.");
-            }
-
-            await Task.Run(() => _attendances.Remove(attendance));
-            return Ok("Attendance deleted successfully.");
+            return await _attendanceService.DeleteAttendance(request) ? Ok("Attenance deleted succesfully.") : NotFound("Attendance doesn't exist");
         }
     }
 }

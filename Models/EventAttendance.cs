@@ -1,10 +1,11 @@
 public class EventAttendance
 {
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
     public Guid EventId { get; set; }
 
-    public EventAttendance()
+    public EventAttendance(Guid userId, Guid eventId)
     {
-        //
+        UserId = userId;
+        EventId = eventId;
     }
 }
