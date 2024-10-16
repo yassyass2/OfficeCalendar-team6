@@ -28,7 +28,7 @@ namespace Services
 
         public async Task<bool> CheckUser(User user)
         {
-            return true; // moet later aangepast worden
+            return true;
         }
 
         public async Task<LoginResult> Login(UserLoginRequest request)
@@ -59,7 +59,7 @@ namespace Services
             // Check if the user already exists
             if (_context.Users.Any(u => u.Email == request.Email))
             {
-                return false; // Indicate failure because the user already exists
+                return false;
             }
 
             // Create the password hash and salt
@@ -80,7 +80,6 @@ namespace Services
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            // Indicate success
             return true;
         }
 
@@ -156,13 +155,13 @@ namespace Services
 
                 if (existingUser != null)
                 {
-                    return true; // Return true if the credentials are valid
+                    return true;
                 }
-                return false; // Return false if the credentials are invalid
+                return false;
             }
             catch
             {
-                return false; // Return false if any exception occurs
+                return false;
             }
         }
 
