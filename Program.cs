@@ -6,12 +6,11 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 
 
-
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 //Configuring the JWT authenticationn
-var key = Encoding.ASCII.GetBytes("H7zV4zJ5uQxB8eX2pT9gR1bY8fF5wQ3x"); // we need to change this later to a better key, can be generated online
+var key = Encoding.ASCII.GetBytes("H7zV4zJ5uQxB8eX2pT9gR1bY8fF5wQ3x");
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
