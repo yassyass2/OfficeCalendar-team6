@@ -8,6 +8,7 @@ namespace Services
     {
         Task<bool> CreateAttendance(EventAttendance request);
         Task<IEnumerable<Guid>> GetAttending(Guid event_Id);
+        Task<bool> DeleteAttendance(EventAttendance request);
     }
 
     public class AttendanceService : IAttendanceService
@@ -50,6 +51,20 @@ namespace Services
         {
             return await _context.Attendances
                 .Where(a => a.Event_Id == event_Id).Select(_ => _.User_Id);
+        }
+
+        public async Task<bool> DeleteAttendance(EventAttendance request)
+        {
+            var attendance = await _context.Attendances.FirstOrDefault(a => a.UserId == request.UserId && a.EventId == request.EventId);
+
+            if (attendance == null)
+            {
+                return false;
+            }
+
+            await _context.Attendances.Remove(attendance);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }
