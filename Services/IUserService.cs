@@ -12,7 +12,9 @@ namespace Services
         Task<bool> Register(UserRegisterRequest request);
         Task<bool> CheckUser(User user);
         Task<LoginResult> Login(UserLoginRequest request);
-        Task<LoginResult> Verify(string token);
+        Task<LoginResult> VerifyAccount(string token);
+        Task<LoginResult> ForgotPassword(string email);
+        Task<LoginResult> ResetPassword(ResetPasswordRequest request);
 
     }
 
@@ -36,11 +38,23 @@ namespace Services
             return new LoginResult { Success = true, Message = "To be implemented" };
         }
 
-        public async Task<LoginResult> Verify(string token)
+        public async Task<LoginResult> VerifyAccount(string token)
         {
-            
+
             return new LoginResult { Success = true, Message = "To be implemented" };
         }
+
+        public async Task<LoginResult> ForgotPassword(string email)
+        {
+
+            return new LoginResult { Success = true, Message = "To be implemented" };
+        }
+
+        public async Task<LoginResult> ResetPassword(ResetPasswordRequest request)
+        {
+            return new LoginResult { Success = true, Message = "To be implemented" };
+        }
+
     }
 
 
@@ -104,7 +118,10 @@ namespace Services
             return new LoginResult { Success = true, Message = "Login successful" };
         }
 
-        public async Task<LoginResult> Verify(string token)
+
+
+
+        public async Task<LoginResult> VerifyAccount(string token)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.VerificationToken == token);
             if (user == null)
@@ -117,6 +134,43 @@ namespace Services
 
             return new LoginResult { Success = true, Message = "Account verified! :)" };
         }
+
+        public async Task<LoginResult> ForgotPassword(string email)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+            {
+                return new LoginResult { Success = false, Message = "User not found." };
+            }
+
+            user.PasswordResetToken = CreateRandomToken();
+            user.ResetTokenExpires = DateTime.Now.AddDays(1);
+            await _context.SaveChangesAsync();
+
+            return new LoginResult { Success = true, Message = "You may reset your password." };
+        }
+
+        public async Task<LoginResult> ResetPassword(ResetPasswordRequest request)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.PasswordResetToken == request.Token);
+
+            if (user == null || user.ResetTokenExpires < DateTime.Now)
+            {
+                return new LoginResult { Success = false, Message = "Invalid token or token expired" };
+            }
+
+            CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
+
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+            user.PasswordResetToken = null;
+            user.ResetTokenExpires = null;
+
+            await _context.SaveChangesAsync();
+
+            return new LoginResult { Success = true, Message = "Password reset completed!" };
+        }
+
 
 
 

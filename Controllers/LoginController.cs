@@ -51,26 +51,6 @@ namespace Controllers
         }
 
 
-        // GET: Check if there is an active session (JWT token check)
-        [HttpGet("session")]
-        public IActionResult CheckSession()
-        {
-            var role = User.FindFirst(ClaimTypes.Role)?.Value;
-            var username = User.FindFirst(ClaimTypes.Name)?.Value;
-
-            if (role == "Admin")
-            {
-                return Ok(new { IsLoggedIn = true, Role = "Admin", Username = username });
-            }
-            else if (role == "User")
-            {
-                return Ok(new { IsLoggedIn = true, Role = "User", Username = username });
-            }
-
-            return Ok(new { IsLoggedIn = false });
-        }
-
-
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterRequest request)
         {
@@ -86,7 +66,8 @@ namespace Controllers
                 return BadRequest("User already exists.");
             }
 
-            return Ok("User registered successfully.");
+            return Ok("User registered successfully. Please verify your account before logging in");
+            //er moet hierna een email automatisch gestuurd worden om account verfication af te maken.  
         }
 
         [HttpPost("verify")]
@@ -97,13 +78,50 @@ namespace Controllers
                 return BadRequest("Token is required");
             }
 
-            var verifyResult = await _userService.Verify(token);
+            var verifyResult = await _userService.VerifyAccount(token);
             if (!verifyResult.Success)
             {
                 return BadRequest(verifyResult.Message);
             }
 
-            return Ok("User verified! :)");
+            return Ok("Account verified! :)");
+        }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromQuery] string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest("Email is required");
+            }
+
+            var ForgotpasswordRequest = await _userService.ForgotPassword(email);
+            if (!ForgotpasswordRequest.Success)
+            {
+                return BadRequest(ForgotpasswordRequest.Message);
+            }
+
+            return Ok("We have sent you an email to reset your password! ");
+            //na dit stap moet er een email toegestuurd worden met de token 
+            //of een verwijzing naar een andere eendpoint met resetpassword opties.
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid request data.");
+            }
+
+            var result = await _userService.ResetPassword(request);
+
+            if (!result.Success)
+            {
+                return BadRequest(result.Message);
+            }
+
+            return Ok(result.Message);
         }
 
     }

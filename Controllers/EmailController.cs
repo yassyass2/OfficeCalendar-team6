@@ -3,6 +3,7 @@ using MimeKit;
 using MimeKit.Text;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using System.Threading.Tasks;
 
 namespace Controllers
 {
@@ -11,22 +12,28 @@ namespace Controllers
     public class EmailController : ControllerBase
     {
         [HttpPost]
-        public IActionResult SendEmail(string body)
+        public async Task<IActionResult> SendEmail(string body)
         {
-            var email = new MimeMessage();
-            email.From.Add(MailboxAddress.Parse("wallace3@ethereal.email"));
-            email.To.Add(MailboxAddress.Parse("Mohamaadflaha2014@gmail.com"));
-            email.Subject = "Test Email Subject";
-            email.Body = new TextPart(TextFormat.Html) { Text = body };
+            try
+            {
+                var email = new MimeMessage();
+                email.From.Add(MailboxAddress.Parse("foreverbusiness333@gmail.com"));
+                email.To.Add(MailboxAddress.Parse("Mohamaadflaha2014@gmail.com")); // Replace with your recipient
+                email.Subject = "Test Email Subject";
+                email.Body = new TextPart(TextFormat.Html) { Text = body };
 
-            using var smtp = new SmtpClient();
-            smtp.Connect("smtp.ethereal.email", 587, SecureSocketOptions.StartTls);
-            smtp.Authenticate("wallace3@ethereal.email", "ySk78MnE6pkexvBkz1");
-            smtp.Send(email);
-            smtp.Disconnect(true);
+                using var smtp = new SmtpClient();
+                smtp.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+                smtp.Authenticate("foreverbusiness333@gmail.com", "ForeverLiving123!");
+                await smtp.SendAsync(email);
+                smtp.Disconnect(true);
 
-            return Ok();
+                return Ok("Email sent successfully");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
-
 }
