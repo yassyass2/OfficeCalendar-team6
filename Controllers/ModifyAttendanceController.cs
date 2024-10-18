@@ -5,13 +5,13 @@ using System.Security.Claims;
 
 namespace Controllers
 {
-    [Route("api/officeattendance")]
+    [Route("api/modifyattendance")]
     [ApiController]
-    public class OfficeAttendanceController : ControllerBase
+    public class ModifyAttendanceController : ControllerBase
     {
         private readonly IAttendanceService _attendanceService;
 
-        public OfficeAttendanceController(IAttendanceService attendanceService)
+        public ModifyAttendanceController(IAttendanceService attendanceService)
         {
             _attendanceService = attendanceService;
         }
@@ -19,7 +19,7 @@ namespace Controllers
         // PUT: api/officeattendance
         [HttpPut]
         [Authorize] // Protect this endpoint
-        public async Task<IActionResult> ModifyAttendance([FromBody] OfficeAttendanceRequest request)
+        public async Task<IActionResult> ModifyAttendance([FromBody] EventAttendance request)
         {
             var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.Name)?.Value;
             if (string.IsNullOrEmpty(userIdClaim))
@@ -27,17 +27,17 @@ namespace Controllers
                 return Unauthorized("User is not logged in.");
             }
 
-            Guid userId = Guid.Parse(userIdClaim); // Adjust based on how you store user IDs
+            //Guid userId = Guid.Parse(userIdClaim); // Adjust based on how you store user IDs
 
             // Check for existing attendance
-            var existingAttendance = await _attendanceService.GetAttendance(userId, request.Date);
-            if (existingAttendance != null)
+            var notExistingAttendance = await _attendanceService.CheckAttendance(request.UserId, request.EventId);
+            if (notExistingAttendance)
             {
-                return BadRequest("Attendance for this date is already booked.");
+                return BadRequest("can't modify, not attending yet");
             }
 
             // Modify attendance
-            bool result = await _attendanceService.ModifyAttendance(userId, request);
+            bool result = await _attendanceService.ModifyAttendance(request);
             if (result)
             {
                 return Ok("Attendance modified successfully.");

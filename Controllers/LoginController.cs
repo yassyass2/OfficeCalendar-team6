@@ -1,106 +1,129 @@
 using Microsoft.AspNetCore.Mvc;
 using Services;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
 namespace Controllers
 {
     [Route("api/login")]
+    [ApiController]
     public class LoginController : Controller
     {
         private readonly IAdminService _adminService;
         private readonly IUserService _userService;
+        private readonly ITokenService _tokenService;
 
-        public LoginController(IAdminService adminService, IUserService userService)
+        public LoginController(IAdminService adminService, IUserService userService, ITokenService tokenService)
         {
             _adminService = adminService;
             _userService = userService;
+            _tokenService = tokenService;
+
         }
+
 
         // POST: login for both Admin and User with JWT
         [HttpPost()]
-        public async Task<IActionResult> Login([FromBody] LoginModel model)
+        public async Task<IActionResult> Login([FromBody] UserLoginRequest model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest("Invalid request format");
             }
 
-            // JWT token creation logic
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("H7zV4zJ5uQxB8eX2pT9gR1bY8fF5wQ3x"); // Use the same secret key as in Program.cs
-
             // Check if the user is an admin
-            if (await _adminService.CheckAdmin(new Admin(model.Username, model.Password)))
+            if (await _adminService.CheckAdmin(new Admin(model.Email, model.Password)))
             {
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new[]
-                    {
-                        new Claim(ClaimTypes.Name, model.Username),
-                        new Claim(ClaimTypes.Role, "Admin")
-                    }),
-                    Expires = DateTime.UtcNow.AddHours(1),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-                };
-
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                var tokenString = tokenHandler.WriteToken(token);
-
-                return Ok(new { Token = tokenString, Message = $"Successfully logged in as Admin {model.Username}" });
+                // Generate a token for the admin
+                var adminToken = _tokenService.GenerateToken(model.Email, "Admin");
+                return Ok(new { Token = adminToken, Message = $"Successfully logged in as Admin {model.Email}" });
             }
 
             // Check if the user is a regular user
-            if (await _userService.CheckUser(new User(model.Username, model.Password)))
+            var loginResult = await _userService.Login(model);
+            if (!loginResult.Success)
             {
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new[]
-                    {
-                        new Claim(ClaimTypes.Name, model.Username),
-                        new Claim(ClaimTypes.Role, "User")
-                    }),
-                    Expires = DateTime.UtcNow.AddHours(1),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-                };
-
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                var tokenString = tokenHandler.WriteToken(token);
-
-                return Ok(new { Token = tokenString, Message = $"Successfully logged in as User {model.Username}" });
+                return Unauthorized(loginResult.Message);
             }
 
-            return Unauthorized("Invalid credentials.");
+            // Generate a token for the regular user
+            var userToken = _tokenService.GenerateToken(model.Email, "User");
+            return Ok(new { Token = userToken, Message = "Login successful" });
         }
 
-        // GET: Check if there is an active session (JWT token check)
-        [HttpGet("session")]
-        public IActionResult CheckSession()
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] UserRegisterRequest request)
         {
-            var role = User.FindFirst(ClaimTypes.Role)?.Value;
-            var username = User.FindFirst(ClaimTypes.Name)?.Value;
-
-            if (role == "Admin")
+            if (!ModelState.IsValid)
             {
-                return Ok(new { IsLoggedIn = true, Role = "Admin", Username = username });
-            }
-            else if (role == "User")
-            {
-                return Ok(new { IsLoggedIn = true, Role = "User", Username = username });
+                return BadRequest("Invalid registration data.");
             }
 
-            return Ok(new { IsLoggedIn = false });
+            var result = await _userService.Register(request);
+
+            if (!result)
+            {
+                return BadRequest("User already exists.");
+            }
+
+            return Ok("User registered successfully. Please verify your account before logging in");
+            //er moet hierna een email automatisch gestuurd worden om account verfication af te maken.  
         }
 
-        
+        [HttpPost("verify")]
+        public async Task<IActionResult> Verify([FromQuery] string token)
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                return BadRequest("Token is required");
+            }
+
+            var verifyResult = await _userService.VerifyAccount(token);
+            if (!verifyResult.Success)
+            {
+                return BadRequest(verifyResult.Message);
+            }
+
+            return Ok("Account verified! :)");
+        }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromQuery] string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest("Email is required");
+            }
+
+            var ForgotpasswordRequest = await _userService.ForgotPassword(email);
+            if (!ForgotpasswordRequest.Success)
+            {
+                return BadRequest(ForgotpasswordRequest.Message);
+            }
+
+            return Ok("We have sent you an email to reset your password! ");
+            //na dit stap moet er een email toegestuurd worden met de token 
+            //of een verwijzing naar een andere eendpoint met resetpassword opties.
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid request data.");
+            }
+
+            var result = await _userService.ResetPassword(request);
+
+            if (!result.Success)
+            {
+                return BadRequest(result.Message);
+            }
+
+            return Ok(result.Message);
+        }
+
     }
 
-    // LoginModel to handle login data/ moet even naar eigen model file als alles goed werkt 
-    public class LoginModel
-    {
-        public string Username { get; set; }
-        public string Password { get; set; }
-    }
 }
