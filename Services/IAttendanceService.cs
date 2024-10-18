@@ -83,9 +83,10 @@ namespace Services
                 return (false, "Event not found or has already started.");
             }
 
-            var isDateConflict = await _context.Attendances.AnyAsync(a => a.EventId != request.EventId
-                && a.UserId == request.UserId
-                && a.Event.Date == eventToAttend.Date);
+            var isDateConflict = await _context.Attendances
+                .AnyAsync(a => a.EventId != request.EventId
+                    && a.UserId == request.UserId
+                    && _context.Events.Any(e => e.Id == a.EventId && e.Date == eventToAttend.Date)); // Fetch the event separately
 
             if (isDateConflict)
             {
