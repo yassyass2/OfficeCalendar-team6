@@ -15,12 +15,12 @@ namespace Services
 
         public bool SendInvitation(EventAttendance invite)
         {
-            if  ( _context.Attendances.Where(a => a.EventId == invite.EventId && a.UserId == invite.UserId) != null )
+            if  ( _context.Attendances.FirstOrDefault(a => a.EventId == invite.EventId && a.UserId == invite.UserId) != null )
             {
                 // employee already attending
                 return false;
             }
-            var user_to_inv = _context.Users.Where(u => u.Id == invite.UserId);
+            var user_to_inv = _context.Users.FirstOrDefault(u => u.Id == invite.UserId);
             if (user_to_inv is null)
             {
                 // employee doesn't exist
