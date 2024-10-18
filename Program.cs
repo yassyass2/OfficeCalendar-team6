@@ -6,12 +6,11 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 
 
-
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 //Configuring the JWT authenticationn
-var key = Encoding.ASCII.GetBytes("H7zV4zJ5uQxB8eX2pT9gR1bY8fF5wQ3x"); // we need to change this later to a better key, can be generated online
+var key = Encoding.ASCII.GetBytes("H7zV4zJ5uQxB8eX2pT9gR1bY8fF5wQ3x");
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -79,6 +78,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IEventStorage, DbEventStorage>();
 builder.Services.AddScoped<IAdminService, DbAdminService>();
 builder.Services.AddScoped<IUserService, DbUserService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+
 
 builder.Services.AddDbContext<MyContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
