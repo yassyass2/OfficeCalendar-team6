@@ -4,26 +4,26 @@ using Services;
 
 namespace Controllers
 {
+    [Route("invite")]
+    [ApiController]
     public class InviteController : Controller
     {
-        private readonly InvitationService _invitation
-        [Route("invite")]
-        [ApiController]
-        public InvitationController(InvitationService invitationService)
+        private readonly IInviteService _invitation;
+        public InviteController(IInviteService invitationService)
         {
             _invitation = invitationService;
         }
 
         [HttpPost()]
-        public Task<IActionResult>([FromBody] EventAttendance invitation)
+        public IActionResult SendInvite(EventAttendance invitation)
         {
-            if (invitation == null)
+            if (invitation is null)
             {
                 return BadRequest("");
             }
-            if (!await _invitation.SendInvitation(inivitation))
+            if (!_invitation.SendInvitation(invitation))
             {
-                return NotFound("Employee already attending or not found")
+                return NotFound("Employee not found or already attending event");
             }
             return Ok("Invitation to the Event has been sent");
         }
