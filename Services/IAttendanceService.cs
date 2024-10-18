@@ -1,16 +1,17 @@
-using System.Text.Json;
-using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace Services
 {
     public interface IAttendanceService
     {
-        Task<bool> CheckAttendance(Guid userId, Guid eventId);
         Task<bool> CreateAttendance(EventAttendance request);
-        Task<IEnumerable<Guid>> GetAttending(Guid event_Id);
+        Task<IEnumerable<Guid>> GetAttending(Guid eventId);
         Task<bool> DeleteAttendance(EventAttendance request);
-        Task<bool> ModifyAttendance(EventAttendance request);
+        Task<(bool, string)> ModifyAttendance(EventAttendance request);
     }
 
     public class AttendanceService : IAttendanceService
@@ -22,46 +23,38 @@ namespace Services
             _context = context;
         }
 
-        public async Task<bool> CheckAttendance(Guid userId, Guid eventId)
+        public async Task<bool> CreateAttendance(EventAttendance request)
         {
-            return await _context.Attendances.FirstOrDefaultAsync(x => x.UserId == userId && x.EventId == eventId) == null;
-        }
-        public async Task<bool> CreateAttendance([FromBody] EventAttendance request)
-        {
-            // Attendances moet nog in MyContext
-            var eventToAttend = _context.Events.FirstOrDefault(e => e.Id == request.EventId);
-            if (eventToAttend == null)
+            var eventToAttend = await _context.Events.FirstOrDefaultAsync(e => e.Id == request.EventId);
+            if (eventToAttend == null || DateTime.Parse(eventToAttend.Date) < DateTime.Now)
             {
-                //event niet gevonden
                 return false;
             }
 
-            // Check event availability (based on date and start time)
-            DateTime eventDate = DateTime.Parse(eventToAttend.Date);
-            TimeSpan eventStartTime = TimeSpan.Parse(eventToAttend.Start_time);
-            DateTime start = eventDate + eventStartTime;
-
-            if (start < DateTime.Now)
+            var existingAttendance = await _context.Attendances
+                .FirstOrDefaultAsync(a => a.EventId == request.EventId && a.UserId == request.UserId);
+            if (existingAttendance != null)
             {
-                // event is al begonnen
-                return false;
+                return false; // User has already signed up
             }
 
-            // Add attendance
-            await Task.Run(() => _context.Attendances.Add(request));
+            await _context.Attendances.AddAsync(request);
             await _context.SaveChangesAsync();
-            return true; // Attendance modification succeeded
+            return true;
         }
 
-        public async Task<IEnumerable<Guid>> GetAttending(Guid event_Id)
+        public async Task<IEnumerable<Guid>> GetAttending(Guid eventId)
         {
             return await _context.Attendances
-                .Where(a => a.EventId == event_Id).Select(_ => _.UserId).ToListAsync();
+                .Where(a => a.EventId == eventId)
+                .Select(a => a.UserId)
+                .ToListAsync();
         }
 
         public async Task<bool> DeleteAttendance(EventAttendance request)
         {
-            var attendance = await _context.Attendances.FirstOrDefaultAsync(a => a.UserId == request.UserId && a.EventId == request.EventId);
+            var attendance = await _context.Attendances
+                .FirstOrDefaultAsync(a => a.UserId == request.UserId && a.EventId == request.EventId);
 
             if (attendance == null)
             {
@@ -73,10 +66,37 @@ namespace Services
             return true;
         }
 
-        public async Task<bool> ModifyAttendance(EventAttendance request)
+        public async Task<(bool, string)> ModifyAttendance(EventAttendance request)
         {
-            await _context.Attendances.AddAsync(request);
-            return true;
+            // Check if the user is trying to modify their own attendance
+            var existingAttendance = await _context.Attendances
+                .FirstOrDefaultAsync(a => a.EventId == request.EventId && a.UserId == request.UserId);
+
+            if (existingAttendance == null)
+            {
+                return (false, "Attendance not found.");
+            }
+
+            var eventToAttend = await _context.Events.FirstOrDefaultAsync(e => e.Id == request.EventId);
+            if (eventToAttend == null || DateTime.Parse(eventToAttend.Date) < DateTime.Now)
+            {
+                return (false, "Event not found or has already started.");
+            }
+
+            var isDateConflict = await _context.Attendances
+                .AnyAsync(a => a.EventId != request.EventId
+                    && a.UserId == request.UserId
+                    && _context.Events.Any(e => e.Id == a.EventId && e.Date == eventToAttend.Date)); // Fetch the event separately
+
+            if (isDateConflict)
+            {
+                return (false, "Date is already occupied by another event.");
+            }
+
+            existingAttendance.EventId = request.EventId;
+            await _context.SaveChangesAsync();
+
+            return (true, null);
         }
     }
 }

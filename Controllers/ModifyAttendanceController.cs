@@ -1,49 +1,70 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Services; // Ensure you have the attendance service implemented
-using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using Services;
+using System;
+using System.Threading.Tasks;
 
 namespace Controllers
 {
-    [Route("api/modifyattendance")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class ModifyAttendanceController : ControllerBase
+    public class OfficeAttendanceController : ControllerBase
     {
         private readonly IAttendanceService _attendanceService;
 
-        public ModifyAttendanceController(IAttendanceService attendanceService)
+        public OfficeAttendanceController(IAttendanceService attendanceService)
         {
             _attendanceService = attendanceService;
         }
 
-        // PUT: api/officeattendance
-        [HttpPut]
-        [Authorize] // Protect this endpoint
+        // POST: api/office/attend
+        [HttpPost("attend")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> AttendEvent([FromBody] EventAttendance request)
+        {
+            if (await _attendanceService.CreateAttendance(request))
+            {
+                return Ok("Event successfully attended.");
+            }
+            return BadRequest("Event not found, has already started, or is fully booked.");
+        }
+
+        // GET: api/office/attendees/{eventId}
+        [HttpGet("attendees/{eventId}")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> GetAttendees([FromRoute] Guid eventId)
+        {
+            var attendees = await _attendanceService.GetAttending(eventId);
+            return Ok(attendees);
+        }
+
+        // DELETE: api/office/attend
+        [HttpDelete("attend")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> DeleteAttendance([FromBody] EventAttendance request)
+        {
+            var result = await _attendanceService.DeleteAttendance(request);
+            return result ? Ok("Attendance successfully deleted.") : NotFound("Attendance not found.");
+        }
+
+        // PUT: api/office/attendance
+        [HttpPut("modify")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> ModifyAttendance([FromBody] EventAttendance request)
         {
-            var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.Name)?.Value;
-            if (string.IsNullOrEmpty(userIdClaim))
+            var userId = User.FindFirst("id")?.Value; // Assumes the user ID is stored in the claims
+            if (userId == null || !Guid.TryParse(userId, out Guid parsedUserId) || request.UserId != parsedUserId)
             {
-                return Unauthorized("User is not logged in.");
+                return Unauthorized("You can only modify your own attendance.");
             }
 
-            //Guid userId = Guid.Parse(userIdClaim); // Adjust based on how you store user IDs
-
-            // Check for existing attendance
-            var notExistingAttendance = await _attendanceService.CheckAttendance(request.UserId, request.EventId);
-            if (notExistingAttendance)
+            var result = await _attendanceService.ModifyAttendance(request);
+            if (result.Item1)
             {
-                return BadRequest("can't modify, not attending yet");
+                return Ok("Attendance successfully modified.");
             }
 
-            // Modify attendance
-            bool result = await _attendanceService.ModifyAttendance(request);
-            if (result)
-            {
-                return Ok("Attendance modified successfully.");
-            }
-
-            return BadRequest("Failed to modify attendance.");
+            return BadRequest(result.Item2); // Return the error message from the service
         }
     }
 }
