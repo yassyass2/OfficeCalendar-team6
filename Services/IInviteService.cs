@@ -21,9 +21,9 @@ namespace Services
                 return false;
             }
             var user_to_inv = _context.Users.FirstOrDefault(u => u.Id == invite.UserId);
-            if (user_to_inv is null)
+            if (user_to_inv is null || _context.Events.FirstOrDefault(e => e.Id == invite.EventId) == null)
             {
-                // employee doesn't exist
+                // employee or event doesn't exist
                 return false;
             }
             var to_mail = user_to_inv;
