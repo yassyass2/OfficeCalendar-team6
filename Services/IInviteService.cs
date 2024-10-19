@@ -27,7 +27,7 @@ namespace Services
                 return false;
             }
             var to_mail = user_to_inv;
-            // targeted employee not attending yet and exists, send invite via mail HERE\/\/\/
+            // targeted employee not attending yet and exists, they should see invite in their account
             return true;
         }
     }
