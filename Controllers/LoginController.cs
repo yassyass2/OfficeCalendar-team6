@@ -12,14 +12,18 @@ namespace Controllers
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
 
-        public LoginController(IAdminService adminService, IUserService userService, ITokenService tokenService)
+        // Email service
+        private readonly IEmailService _emailService;
+
+        public LoginController(IAdminService adminService, IUserService userService, ITokenService tokenService, IEmailService emailService)
         {
             _adminService = adminService;
             _userService = userService;
             _tokenService = tokenService;
 
+            // Email service
+            _emailService = emailService;
         }
-
 
         // POST: login for both Admin and User with JWT
         [HttpPost()]
@@ -50,7 +54,6 @@ namespace Controllers
             return Ok(new { Token = userToken, Message = "Login successful" });
         }
 
-
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterRequest request)
         {
@@ -66,8 +69,16 @@ namespace Controllers
                 return BadRequest("User already exists.");
             }
 
-            return Ok("User registered successfully. Please verify your account before logging in");
-            //er moet hierna een email automatisch gestuurd worden om account verfication af te maken.  
+            // Email sending logic
+            var emailBody = "Please verify your account by clicking on the following link: <verification-link>";
+            var emailSent = await _emailService.SendEmail("office@shithosting.net", emailBody); // Replace with the user's email from the request
+
+            if (!emailSent)
+            {
+                return StatusCode(500, "User registered but failed to send verification email.");
+            }
+
+            return Ok("User registered successfully. Please verify your account before logging in.");
         }
 
         [HttpPost("verify")]
