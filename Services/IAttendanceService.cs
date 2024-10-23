@@ -32,6 +32,7 @@ namespace Services
 
             if (eventToAttend == null) // || DateTime.Parse(eventToAttend.Date) < DateTime.Now
             {
+                Console.WriteLine($"no event found for id: {request.EventId}");
                 return false;
             }
 
