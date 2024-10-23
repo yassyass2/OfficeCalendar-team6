@@ -79,6 +79,8 @@ builder.Services.AddScoped<IEventStorage, DbEventStorage>();
 builder.Services.AddScoped<IAdminService, DbAdminService>();
 builder.Services.AddScoped<IUserService, DbUserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IAttendanceService, AttendanceService>();
+
 // Email service
 builder.Services.AddScoped<IEmailService, EmailService>();
 
