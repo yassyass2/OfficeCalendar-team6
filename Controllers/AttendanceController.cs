@@ -5,7 +5,7 @@ using SQLitePCL;
 
 namespace Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Attendance")]
     [ApiController]
     public class AttendanceController : Controller
     {
@@ -19,8 +19,10 @@ namespace Controllers
         [HttpPost("attend")]
         // Check if the user is a "user" from the session
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> AttendEvent([FromBody] EventAttendance request)
+        public async Task<IActionResult> AttendEvent([FromBody] EventAttendance? request)
         {
+            if (request == null) return BadRequest("no body given");
+            Console.WriteLine(request.EventId);
             if (await _attendanceService.CreateAttendance(request))
             {
                 return Ok("event succesfully attended");

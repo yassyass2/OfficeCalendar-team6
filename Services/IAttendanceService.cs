@@ -26,7 +26,7 @@ namespace Services
         public async Task<bool> CreateAttendance(EventAttendance request)
         {
             //string eventId = request.EventId.ToString(); // Convert Guid to string (it is TEXT in the database)
-            Event eventToAttend = await _context.Events.FirstOrDefaultAsync(e => e.Id == request.EventId);
+            Event? eventToAttend = await _context.Events.FirstOrDefaultAsync(e => e.Id == request.EventId);
 
             Console.WriteLine(">>>>>>" + eventToAttend);
 
