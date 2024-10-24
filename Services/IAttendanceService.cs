@@ -29,7 +29,7 @@ namespace Services
             var evs = _context.Events.ToList();
             Event? eventToAttend = evs.FirstOrDefault(e => e.Id == request.EventId);
 
-            if (eventToAttend == null) // || DateTime.Parse(eventToAttend.Date) < DateTime.Now
+            if (eventToAttend == null || DateTime.Parse(eventToAttend.Date) < DateTime.Now)
             {
                 Console.WriteLine($"no event found for id: {request.EventId}");
                 Console.WriteLine($"it should be {_context.Events.First().Id}");
