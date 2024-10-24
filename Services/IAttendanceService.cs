@@ -26,13 +26,13 @@ namespace Services
         public async Task<bool> CreateAttendance(EventAttendance request)
         {
             //string eventId = request.EventId.ToString(); // Convert Guid to string (it is TEXT in the database)
-            Event? eventToAttend = await _context.Events.FirstOrDefaultAsync(e => e.Id == request.EventId);
-
-            Console.WriteLine(">>>>>>" + eventToAttend);
+            var evs = _context.Events.ToList();
+            Event? eventToAttend = evs.FirstOrDefault(e => e.Id == request.EventId);
 
             if (eventToAttend == null) // || DateTime.Parse(eventToAttend.Date) < DateTime.Now
             {
                 Console.WriteLine($"no event found for id: {request.EventId}");
+                Console.WriteLine($"it should be {_context.Events.First().Id}");
                 return false;
             }
 

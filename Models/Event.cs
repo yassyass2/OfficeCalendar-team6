@@ -9,9 +9,10 @@ public class Event
     public string Location { get; set; }
     public bool Admin_approval { get; set; }
 
-    public Event(string title, string description, string date, string start_time, string end_time, string location)
+    public Event(Guid id, string title, string description, string date, string start_time, string end_time, string location)
     {
-        Id = Guid.NewGuid();
+        Console.WriteLine($"eerst {title} is {Id}");
+        Id = id;
         Title = title;
         Description = description;
         Date = date;
@@ -19,5 +20,6 @@ public class Event
         End_time = end_time;
         Location = location;
         Admin_approval = false;
+        Console.WriteLine($"now event id of {title} is {Id}");
     }
 }
