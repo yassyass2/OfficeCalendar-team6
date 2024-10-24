@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/att")]
     [ApiController]
     public class OfficeAttendanceController : ControllerBase
     {

@@ -25,11 +25,20 @@ namespace Services
 
         public async Task<bool> CreateAttendance(EventAttendance request)
         {
-            var eventToAttend = await _context.Events.FirstOrDefaultAsync(e => e.Id == request.EventId);
+            //string eventId = request.EventId.ToString(); // Convert Guid to string (it is TEXT in the database)
+            var evs = _context.Events.ToList();
+            Event? eventToAttend = evs.FirstOrDefault(e => e.Id == request.EventId);
+
             if (eventToAttend == null || DateTime.Parse(eventToAttend.Date) < DateTime.Now)
             {
+                Console.WriteLine($"no event found for id: {request.EventId}");
+                Console.WriteLine($"it should be {_context.Events.First().Id}");
                 return false;
             }
+
+            //Event eventToAttend = _context.Events.FirstOrDefault(e => e.Id == request.EventId); // (e => e.Id == request.EventId)
+            // var found = new List<Event>(){ eventToAttend };
+            // Console.WriteLine("!!!" + _context.Events.First().Id);
 
             var existingAttendance = await _context.Attendances
                 .FirstOrDefaultAsync(a => a.EventId == request.EventId && a.UserId == request.UserId);
