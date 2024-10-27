@@ -16,7 +16,7 @@ namespace Services
             }
 
             // Check if the provided credentials match any admin in the list
-            return admins.FirstOrDefault(_ => _.Username == admin.Username && _.Password == admin.Password) != null;
+            return admins.FirstOrDefault(_ => _.Email == admin.Email && _.Password == admin.Password) != null;
         }
     }
 
@@ -34,7 +34,7 @@ namespace Services
             try
             {
                 // Check if the admin credentials exist in the database
-                if (_context.Admins.FirstOrDefault(x => x.Username == admin.Username && x.Password == admin.Password) != null)
+                if (_context.Admins.FirstOrDefault(x => x.Email == admin.Email && x.Password == admin.Password) != null)
                 {
                     return true;
                 }

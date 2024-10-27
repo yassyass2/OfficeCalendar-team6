@@ -15,7 +15,7 @@ namespace Controllers
         private readonly ITokenService _tokenService;
 
         public LoginController(IAdminService adminService, IUserService userService,
-            ITokenService tokenService, IEmailService emailService)
+            ITokenService tokenService)
         {
             _adminService = adminService;
             _userService = userService;
