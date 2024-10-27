@@ -5,11 +5,7 @@ using System.Text;
 
 namespace Services
 {
-    public interface ITokenService
-    {
-        string GenerateToken(string email, string role);
-    }
-
+    
     public class TokenService : ITokenService
     {
         private readonly string _secretKey = "H7zV4zJ5uQxB8eX2pT9gR1bY8fF5wQ3x";

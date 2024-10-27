@@ -1,14 +1,11 @@
 namespace Services
 {
-    public interface IInviteService
-    {
-        bool SendInvitation(EventAttendance invite);
-    }
+    
 
-    public class DbInviteService : IInviteService
+    public class InviteService : IInviteService
     {
         private readonly MyContext _context;
-        public DbInviteService(MyContext context)
+        public InviteService(MyContext context)
         {
             _context = context;
         }

@@ -2,11 +2,6 @@ using System.Text.Json;
 
 namespace Services
 {
-    public interface IAdminService
-    {
-        Task<bool> CheckAdmin(Admin admin); // Verifies admin credentials
-    }
-
     public class JsonAdminService : IAdminService
     {
         public async Task<bool> CheckAdmin(Admin admin)
@@ -25,11 +20,11 @@ namespace Services
         }
     }
 
-    public class DbAdminService : IAdminService
+    public class AdminService : IAdminService
     {
         private readonly MyContext _context;
 
-        public DbAdminService(MyContext context)
+        public AdminService(MyContext context)
         {
             _context = context;
         }
