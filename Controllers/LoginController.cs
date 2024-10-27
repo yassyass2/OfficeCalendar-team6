@@ -11,21 +11,17 @@ namespace Controllers
         private readonly IAdminService _adminService;
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
-
-        // Email service
         private readonly IEmailService _emailService;
 
-        public LoginController(IAdminService adminService, IUserService userService, ITokenService tokenService, IEmailService emailService)
+        public LoginController(IAdminService adminService, IUserService userService, 
+            ITokenService tokenService, IEmailService emailService)
         {
             _adminService = adminService;
             _userService = userService;
             _tokenService = tokenService;
-
-            // Email service
             _emailService = emailService;
         }
 
-        // POST: login for both Admin and User with JWT
         [HttpPost()]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest model)
         {
@@ -37,7 +33,6 @@ namespace Controllers
             // Check if the user is an admin
             if (await _adminService.CheckAdmin(new Admin(model.Email, model.Password)))
             {
-                // Generate a token for the admin
                 var adminToken = _tokenService.GenerateToken(model.Email, "Admin");
                 return Ok(new { Token = adminToken, Message = $"Successfully logged in as Admin {model.Email}" });
             }
@@ -49,7 +44,6 @@ namespace Controllers
                 return Unauthorized(loginResult.Message);
             }
 
-            // Generate a token for the regular user
             var userToken = _tokenService.GenerateToken(model.Email, "User");
             return Ok(new { Token = userToken, Message = "Login successful" });
         }
@@ -66,55 +60,41 @@ namespace Controllers
 
             if (!result)
             {
-                return BadRequest("User already exists.");
+                return BadRequest("User registration failed. Email might already be registered.");
             }
 
-            // Email sending logic
-            var emailBody = "Please verify your account by clicking on the following link: <verification-link>";
-            var emailSent = await _emailService.SendEmail("office@shithosting.net", emailBody); // Replace with the user's email from the request
-
-            if (!emailSent)
-            {
-                return StatusCode(500, "User registered but failed to send verification email.");
-            }
-
-            return Ok("User registered successfully. Please verify your account before logging in.");
+            return Ok("Registration successful! Please check your email for the verification code.");
         }
 
         [HttpPost("verify")]
-        public async Task<IActionResult> Verify([FromQuery] string token)
+        public async Task<IActionResult> Verify([FromBody] VerificationRequest request)
         {
-            if (string.IsNullOrEmpty(token))
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Token is required");
+                return BadRequest("Invalid verification code");
             }
 
-            var verifyResult = await _userService.VerifyAccount(token);
+            var verifyResult = await _userService.VerifyAccount(request.Code);
             if (!verifyResult.Success)
             {
                 return BadRequest(verifyResult.Message);
             }
 
-            return Ok("Account verified! :)");
+            return Ok(verifyResult.Message);
         }
 
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPassword([FromQuery] string email)
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
         {
-            if (string.IsNullOrEmpty(email))
+            if (!ModelState.IsValid)
             {
                 return BadRequest("Email is required");
             }
 
-            var ForgotpasswordRequest = await _userService.ForgotPassword(email);
-            if (!ForgotpasswordRequest.Success)
-            {
-                return BadRequest(ForgotpasswordRequest.Message);
-            }
+            var result = await _userService.ForgotPassword(request.Email);
 
-            return Ok("We have sent you an email to reset your password! ");
-            //na dit stap moet er een email toegestuurd worden met de token 
-            //of een verwijzing naar een andere eendpoint met resetpassword opties.
+            // Always return OK to prevent email enumeration
+            return Ok("If the email exists, a password reset code has been sent.");
         }
 
         [HttpPost("reset-password")]
@@ -122,11 +102,10 @@ namespace Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid request data.");
+                return BadRequest(ModelState);
             }
 
             var result = await _userService.ResetPassword(request);
-
             if (!result.Success)
             {
                 return BadRequest(result.Message);
@@ -134,7 +113,5 @@ namespace Controllers
 
             return Ok(result.Message);
         }
-
     }
-
 }

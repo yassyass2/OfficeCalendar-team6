@@ -54,7 +54,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Enter 'Bearer' [space] and then your valid token in the text input below.\n\nExample: \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\""
+        Description = "Add valid token in the text input below.\n\nExample: \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\""
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -78,6 +78,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IEventStorage, DbEventStorage>();
 builder.Services.AddScoped<IAdminService, DbAdminService>();
 builder.Services.AddScoped<IUserService, DbUserService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 

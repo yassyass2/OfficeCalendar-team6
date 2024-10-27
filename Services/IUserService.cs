@@ -2,6 +2,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 
 
@@ -61,25 +62,44 @@ namespace Services
     public class DbUserService : IUserService
     {
         private readonly MyContext _context;
+        private readonly IEmailService _emailService;
 
-        public DbUserService(MyContext context)
+        public DbUserService(MyContext context, IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
+        }
+
+        private string GenerateVerificationCode()
+        {
+            // Generate a random 6-digit number
+            Random random = new Random();
+            return random.Next(100000, 999999).ToString();
+        }
+
+        private string HashVerificationCode(string code)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(code));
+                return Convert.ToBase64String(hashedBytes);
+            }
         }
 
 
         public async Task<bool> Register(UserRegisterRequest request)
         {
-            // Check if the user already exists
             if (_context.Users.Any(u => u.Email == request.Email))
             {
                 return false;
             }
 
-            // Create the password hash and salt
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-            // Create a new user object
+            // Generate verification code
+            var verificationCode = GenerateVerificationCode();
+            var hashedCode = HashVerificationCode(verificationCode);
+
             var user = new User
             {
                 Email = request.Email,
@@ -87,14 +107,26 @@ namespace Services
                 PasswordSalt = passwordSalt,
                 First_name = request.FirstName,
                 Last_name = request.LastName,
-                VerificationToken = CreateRandomToken()
+                VerificationCodeHash = hashedCode,
+                VerificationCodeExpires = DateTime.UtcNow.AddMinutes(15)
             };
 
-            // Add the user to the database
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return true;
+            // Send verification email
+            try
+            {
+                await _emailService.SendVerificationCode(request.Email, verificationCode);
+                return true;
+            }
+            catch (Exception)
+            {
+                // If email fails, delete the user and return false
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+                return false;
+            }
         }
 
         public async Task<LoginResult> Login(UserLoginRequest request)
@@ -121,18 +153,27 @@ namespace Services
 
 
 
-        public async Task<LoginResult> VerifyAccount(string token)
+        public async Task<LoginResult> VerifyAccount(string code)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.VerificationToken == token);
+            var hashedInputCode = HashVerificationCode(code);
+
+            var user = await _context.Users.FirstOrDefaultAsync(u =>
+                u.VerificationCodeHash == hashedInputCode &&
+                u.VerificationCodeExpires > DateTime.UtcNow);
+
             if (user == null)
             {
-                return new LoginResult { Success = false, Message = "Invalid token :(" };
+                // Add a small delay to prevent timing attacks
+                await Task.Delay(Random.Shared.Next(100, 250));
+                return new LoginResult { Success = false, Message = "Invalid or expired verification code" };
             }
 
-            user.VerifiedAt = DateTime.Now;
+            user.VerifiedAt = DateTime.UtcNow;
+            user.VerificationCodeHash = null;
+            user.VerificationCodeExpires = null;
             await _context.SaveChangesAsync();
 
-            return new LoginResult { Success = true, Message = "Account verified! :)" };
+            return new LoginResult { Success = true, Message = "Account verified successfully!" };
         }
 
         public async Task<LoginResult> ForgotPassword(string email)
@@ -140,35 +181,51 @@ namespace Services
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (user == null)
             {
-                return new LoginResult { Success = false, Message = "User not found." };
+                await Task.Delay(Random.Shared.Next(100, 250));
+                return new LoginResult { Success = false, Message = "If the email exists, a reset code has been sent." };
             }
 
-            user.PasswordResetToken = CreateRandomToken();
-            user.ResetTokenExpires = DateTime.Now.AddDays(1);
-            await _context.SaveChangesAsync();
+            var resetCode = GenerateVerificationCode();
+            user.PasswordResetCodeHash = HashVerificationCode(resetCode);
+            user.ResetCodeExpires = DateTime.UtcNow.AddMinutes(15);
 
-            return new LoginResult { Success = true, Message = "You may reset your password." };
+            try
+            {
+                await _emailService.SendPasswordResetCode(email, resetCode);
+                await _context.SaveChangesAsync();
+                return new LoginResult { Success = true, Message = "If the email exists, a reset code has been sent." };
+            }
+            catch
+            {
+                return new LoginResult { Success = false, Message = "Failed to send reset code." };
+            }
         }
 
         public async Task<LoginResult> ResetPassword(ResetPasswordRequest request)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.PasswordResetToken == request.Token);
+            var hashedInputCode = HashVerificationCode(request.Code);
 
-            if (user == null || user.ResetTokenExpires < DateTime.Now)
+            var user = await _context.Users.FirstOrDefaultAsync(u =>
+                u.PasswordResetCodeHash == hashedInputCode &&
+                u.ResetCodeExpires > DateTime.UtcNow);
+
+            if (user == null)
             {
-                return new LoginResult { Success = false, Message = "Invalid token or token expired" };
+                // Add a small delay to prevent timing attacks
+                await Task.Delay(Random.Shared.Next(100, 250));
+                return new LoginResult { Success = false, Message = "Invalid or expired reset code" };
             }
 
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
-            user.PasswordResetToken = null;
-            user.ResetTokenExpires = null;
+            user.PasswordResetCodeHash = null;
+            user.ResetCodeExpires = null;
 
             await _context.SaveChangesAsync();
 
-            return new LoginResult { Success = true, Message = "Password reset completed!" };
+            return new LoginResult { Success = true, Message = "Password successfully reset!" };
         }
 
 
@@ -192,11 +249,6 @@ namespace Services
                     .ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 return computedHash.SequenceEqual(passwordHash);
             }
-        }
-
-        private string CreateRandomToken()
-        {
-            return Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
         }
 
         public async Task<bool> CheckUser(User user)

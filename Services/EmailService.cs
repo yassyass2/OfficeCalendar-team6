@@ -17,7 +17,7 @@ public class EmailService : IEmailService
             email.Body = new TextPart(TextFormat.Html) { Text = body };
 
             using var smtp = new SmtpClient();
-            smtp.Connect("shithosting.net", 465, SecureSocketOptions.SslOnConnect); // Correct port and secure socket option
+            smtp.Connect("shithosting.net", 465, SecureSocketOptions.SslOnConnect);
             smtp.Authenticate("office@shithosting.net", "Rfwr96&48");
             await smtp.SendAsync(email);
             smtp.Disconnect(true);
@@ -26,8 +26,39 @@ public class EmailService : IEmailService
         }
         catch (Exception ex)
         {
-            // Return or log the exception for troubleshooting
             throw new Exception($"Failed to send email: {ex.Message}");
         }
+    }
+
+    public async Task<bool> SendVerificationCode(string to, string code)
+    {
+        var htmlBody = $@"
+            <html>
+                <body style='font-family: Arial, sans-serif;'>
+                    <h2>Verify Your Email Address</h2>
+                    <p>Thank you for registering! Please use the following verification code:</p>
+                    <h1 style='color: #4CAF50; font-size: 32px; letter-spacing: 2px;'>{code}</h1>
+                    <p>This code will expire in 15 minutes.</p>
+                    <p>If you didn't request this verification, please ignore this email.</p>
+                </body>
+            </html>";
+
+        return await SendEmail(to, htmlBody);
+    }
+
+    public async Task<bool> SendPasswordResetCode(string to, string code)
+    {
+        var htmlBody = $@"
+            <html>
+                <body style='font-family: Arial, sans-serif;'>
+                    <h2>Password Reset Request</h2>
+                    <p>You requested to reset your password. Use the following code:</p>
+                    <h1 style='color: #2196F3; font-size: 32px; letter-spacing: 2px;'>{code}</h1>
+                    <p>This code will expire in 15 minutes.</p>
+                    <p>If you didn't request this reset, please secure your account.</p>
+                </body>
+            </html>";
+
+        return await SendEmail(to, htmlBody);
     }
 }
