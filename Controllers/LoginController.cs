@@ -13,7 +13,6 @@ namespace Controllers
         private readonly IAdminService _adminService;
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
-        private readonly IEmailService _emailService;
 
         public LoginController(IAdminService adminService, IUserService userService,
             ITokenService tokenService, IEmailService emailService)
@@ -21,7 +20,6 @@ namespace Controllers
             _adminService = adminService;
             _userService = userService;
             _tokenService = tokenService;
-            _emailService = emailService;
         }
  
         [HttpPost()]
