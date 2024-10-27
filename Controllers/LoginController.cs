@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using System.Security.Claims;
+using System.Text;
+
 
 namespace Controllers
 {
@@ -13,7 +15,7 @@ namespace Controllers
         private readonly ITokenService _tokenService;
         private readonly IEmailService _emailService;
 
-        public LoginController(IAdminService adminService, IUserService userService, 
+        public LoginController(IAdminService adminService, IUserService userService,
             ITokenService tokenService, IEmailService emailService)
         {
             _adminService = adminService;
@@ -30,11 +32,14 @@ namespace Controllers
                 return BadRequest("Invalid request format");
             }
 
+            string token;
+
             // Check if the user is an admin
             if (await _adminService.CheckAdmin(new Admin(model.Email, model.Password)))
             {
-                var adminToken = _tokenService.GenerateToken(model.Email, "Admin");
-                return Ok(new { Token = adminToken, Message = $"Successfully logged in as Admin {model.Email}" });
+                token = _tokenService.GenerateToken(model.Email, "Admin");
+                HttpContext.Session.Set("JwtToken", Encoding.UTF8.GetBytes(token));
+                return Ok(new { Message = $"Successfully logged in as Admin {model.Email}" });
             }
 
             // Check if the user is a regular user
@@ -44,9 +49,15 @@ namespace Controllers
                 return Unauthorized(loginResult.Message);
             }
 
-            var userToken = _tokenService.GenerateToken(model.Email, "User");
-            return Ok(new { Token = userToken, Message = "Login successful" });
+            // Generate token for regular user
+            token = _tokenService.GenerateToken(model.Email, "User");
+
+            // Store the token in session for automatic usage by middleware
+            HttpContext.Session.Set("JwtToken", Encoding.UTF8.GetBytes(token));
+
+            return Ok(new { Message = "Login successful" });
         }
+
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterRequest request)

@@ -92,7 +92,8 @@ builder.Services.AddDbContext<MyContext>(options =>
 var app = builder.Build();
 app.Urls.Add("http://localhost:5000");
 
-app.UseSession(); // voor sessie handelen
+app.UseSession();
+app.UseMiddleware<JwtSessionMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 
