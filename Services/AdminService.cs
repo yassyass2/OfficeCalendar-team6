@@ -2,9 +2,9 @@ using System.Text.Json;
 
 namespace Services
 {
-    public class JsonAdminService : IAdminService
+    public class JsonAdminService 
     {
-        public async Task<bool> CheckAdmin(Admin admin)
+        public async Task<bool> CheckAdminJson(Admin admin)
         {
             string path = $"Data/admins.json";
             List<Admin> admins = new List<Admin>();
