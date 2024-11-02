@@ -91,7 +91,7 @@ namespace Services
 
         public async Task<bool> Put(Guid Id, Event ev)
         {
-            var to_update = _context.Events.FindAsync(Id);
+            var to_update = await _context.Events.FindAsync(Id);
             if (to_update == null) return false;
             _context.Entry(to_update).CurrentValues.SetValues(ev);
             return await _context.SaveChangesAsync() > 0;
