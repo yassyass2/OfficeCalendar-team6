@@ -21,7 +21,7 @@ namespace Controllers
             _userService = userService;
             _tokenService = tokenService;
         }
- 
+
         [HttpPost()]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest model)
         {
@@ -33,7 +33,13 @@ namespace Controllers
             string token;
 
             // Check if the user is an admin
-            if (await _adminService.CheckAdmin(new Admin(model.Email, model.Password)))
+            var adminToCheck = new Admin
+            {
+                Email = model.Email,
+                Password = model.Password
+            };
+
+            if (await _adminService.CheckAdmin(adminToCheck))
             {
                 token = _tokenService.GenerateToken(model.Email, "Admin");
                 HttpContext.Session.Set("JwtToken", Encoding.UTF8.GetBytes(token));
