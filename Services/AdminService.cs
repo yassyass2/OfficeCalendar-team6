@@ -2,7 +2,7 @@ using System.Text.Json;
 
 namespace Services
 {
-    public class JsonAdminService 
+    public class JsonAdminService
     {
         public async Task<bool> CheckAdminJson(Admin admin)
         {
@@ -33,8 +33,11 @@ namespace Services
         {
             try
             {
-                // Check if the admin credentials exist in the database
-                if (_context.Admins.FirstOrDefault(x => x.Email == admin.Email && x.Password == admin.Password) != null)
+                Console.WriteLine($"Checking Admin - Email: {admin.Email}, Password: {admin.Password}");
+
+
+                var nieuweAdmins = _context.Admins.ToList();
+                if (nieuweAdmins.FirstOrDefault(x => x.Email == admin.Email && x.Password == admin.Password) != null)
                 {
                     return true;
                 }
