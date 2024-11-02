@@ -4,8 +4,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Services
 {
-    
-
     public class JsonEventStorage : IEventStorage
     {
         public string path = "Data/events.json";
@@ -75,13 +73,13 @@ namespace Services
         {
             try
             {
+                var load = await _context.Events.ToListAsync();
                 var eventToRemove = await _context.Events.FirstOrDefaultAsync(e => e.Id == Id);
 
                 if (eventToRemove != null)
                 {
                     _context.Events.Remove(eventToRemove);
-                    await _context.SaveChangesAsync();
-                    return true;
+                    return await _context.SaveChangesAsync() > 0;
                 }
                 return false;
             }
@@ -93,16 +91,10 @@ namespace Services
 
         public async Task<bool> Put(Guid Id, Event ev)
         {
-            try
-            {
-                _context.Events.Update(ev);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            var to_update = _context.Events.FindAsync(Id);
+            if (to_update == null) return false;
+            _context.Entry(to_update).CurrentValues.SetValues(ev);
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

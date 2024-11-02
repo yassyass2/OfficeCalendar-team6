@@ -1,15 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-public class AdminAuthorizationFilter : IAuthorizationFilter
-{
-    public void OnAuthorization(AuthorizationFilterContext context)
+namespace Filters{
+    public class AdminAuthorizationFilter : IAuthorizationFilter
     {
-        var isAdmin = context.HttpContext.Session.GetString("IsAdmin");
-
-        if (string.IsNullOrEmpty(isAdmin) || isAdmin != "true")
+        public void OnAuthorization(AuthorizationFilterContext context)
         {
-            context.Result = new UnauthorizedResult();
+            var isAdmin = context.HttpContext.Session.GetString("IsAdmin");
+
+            if (string.IsNullOrEmpty(isAdmin) || isAdmin != "true")
+            {
+                context.Result = new UnauthorizedResult();
+            }
         }
     }
 }

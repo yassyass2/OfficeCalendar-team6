@@ -1,7 +1,5 @@
 namespace Services
 {
-    
-
     public class InviteService : IInviteService
     {
         private readonly MyContext _context;

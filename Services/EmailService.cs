@@ -4,61 +4,63 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using System.Threading.Tasks;
 
-public class EmailService : IEmailService
-{
-    public async Task<bool> SendEmail(string to, string body)
+namespace Services{
+    public class EmailService : IEmailService
     {
-        try
+        public async Task<bool> SendEmail(string to, string body)
         {
-            var email = new MimeMessage();
-            email.From.Add(MailboxAddress.Parse("office@shithosting.net"));
-            email.To.Add(MailboxAddress.Parse(to));
-            email.Subject = "Account Verification";
-            email.Body = new TextPart(TextFormat.Html) { Text = body };
+            try
+            {
+                var email = new MimeMessage();
+                email.From.Add(MailboxAddress.Parse("office@shithosting.net"));
+                email.To.Add(MailboxAddress.Parse(to));
+                email.Subject = "Account Verification";
+                email.Body = new TextPart(TextFormat.Html) { Text = body };
 
-            using var smtp = new SmtpClient();
-            smtp.Connect("shithosting.net", 465, SecureSocketOptions.SslOnConnect);
-            smtp.Authenticate("office@shithosting.net", "Rfwr96&48");
-            await smtp.SendAsync(email);
-            smtp.Disconnect(true);
+                using var smtp = new SmtpClient();
+                smtp.Connect("shithosting.net", 465, SecureSocketOptions.SslOnConnect);
+                smtp.Authenticate("office@shithosting.net", "Rfwr96&48");
+                await smtp.SendAsync(email);
+                smtp.Disconnect(true);
 
-            return true;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to send email: {ex.Message}");
+            }
         }
-        catch (Exception ex)
+
+        public async Task<bool> SendVerificationCode(string to, string code)
         {
-            throw new Exception($"Failed to send email: {ex.Message}");
+            var htmlBody = $@"
+                <html>
+                    <body style='font-family: Arial, sans-serif;'>
+                        <h2>Verify Your Email Address</h2>
+                        <p>Thank you for registering! Please use the following verification code:</p>
+                        <h1 style='color: #4CAF50; font-size: 32px; letter-spacing: 2px;'>{code}</h1>
+                        <p>This code will expire in 15 minutes.</p>
+                        <p>If you didn't request this verification, please ignore this email.</p>
+                    </body>
+                </html>";
+
+            return await SendEmail(to, htmlBody);
         }
-    }
 
-    public async Task<bool> SendVerificationCode(string to, string code)
-    {
-        var htmlBody = $@"
-            <html>
-                <body style='font-family: Arial, sans-serif;'>
-                    <h2>Verify Your Email Address</h2>
-                    <p>Thank you for registering! Please use the following verification code:</p>
-                    <h1 style='color: #4CAF50; font-size: 32px; letter-spacing: 2px;'>{code}</h1>
-                    <p>This code will expire in 15 minutes.</p>
-                    <p>If you didn't request this verification, please ignore this email.</p>
-                </body>
-            </html>";
+        public async Task<bool> SendPasswordResetCode(string to, string code)
+        {
+            var htmlBody = $@"
+                <html>
+                    <body style='font-family: Arial, sans-serif;'>
+                        <h2>Password Reset Request</h2>
+                        <p>You requested to reset your password. Use the following code:</p>
+                        <h1 style='color: #2196F3; font-size: 32px; letter-spacing: 2px;'>{code}</h1>
+                        <p>This code will expire in 15 minutes.</p>
+                        <p>If you didn't request this reset, please secure your account.</p>
+                    </body>
+                </html>";
 
-        return await SendEmail(to, htmlBody);
-    }
-
-    public async Task<bool> SendPasswordResetCode(string to, string code)
-    {
-        var htmlBody = $@"
-            <html>
-                <body style='font-family: Arial, sans-serif;'>
-                    <h2>Password Reset Request</h2>
-                    <p>You requested to reset your password. Use the following code:</p>
-                    <h1 style='color: #2196F3; font-size: 32px; letter-spacing: 2px;'>{code}</h1>
-                    <p>This code will expire in 15 minutes.</p>
-                    <p>If you didn't request this reset, please secure your account.</p>
-                </body>
-            </html>";
-
-        return await SendEmail(to, htmlBody);
+            return await SendEmail(to, htmlBody);
+        }
     }
 }

@@ -5,15 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using System.Text;
 
 
-
 namespace Services
 {
-    
-
-
     public class JsonUserService : IUserService
     {
-        //!!!!!! //Alles in JsonUserServices moet later aangepast worden zodra de methode met de database werkt
         public Task<bool> Register(UserRegisterRequest request)
         {
             return Task.FromResult(true);

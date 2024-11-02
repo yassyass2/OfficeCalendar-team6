@@ -11,7 +11,6 @@ public class Event
 
     public Event(Guid id, string title, string description, string date, string start_time, string end_time, string location)
     {
-        Console.WriteLine($"eerst {title} is {Id}");
         Id = id;
         Title = title;
         Description = description;
@@ -20,6 +19,5 @@ public class Event
         End_time = end_time;
         Location = location;
         Admin_approval = false;
-        Console.WriteLine($"now event id of {title} is {Id}");
     }
 }
