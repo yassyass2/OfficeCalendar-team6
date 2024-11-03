@@ -1,18 +1,24 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using Filters;
 
 namespace Controllers
 {
     [Route("events")]
     [ApiController]
+    [ServiceFilter(typeof(NotificationFilter))]
     public class EventController : ControllerBase
     {
         private readonly IEventStorage _eventStorage;
+        private readonly IAttendanceService _att;
+        private readonly IEmailService _mail;
 
-        public EventController(IEventStorage eventStorage)
+        public EventController(IEventStorage eventStorage, IAttendanceService attendanceService, IEmailService mail)
         {
             _eventStorage = eventStorage;
+            _att = attendanceService;
+            _mail = mail;
         }
 
         // Users can access this

@@ -1,4 +1,6 @@
-public interface ITokenService
-{
-    string GenerateToken(string email, string role);
+namespace Services{
+    public interface ITokenService
+    {
+        string GenerateToken(string email, string role);
+    }
 }
