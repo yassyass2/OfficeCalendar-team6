@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 
 namespace Services
 {
@@ -91,10 +92,26 @@ namespace Services
 
         public async Task<bool> Put(Guid Id, Event ev)
         {
+            _context.Events.FirstOrDefault();
             var to_update = await _context.Events.FindAsync(Id);
             if (to_update == null) return false;
-            _context.Entry(to_update).CurrentValues.SetValues(ev);
-            return await _context.SaveChangesAsync() > 0;
+            to_update.Title = ev.Title;
+            to_update.Description = ev.Description;
+            to_update.Date = ev.Date;
+            to_update.Start_time = ev.Start_time;
+            to_update.End_time = ev.End_time;
+            to_update.Location = ev.Location;
+
+            try{
+                return _context.SaveChanges() > 0;
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                // voor concurrency exception
+                // Options zijn logging, retrying, or returning a specific result to the caller
+                Console.WriteLine($"Concurrency conflict detected: {ex.Message}. retrying.");
+                return false;
+            }
         }
     }
 }
