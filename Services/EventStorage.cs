@@ -92,27 +92,43 @@ namespace Services
 
         public async Task<bool> Put(Guid Id, Event ev)
         {
-            _context.Events.AsNoTracking().FirstOrDefault();
+
+            var allEvents = await _context.Events.ToListAsync();
+            Console.WriteLine("Events in the database:");
+            foreach (var evt in allEvents)
+            {
+                Console.WriteLine($"Id: {evt.Id}, Title: {evt.Title}, Date: {evt.Date}");
+            }
+
             var to_update = await _context.Events.FindAsync(Id);
-            if (to_update == null) return false;
+            if (to_update == null)
+            {
+                Console.WriteLine($"Event with Id {Id} not found.");
+                return false;
+            }
+
+
             to_update.Title = ev.Title;
             to_update.Description = ev.Description;
             to_update.Date = ev.Date;
             to_update.Start_time = ev.Start_time;
             to_update.End_time = ev.End_time;
             to_update.Location = ev.Location;
-            Console.WriteLine($"{to_update.Title} found");
+            _context.Entry(to_update).State = EntityState.Modified;
 
-            try{
-                return _context.SaveChanges() > 0;
+            try
+            {
+                var result = await _context.SaveChangesAsync() > 0;
+                Console.WriteLine(result ? "Update successful." : "Update failed.");
+                return result;
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                // voor concurrency exception
-                // Options zijn logging, retrying, or returning a specific result to the caller
-                Console.WriteLine($"Concurrency conflict detected: {ex.Message}. retrying.");
+                Console.WriteLine($"Concurrency conflict detected: {ex.Message}. Please try again.");
                 return false;
             }
         }
+
+
     }
 }
