@@ -22,11 +22,15 @@ namespace Services
             //string eventId = request.EventId.ToString(); // Convert Guid to string (it is TEXT in the database)
             var evs = _context.Events.ToList();
             Event? eventToAttend = evs.FirstOrDefault(e => e.Id == request.EventId);
+            var at = TimeSpan.Parse(request.AttendAt);
 
             if (eventToAttend == null || DateTime.Parse(eventToAttend.Date) < DateTime.Now)
             {
                 Console.WriteLine($"no event found for id: {request.EventId}");
                 Console.WriteLine($"it should be {_context.Events.First().Id}");
+                return false;
+            }
+            if (!(at >= TimeSpan.Parse(eventToAttend.Start_time) && at <= TimeSpan.Parse(eventToAttend.End_time))){
                 return false;
             }
 
@@ -38,7 +42,7 @@ namespace Services
                 .FirstOrDefaultAsync(a => a.EventId == request.EventId && a.UserId == request.UserId);
             if (existingAttendance != null)
             {
-                return false; // User has already signed up
+                return false; // User has already signed up fot his event
             }
 
             await _context.Attendances.AddAsync(request);

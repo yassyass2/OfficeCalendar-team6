@@ -24,14 +24,5 @@ public class MyContext : DbContext
         modelBuilder.Entity<EventAttendance>().HasKey(a => new { a.UserId, a.EventId });
 
         // Add any relationships between entities if needed
-        modelBuilder.Entity<EventAttendance>()
-            .HasOne<User>()
-            .WithMany()
-            .HasForeignKey(a => a.UserId);
-
-        modelBuilder.Entity<EventAttendance>()
-            .HasOne<Event>()
-            .WithMany()
-            .HasForeignKey(a => a.EventId);
     }
 }
