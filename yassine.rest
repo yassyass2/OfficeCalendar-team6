@@ -1,0 +1,82 @@
+POST http://localhost:5000/api/login HTTP/1.1 
+content-type: application/json
+
+{
+    "email": "admin@gmail.com", "password": "adminpass"
+}
+#####
+
+POST http://localhost:5000/api/login HTTP/1.1 
+content-type: application/json
+
+{
+    "email": "yassinabde@outlook.com", "password": "yassyass"
+}
+#####
+
+POST http://localhost:5000/events HTTP/1.1
+content-type: application/json
+
+{
+	"id": "5555CB36-86CE-462E-81E1-811d9C045555",
+	"title": "test event",
+	"description": "interesting event",
+	"date": "01-01-2025",
+	"start_time": "09:00",
+	"end_time": "10:00",
+	"location": "NL",
+    "admin_approval": false
+}
+
+#####
+
+GET http://localhost:5000/events
+#####
+
+
+POST http://localhost:5000/api/Attendance/attend
+content-type: application/json
+
+{
+    "userId": "0E73F0D1-A70C-472D-B41B-A8DC84403A54",
+    "eventId": "5555CB36-86CE-462E-81E1-811d9C045555",
+    "attendAt": "09:30"
+}
+#####
+
+PUT http://localhost:5000/events/5555CB36-86CE-462E-81E1-811d9C045555
+content-type: application/json
+
+{
+	"id": "5555CB36-86CE-462E-81E1-811d9C045555",
+	"title": "test event",
+	"description": "just an event",
+	"date": "01-01-2025",
+	"start_time": "09:00",
+	"end_time": "10:00",
+	"location": "USA",
+    "admin_approval": false
+}
+#####
+
+GET http://localhost:5000/api/Attendance/attendees?Event_id=5555CB36-86CE-462E-81E1-811d9C045555
+
+#####
+
+DELETE http://localhost:5000/events/5555CB36-86CE-462E-81E1-811d9C045555
+#####
+
+DELETE http://localhost:5000/Attendence/attend
+content-type: application/json
+
+{
+    "userId": "0E73F0D1-A70C-472D-B41B-A8DC84403A54",
+    "eventId": "5555CB36-86CE-462E-81E1-811d9C045555",
+    "attendAt": "09:30"
+}
+#####
+
+POST http://localhost:5000/invite?ToInvite=0E73F0D1-A70C-472D-B41B-A8DC84403A54&WhatEvent=3FA85F64-5717-4562-B3FC-2C963F66AFA6 HTTP/1.1
+
+#####
+
