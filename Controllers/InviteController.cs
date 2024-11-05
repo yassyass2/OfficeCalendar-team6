@@ -9,22 +9,24 @@ namespace Controllers
     public class InviteController : Controller
     {
         private readonly IInviteService _invitation;
-        public InviteController(IInviteService invitationService)
+        private readonly IEmailService _mail;
+        private readonly IUserService _user;
+        public InviteController(IInviteService invitationService, IEmailService emailService, IUserService u)
         {
             _invitation = invitationService;
+            _mail = emailService;
+            _user = u;
         }
 
         [HttpPost()]
-        public IActionResult SendInvite(EventAttendance invitation)
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> SendInvite(Guid ToInvite, Guid WhatEvent)
         {
-            if (invitation is null)
-            {
-                return BadRequest("");
-            }
-            if (!_invitation.SendInvitation(invitation))
-            {
-                return NotFound("Employee not found or already attending event");
-            }
+            if (ToInvite == Guid.Empty || WhatEvent == Guid.Empty) return BadRequest("traget Id or Event Id not given");
+            if (!_invitation.SendInvitation(ToInvite, WhatEvent)) return NotFound("employee or Event do not exist");
+
+            var mail = await _user.GetEmail(ToInvite);
+            await _mail.SendEmail(mail, $"You have been invited to event {WhatEvent}! log in to see details");
             return Ok("Invitation to the Event has been sent");
         }
     }
