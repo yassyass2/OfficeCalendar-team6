@@ -19,7 +19,7 @@ namespace Controllers
         }
 
         [HttpPost()]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> SendInvite(Guid ToInvite, Guid WhatEvent)
         {
             if (ToInvite == Guid.Empty || WhatEvent == Guid.Empty) return BadRequest("traget Id or Event Id not given");
