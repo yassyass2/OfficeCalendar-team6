@@ -45,21 +45,6 @@ namespace Controllers
             return NotFound("Event not found or has already started.");
         }
 
-        // PUT: api/Attendance/modify
-        [HttpPut("modify")]
-        [Authorize(Roles = "User")]
-        public async Task<IActionResult> ModifyAttendance([FromQuery] Guid newEventId)
-        {
-            var userId = GetUserId();
-            if (userId == null)
-            {
-                return Unauthorized("User ID not found in session.");
-            }
-
-            var result = await _attendanceService.ModifyEventAttendance(userId.Value, newEventId);
-            return result ? Ok("Attendance successfully modified.") : BadRequest("Failed to modify attendance.");
-        }
-
         // GET: api/Attendance/attendees/{eventId}
         [HttpGet("attendees/{eventId}")]
         [Authorize(Roles = "User")]
