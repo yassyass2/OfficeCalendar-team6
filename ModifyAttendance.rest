@@ -9,13 +9,15 @@ Content-Type: application/json
 
 ### 2. Update current event to new event ID
 PUT http://localhost:5000/api/ModifyAttendance
+Authorization: Bearer YOUR_TOKEN_HERE
 Content-Type: application/json
 
 {
-    "userId": "0E73F0D1-A70C-472D-B41B-A8DC84403A54",
-    "eventId": "3FA85F64-5717-4562-B3FC-2C963F66AFA6", // Event user wants to attend. (switch with current event)
-    //"attendAt": "09:00"  // Example time - adjust as needed to fit event's valid time range
+    "user_Id": "0E73F0D1-A70C-472D-B41B-A8DC84403A54",
+    "eventId": "3FA85F64-5717-4562-B3FC-2C963F66AFA6",
+    "attendAt": "09:10:00"
 }
 
 ### 3. View attended events
 GET http://localhost:5000/api/Attendance/view
+Authorization: Bearer YOUR_TOKEN_HERE
