@@ -92,7 +92,7 @@ namespace Services
 
         public async Task<bool> Put(Guid Id, Event ev)
         {
-            _context.Events.FirstOrDefault();
+            _context.Events.AsNoTracking().FirstOrDefault();
             var to_update = await _context.Events.FindAsync(Id);
             if (to_update == null) return false;
             to_update.Title = ev.Title;
@@ -101,6 +101,7 @@ namespace Services
             to_update.Start_time = ev.Start_time;
             to_update.End_time = ev.End_time;
             to_update.Location = ev.Location;
+            Console.WriteLine($"{to_update.Title} found");
 
             try{
                 return _context.SaveChanges() > 0;
