@@ -20,13 +20,13 @@ namespace Controllers
         private Guid? GetUserId()
         {
             var userIdClaim = User.FindFirst("id");
-            return userIdClaim != null ? Guid.Parse(userIdClaim.Value) : (Guid?)null;
+            return userIdClaim != null ? Guid.Parse(userIdClaim.Value) : null;
         }
 
         // PUT: api/ModifyAttendance
         [HttpPut]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> ModifyAttendance([FromQuery] Guid newEventId)
+        public async Task<IActionResult> ModifyAttendance([FromBody] EventAttendance newAtt)
         {
             var userId = GetUserId();
             if (userId == null)
@@ -34,7 +34,7 @@ namespace Controllers
                 return Unauthorized("User ID not found in session.");
             }
 
-            var result = await _attendanceService.ModifyEventAttendance(userId.Value, newEventId);
+            var result = await _attendanceService.ModifyEventAttendance(newAtt);
             return result ? Ok("Attendance successfully modified.") : BadRequest("Failed to modify attendance.");
         }
     }

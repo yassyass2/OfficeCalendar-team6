@@ -32,15 +32,20 @@ namespace Services
                 return false; // User already attending the event
             }
 
+            var at = TimeSpan.Parse(request.AttendAt);
+            if (!(at >= TimeSpan.Parse(eventToAttend.Start_time) && at <= TimeSpan.Parse(eventToAttend.End_time))){
+                return false;
+            }
+
             await _context.Attendances.AddAsync(request);
             await _context.SaveChangesAsync();
             return true;
         }
 
-        public async Task<bool> ModifyEventAttendance(Guid userId, Guid newEventId)
+        public async Task<bool> ModifyEventAttendance(EventAttendance newAtt)
         {
             var existingAttendance = await _context.Attendances
-                .FirstOrDefaultAsync(a => a.UserId == userId);
+                .FirstOrDefaultAsync(a => a.UserId == newAtt.UserId && a.EventId == newAtt.EventId);
 
             if (existingAttendance == null)
             {
@@ -48,14 +53,19 @@ namespace Services
             }
 
             var eventToAttend = await _context.Events
-                .FirstOrDefaultAsync(e => e.Id == newEventId);
+                .FirstOrDefaultAsync(e => e.Id == newAtt.EventId);
 
             if (eventToAttend == null || DateTime.Parse(eventToAttend.Date) < DateTime.Now)
             {
                 return false; // New event not found or has already started
             }
 
-            existingAttendance.EventId = newEventId;
+            var at = TimeSpan.Parse(newAtt.AttendAt);
+            if (!(at >= TimeSpan.Parse(eventToAttend.Start_time) && at <= TimeSpan.Parse(eventToAttend.End_time))){
+                return false;
+            }
+
+            existingAttendance.AttendAt = newAtt.AttendAt;
             await _context.SaveChangesAsync();
             return true;
         }

@@ -66,7 +66,7 @@ GET http://localhost:5000/api/Attendance/attendees?Event_id=5555CB36-86CE-462E-8
 DELETE http://localhost:5000/events/5555CB36-86CE-462E-81E1-811d9C045555
 #####
 
-DELETE http://localhost:5000/Attendence/attend
+DELETE http://localhost:5000/api/Attendance/attend
 content-type: application/json
 
 {

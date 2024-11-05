@@ -17,12 +17,6 @@ namespace Controllers
             _attendanceService = attendanceService;
         }
 
-        private Guid? GetUserId()
-        {
-            var userIdClaim = User.FindFirst("id");
-            return userIdClaim != null ? Guid.Parse(userIdClaim.Value) : (Guid?)null;
-        }
-
         // POST: api/Attendance/attend
         [HttpPost("attend")]
         [Authorize(Roles = "User")]
@@ -31,13 +25,6 @@ namespace Controllers
             if (request == null) return BadRequest("No body given");
             Console.WriteLine(request.EventId);
 
-            var userId = GetUserId();
-            if (userId == null)
-            {
-                return Unauthorized("User ID not found in session.");
-            }
-
-            request.UserId = userId.Value;
             if (await _attendanceService.CreateAttendance(request))
             {
                 return Ok("Event successfully attended.");
@@ -46,9 +33,9 @@ namespace Controllers
         }
 
         // GET: api/Attendance/attendees/{eventId}
-        [HttpGet("attendees/{eventId}")]
+        [HttpGet("attendees")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> GetAttendees([FromRoute] Guid eventId)
+        public async Task<IActionResult> GetAttendees([FromQuery] Guid eventId)
         {
             var attendees = await _attendanceService.GetAttending(eventId);
             return Ok(attendees);
@@ -59,13 +46,6 @@ namespace Controllers
         [Authorize(Roles = "User")]
         public async Task<IActionResult> DeleteAttendance([FromBody] EventAttendance request)
         {
-            var userId = GetUserId();
-            if (userId == null)
-            {
-                return Unauthorized("User ID not found in session.");
-            }
-
-            request.UserId = userId.Value;
             return await _attendanceService.DeleteAttendance(request)
                 ? Ok("Attendance successfully deleted.")
                 : NotFound("Attendance doesn't exist.");
@@ -74,15 +54,14 @@ namespace Controllers
         // GET: api/Attendance/view
         [HttpGet("view")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> ViewEvents()
+        public async Task<IActionResult> ViewEvents(Guid userId)
         {
-            var userId = GetUserId();
-            if (userId == null)
+            if (userId == Guid.Empty)
             {
                 return Unauthorized("User ID not found in session.");
             }
 
-            var events = await _attendanceService.GetAttendedEvents(userId.Value);
+            var events = await _attendanceService.GetAttendedEvents(userId);
             return Ok(events);
         }
     }
