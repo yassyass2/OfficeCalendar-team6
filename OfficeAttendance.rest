@@ -1,0 +1,33 @@
+### Attend Event
+POST http://localhost:5000/api/att/attend
+Content-Type: application/json
+Authorization: Bearer YOUR_AUTH_TOKEN_HERE
+
+{
+    "userId": "USER_ID_HERE",
+    "eventId": "EVENT_ID_HERE"
+}
+
+### Get Attendees for an Event
+GET http://localhost:5000/api/att/attendees/EVENT_ID_HERE
+Authorization: Bearer YOUR_AUTH_TOKEN_HERE
+
+### Delete Attendance
+DELETE http://localhost:5000/api/att/attend
+Content-Type: application/json
+Authorization: Bearer YOUR_AUTH_TOKEN_HERE
+
+{
+    "userId": "USER_ID_HERE",
+    "eventId": "EVENT_ID_HERE"
+}
+
+### Modify Attendance
+PUT http://localhost:5000/api/att/modify
+Content-Type: application/json
+Authorization: Bearer YOUR_AUTH_TOKEN_HERE
+
+{
+    "userId": "USER_ID_HERE",
+    "eventId": "NEW_EVENT_ID_HERE"  // The new event ID you want to attend
+}
