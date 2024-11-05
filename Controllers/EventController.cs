@@ -13,12 +13,14 @@ namespace Controllers
         private readonly IEventStorage _eventStorage;
         private readonly IAttendanceService _att;
         private readonly IEmailService _mail;
+        private readonly IUserService _user;
 
-        public EventController(IEventStorage eventStorage, IAttendanceService attendanceService, IEmailService mail)
+        public EventController(IEventStorage eventStorage, IAttendanceService attendanceService, IEmailService mail, IUserService u)
         {
             _eventStorage = eventStorage;
             _att = attendanceService;
             _mail = mail;
+            _user = u;
         }
 
         // Users can access this

@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Services
 {
+    
+
     public class AttendanceService : IAttendanceService
     {
         private readonly MyContext _context;
@@ -15,22 +17,32 @@ namespace Services
             _context = context;
         }
 
-        // Creates an attendance record for a user to join an event
         public async Task<bool> CreateAttendance(EventAttendance request)
         {
-            var eventToAttend = await _context.Events
-                .FirstOrDefaultAsync(e => e.Id == request.EventId);
+            //string eventId = request.EventId.ToString(); // Convert Guid to string (it is TEXT in the database)
+            var evs = _context.Events.ToList();
+            Event? eventToAttend = evs.FirstOrDefault(e => e.Id == request.EventId);
+            var at = TimeSpan.Parse(request.AttendAt);
 
             if (eventToAttend == null || DateTime.Parse(eventToAttend.Date) < DateTime.Now)
             {
-                return false; // Event not found or has already started
+                Console.WriteLine($"no event found for id: {request.EventId}");
+                Console.WriteLine($"it should be {_context.Events.First().Id}");
+                return false;
+            }
+            if (!(at >= TimeSpan.Parse(eventToAttend.Start_time) && at <= TimeSpan.Parse(eventToAttend.End_time))){
+                return false;
             }
 
+            //Event eventToAttend = _context.Events.FirstOrDefault(e => e.Id == request.EventId); // (e => e.Id == request.EventId)
+            // var found = new List<Event>(){ eventToAttend };
+            // Console.WriteLine("!!!" + _context.Events.First().Id);
+
             var existingAttendance = await _context.Attendances
-                .FirstOrDefaultAsync(a => a.UserId == request.UserId && a.EventId == request.EventId);
+                .FirstOrDefaultAsync(a => a.EventId == request.EventId && a.UserId == request.UserId);
             if (existingAttendance != null)
             {
-                return false; // User already attending the event
+                return false; // User has already signed up fot his event
             }
 
             await _context.Attendances.AddAsync(request);
@@ -38,47 +50,6 @@ namespace Services
             return true;
         }
 
-        // Modifies the attendance of a user to switch to a new event
-        public async Task<bool> ModifyEventAttendance(Guid userId, Guid newEventId)
-        {
-            var existingAttendance = await _context.Attendances
-                .FirstOrDefaultAsync(a => a.UserId == userId);
-
-            if (existingAttendance == null)
-            {
-                return false; // No existing attendance to modify
-            }
-
-            var eventToAttend = await _context.Events
-                .FirstOrDefaultAsync(e => e.Id == newEventId);
-
-            if (eventToAttend == null || DateTime.Parse(eventToAttend.Date) < DateTime.Now)
-            {
-                return false; // New event not found or has already started
-            }
-
-            existingAttendance.EventId = newEventId;
-            await _context.SaveChangesAsync();
-            return true;
-        }
-
-        // Deletes an attendance record for a specific user and event
-        public async Task<bool> DeleteAttendance(EventAttendance request)
-        {
-            var attendance = await _context.Attendances
-                .FirstOrDefaultAsync(a => a.UserId == request.UserId && a.EventId == request.EventId);
-
-            if (attendance == null)
-            {
-                return false; // Attendance not found
-            }
-
-            _context.Attendances.Remove(attendance);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-
-        // Retrieves all users attending a specified event
         public async Task<IEnumerable<Guid>> GetAttending(Guid eventId)
         {
             return await _context.Attendances
@@ -87,13 +58,52 @@ namespace Services
                 .ToListAsync();
         }
 
-        // Retrieves all events a specific user is attending
-        public async Task<IEnumerable<Guid>> GetAttendedEvents(Guid userId)
+        public async Task<bool> DeleteAttendance(EventAttendance request)
         {
-            return await _context.Attendances
-                .Where(a => a.UserId == userId)
-                .Select(a => a.EventId)
-                .ToListAsync();
+            var attendance = await _context.Attendances
+                .FirstOrDefaultAsync(a => a.UserId == request.UserId && a.EventId == request.EventId);
+
+            if (attendance == null)
+            {
+                return false;
+            }
+
+            _context.Attendances.Remove(attendance);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<(bool, string)> ModifyAttendance(EventAttendance request)
+        {
+            // Check if the user is trying to modify their own attendance
+            var existingAttendance = await _context.Attendances
+                .FirstOrDefaultAsync(a => a.EventId == request.EventId && a.UserId == request.UserId);
+
+            if (existingAttendance == null)
+            {
+                return (false, "Attendance not found.");
+            }
+
+            var eventToAttend = await _context.Events.FirstOrDefaultAsync(e => e.Id == request.EventId);
+            if (eventToAttend == null || DateTime.Parse(eventToAttend.Date) < DateTime.Now)
+            {
+                return (false, "Event not found or has already started.");
+            }
+
+            var isDateConflict = await _context.Attendances
+                .AnyAsync(a => a.EventId != request.EventId
+                    && a.UserId == request.UserId
+                    && _context.Events.Any(e => e.Id == a.EventId && e.Date == eventToAttend.Date)); // Fetch the event separately
+
+            if (isDateConflict)
+            {
+                return (false, "Date is already occupied by another event.");
+            }
+
+            existingAttendance.EventId = request.EventId;
+            await _context.SaveChangesAsync();
+
+            return (true, null);
         }
     }
 }

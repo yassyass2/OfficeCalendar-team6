@@ -41,6 +41,9 @@ namespace Services
         {
             return new LoginResult { Success = true, Message = "To be implemented" };
         }
+        public async Task<string> GetEmail(Guid id){
+            return "";
+        }
 
     }
 
@@ -254,6 +257,24 @@ namespace Services
             catch
             {
                 return false;
+            }
+        }
+
+        public async Task<string> GetEmail(Guid id){
+            try
+            {
+                var existingUser = await _context.Users
+                    .FirstOrDefaultAsync(x => x.Id == id);
+
+                if (existingUser != null)
+                {
+                    return existingUser.Email;
+                }
+                return "yassinabde@outlook.com";
+            }
+            catch
+            {
+                return "yassinabde@outlook.com";
             }
         }
 
