@@ -1,0 +1,23 @@
+### Login to Get JWT Token
+POST http://localhost:5000/api/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "yassinabde@outlook.com",
+    "password": "yassyass"
+}
+
+### Modify Attendance (PUT)
+# Replace `YOUR_JWT_TOKEN` with the token from the login response
+PUT http://localhost:5000/api/ModifyAttendance HTTP/1.1
+Authorization: Bearer YOUR_JWT_TOKEN
+Content-Type: application/json
+
+{
+    "newEventId": "3FA85F64-5717-4562-B3FC-2C963F66AFA6"
+}
+
+### View Attended Events (GET)
+# Replace `YOUR_JWT_TOKEN` with the token from the login response
+GET http://localhost:5000/api/Attendance/view HTTP/1.1
+Authorization: Bearer YOUR_JWT_TOKEN
