@@ -34,14 +34,16 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<IEventStorage, EventStorage>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+
+builder.Services.AddScoped<IEventStorage, EventStorage>();
+builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 builder.Services.AddScoped<NotificationFilter>();
+builder.Services.AddScoped<IInviteService, InviteService>();
 
 
 builder.Services.AddDbContext<MyContext>(options =>

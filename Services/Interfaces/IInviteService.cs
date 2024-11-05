@@ -1,6 +1,6 @@
 namespace Services{
     public interface IInviteService
     {
-        bool SendInvitation(EventAttendance invite);
+        bool SendInvitation(Guid To, Guid Ev);
     }
 }
