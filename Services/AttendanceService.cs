@@ -45,26 +45,14 @@ namespace Services
         public async Task<bool> ModifyEventAttendance(EventAttendance newAtt)
         {
             var existingAttendance = await _context.Attendances
-                .FirstOrDefaultAsync(a => a.UserId == newAtt.UserId && a.EventId == newAtt.EventId);
+                .FirstOrDefaultAsync(a => a.UserId == newAtt.UserId);
 
             if (existingAttendance == null)
             {
                 return false; // No existing attendance to modify
             }
 
-            var eventToAttend = await _context.Events
-                .FirstOrDefaultAsync(e => e.Id == newAtt.EventId);
-
-            if (eventToAttend == null || DateTime.Parse(eventToAttend.Date) < DateTime.Now)
-            {
-                return false; // New event not found or has already started
-            }
-
-            var at = TimeSpan.Parse(newAtt.AttendAt);
-            if (!(at >= TimeSpan.Parse(eventToAttend.Start_time) && at <= TimeSpan.Parse(eventToAttend.End_time))){
-                return false;
-            }
-
+            existingAttendance.EventId = newAtt.EventId;
             existingAttendance.AttendAt = newAtt.AttendAt;
             await _context.SaveChangesAsync();
             return true;

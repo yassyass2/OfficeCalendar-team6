@@ -8,7 +8,7 @@ namespace Controllers
 {
     [Route("api/ModifyAttendance")]
     [ApiController]
-    public class ModifyAttendanceController : ControllerBase
+    public class ModifyAttendanceController : Controller
     {
         private readonly IAttendanceService _attendanceService;
 
@@ -17,25 +17,18 @@ namespace Controllers
             _attendanceService = attendanceService;
         }
 
-        private Guid? GetUserId()
-        {
-            var userIdClaim = User.FindFirst("id");
-            return userIdClaim != null ? Guid.Parse(userIdClaim.Value) : null;
-        }
-
         // PUT: api/ModifyAttendance
         [HttpPut]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> ModifyAttendance([FromBody] EventAttendance newAtt)
+        public async Task<IActionResult> ModifyAttendance([FromBody] EventAttendance newAttendance)
         {
-            var userId = GetUserId();
-            if (userId == null)
-            {
-                return Unauthorized("User ID not found in session.");
-            }
+            if (newAttendance == null) return BadRequest("No body given");
 
-            var result = await _attendanceService.ModifyEventAttendance(newAtt);
-            return result ? Ok("Attendance successfully modified.") : BadRequest("Failed to modify attendance.");
+            if (await _attendanceService.ModifyEventAttendance(newAttendance))
+            {
+                return Ok("Attendance successfully modified.");
+            }
+            return BadRequest("Failed to modify attendance.");
         }
     }
 }
