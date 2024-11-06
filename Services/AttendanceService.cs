@@ -45,7 +45,7 @@ namespace Services
         public async Task<bool> ModifyEventAttendance(EventAttendance newAtt)
         {
             var existingAttendance = await _context.Attendances
-                .FirstOrDefaultAsync(a => a.UserId == newAtt.UserId);
+                .FirstOrDefaultAsync(a => a.UserId == newAtt.UserId && a.EventId == newAtt.EventId);
 
             if (existingAttendance == null)
             {
@@ -53,7 +53,12 @@ namespace Services
             }
 
             existingAttendance.EventId = newAtt.EventId;
-            existingAttendance.AttendAt = newAtt.AttendAt;
+
+            if (!string.IsNullOrEmpty(newAtt.AttendAt))
+            {
+                existingAttendance.AttendAt = newAtt.AttendAt;
+            }
+
             await _context.SaveChangesAsync();
             return true;
         }

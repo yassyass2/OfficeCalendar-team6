@@ -12,6 +12,5 @@ content-type: application/json
 
 {
     "userId": "0E73F0D1-A70C-472D-B41B-A8DC84403A54",
-    "eventId": "1B79CB36-86CE-462E-81E1-811D9C047F5C",
-    "attendAt": "10:00"
+    "eventId": "1B79CB36-86CE-462E-81E1-811D9C047F5C"
 }
