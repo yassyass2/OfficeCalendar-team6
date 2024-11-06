@@ -1,0 +1,51 @@
+### Register
+POST http://localhost:5000/api/login/register
+Content-Type: application/json
+
+{
+  "email": "kociyox525@anypng.com",
+  "password": "123321",
+  "confirmPassword": "123321",
+  "firstName": "FirstName",
+  "lastName": "LastName"
+}
+
+
+### Verify
+POST http://localhost:5000/api/login/verify
+Content-Type: application/json
+
+{
+  "code": "127683"
+}
+
+
+### Login
+POST http://localhost:5000/api/login
+Content-Type: application/json
+
+{
+  "email": "kociyox525@anypng.com",
+  "password": "123321"
+}
+
+
+### Forgot Password
+POST http://localhost:5000/api/login/forgot-password
+Content-Type: application/json
+
+{
+  "email": "kociyox525@anypng.com"
+}
+
+
+### Reset Password
+POST http://localhost:5000/api/login/reset-password HTTP/1.1 
+Content-Type: application/json
+
+{
+  "code": "929201",
+  "password": "321321",
+  "confirmPassword": "321321"
+}
+

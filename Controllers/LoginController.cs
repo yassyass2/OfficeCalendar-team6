@@ -108,7 +108,7 @@ namespace Controllers
 
             var result = await _userService.ForgotPassword(request.Email);
 
-            // Always return OK to prevent email enumeration
+            //return ok to prevent email enum
             return Ok("If the email exists, a password reset code has been sent.");
         }
 
