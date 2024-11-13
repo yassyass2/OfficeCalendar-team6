@@ -8,7 +8,7 @@ namespace Controllers
 {
     [Route("api/Attendance")]
     [ApiController]
-    public class AttendanceController : Controller
+    public class AttendanceController : ControllerBase
     {
         private readonly IAttendanceService _attendanceService;
 
