@@ -25,6 +25,16 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true; // sessie cookie altijd gestuurd
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 
 // services van Swagger UI toevoegen (optioneel)
 builder.Services.AddEndpointsApiExplorer();
@@ -57,6 +67,8 @@ app.UseSession();
 app.UseMiddleware<JwtSessionMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseCors("AllowReactApp");
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

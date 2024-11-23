@@ -1,37 +1,52 @@
 import React, { useState } from 'react';
-import CalendarLogo from '../assets/calendar-logo.png'; // Adjust the path as needed
+import { useNavigate } from 'react-router-dom'; // Import the hook
+import CalendarLogo from '../assets/calendar-logo.png';
+import axios from 'axios';
 
 function Login() {
-  const [isDarkMode, setIsDarkMode] = useState(false); // State to toggle dark mode
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const [message, setMessage] = useState(null);
+  const navigate = useNavigate(); // Initialize the hook
 
-  // Toggle light/dark mode and enable/disable preloaded styles
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
-  
-    // Select the preloaded stylesheets
     const lightLink = document.querySelector('link[href="/styles/login-light.css"]');
     const darkLink = document.querySelector('link[href="/styles/login-dark.css"]');
-  
-    console.log("Before toggle:", {
-      lightDisabled: lightLink?.disabled,
-      darkDisabled: darkLink?.disabled,
-    });
-  
-    // Toggle the disabled property
+
     if (isDarkMode) {
-      lightLink.disabled = false; // Enable light mode
-      darkLink.disabled = true;  // Disable dark mode
+      lightLink.disabled = false;
+      darkLink.disabled = true;
     } else {
-      lightLink.disabled = true; // Disable light mode
-      darkLink.disabled = false; // Enable dark mode
+      lightLink.disabled = true;
+      darkLink.disabled = false;
     }
-  
-    console.log("After toggle:", {
-      lightDisabled: lightLink?.disabled,
-      darkDisabled: darkLink?.disabled,
-    });
   };
-  
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setMessage(null);
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/login', {
+        email,
+        password,
+      });
+      setMessage(response.data.message);
+      console.log('Token:', response.data.token);
+
+      // Store the token in localStorage
+      localStorage.setItem('authToken', response.data.token);
+
+      // Redirect to the Calendar
+      navigate('/Calendar');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Login failed');
+    }
+  };
 
   return (
     <div className="wrapper">
@@ -63,14 +78,16 @@ function Login() {
       <div className="text-center mt-4 name">ShitCalendar</div>
 
       {/* Login Form */}
-      <form className="p-3 mt-3">
+      <form className="p-3 mt-3" onSubmit={handleLogin}>
         <div className="form-field d-flex align-items-center">
           <span className="far fa-user"></span>
           <input
-            type="text"
-            name="userName"
-            id="userName"
-            placeholder="Username"
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div className="form-field d-flex align-items-center">
@@ -80,14 +97,15 @@ function Login() {
             name="password"
             id="pwd"
             placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button className="btn mt-3">Login</button>
+        <button className="btn mt-3" type="submit">Login</button>
       </form>
 
-      <div className="text-center fs-6">
-        <a href="#">Forget password?</a> or <a href="#">Sign up</a>
-      </div>
+      {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+      {message && <p style={{ color: 'green', textAlign: 'center' }}>{message}</p>}
     </div>
   );
 }
