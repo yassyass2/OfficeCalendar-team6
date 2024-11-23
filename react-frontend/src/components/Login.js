@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import CalendarLogo from '../assets/calendar-logo.png'; // Adjust the path as needed
-import axios from 'axios'; // For API requests
+import { useNavigate } from 'react-router-dom'; // Import the hook
+import CalendarLogo from '../assets/calendar-logo.png';
+import axios from 'axios';
 
 function Login() {
-  const [isDarkMode, setIsDarkMode] = useState(false); // State for dark mode
-  const [email, setEmail] = useState(''); // Email input
-  const [password, setPassword] = useState(''); // Password input
-  const [error, setError] = useState(null); // Error message
-  const [message, setMessage] = useState(null); // Success message
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const [message, setMessage] = useState(null);
+  const navigate = useNavigate(); // Initialize the hook
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
-
     const lightLink = document.querySelector('link[href="/styles/login-light.css"]');
     const darkLink = document.querySelector('link[href="/styles/login-dark.css"]');
 
@@ -24,23 +25,26 @@ function Login() {
     }
   };
 
-  // Handle form submission
   const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent page refresh
-    setError(null); // Clear previous errors
-    setMessage(null); // Clear previous messages
+    e.preventDefault();
+    setError(null);
+    setMessage(null);
 
     try {
       const response = await axios.post('http://localhost:5000/api/login', {
         email,
         password,
       });
-      setMessage(response.data.message); // Show success message
-      console.log('Token:', response.data.token); // Log the token
-      // Store the token in localStorage for future use
+      setMessage(response.data.message);
+      console.log('Token:', response.data.token);
+
+      // Store the token in localStorage
       localStorage.setItem('authToken', response.data.token);
+
+      // Redirect to the Calendar
+      navigate('/Calendar');
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed'); // Show error message
+      setError(err.response?.data?.message || 'Login failed');
     }
   };
 

@@ -1,11 +1,16 @@
 import React from 'react';
-import Login from './components/Login'; // Import the Login component
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './components/Login'; // Your Login component
+import Calendar from './components/Calendar'; // The page after login
 
 function App() {
   return (
-    <div>
-      <Login /> {/* Render the Login component */}
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} /> {/* Login Page */}
+        <Route path="/Calendar" element={<Calendar />} /> {/* Calander */}
+      </Routes>
+    </Router>
   );
 }
 
