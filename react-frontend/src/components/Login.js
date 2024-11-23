@@ -1,20 +1,31 @@
-import React, { useState } from 'react';
-import '../styles.css';
+import React, { useState, useEffect } from 'react';
 import CalendarLogo from '../assets/calendar-logo.png'; // Assuming you're using a local logo
 
 function Login() {
   const [isDarkMode, setIsDarkMode] = useState(false); // State to toggle dark mode
 
+  // Dynamically load the correct CSS file
+  useEffect(() => {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = `/styles/${isDarkMode ? 'login-dark.css' : 'login-light.css'}`; // Use absolute path from public
+    document.head.appendChild(link);
+  
+    return () => {
+      document.head.removeChild(link); // Clean up the stylesheet
+    };
+  }, [isDarkMode]);
+  
+
   // Toggle dark mode
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
-    document.body.classList.toggle('dark-mode'); // Applies the class to <body>
-};
-
+  };
 
   return (
-    <div className={`wrapper ${isDarkMode ? 'dark-mode' : ''}`}>
-      {/* Dark Mode Toggle */}
+    <div className="wrapper">
+      {/* Dark Mode Toggle Button */}
       <button
         className="toggle-btn"
         onClick={toggleDarkMode}
@@ -39,7 +50,7 @@ function Login() {
       </div>
 
       {/* App Name */}
-      <div className="text-center mt-4 name">Twitter</div>
+      <div className="text-center mt-4 name">ShitCalender</div>
 
       {/* Login Form */}
       <form className="p-3 mt-3">

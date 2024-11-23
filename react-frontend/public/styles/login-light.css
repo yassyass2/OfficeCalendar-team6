@@ -1,0 +1,128 @@
+/* Importing fonts from Google */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+/* Resetting */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Body for centering */
+body {
+    background: linear-gradient(45deg, #7A2048 , #1625ad, #01a3e9);
+    transition: background 0.5s ease, color 0.5s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    color: #000;
+}
+
+/* Wrapper styling */
+.wrapper {
+    max-width: 525px;
+    min-height: 750px;
+    transition: background 0.5s ease, box-shadow 0.5s ease;
+    margin: auto;
+    padding: 50px 40px 40px 40px;
+    background-color: #ecf0f3;
+    border-radius: 15px;
+    box-shadow: 17px 17px 40px #242525;
+}
+
+/* Logo */
+.logo {
+    width: 120px; /* Keeps the outer circle size fixed */
+    height: 120px; /* Ensures it's a perfect circle */
+    margin: auto;  
+    position: relative;
+    border-radius: 50%;
+    box-shadow: 0px 0px 3px #383838,
+        0px 0px 0px 5px #ecf0f3,
+        8px 8px 15px #505152,
+        -8px -8px 15px #fff;
+}
+
+.logo img {
+    width: 80%; /* Increase the size relative to the circle */
+    height: 80%; /* Keep proportions consistent */
+    position: relative;
+    top: 10%; /* Re-center the image */
+    left: 10%; /* Re-center the image */
+    object-fit: contain; /* Ensure the image scales properly */
+    border-radius: 10%; /* Optional: Keeps image circular if needed */
+}
+
+
+/* Text and form styling */
+.wrapper .name {
+    font-weight: 600;
+    font-size: 1.8rem; /* Slightly bigger text */
+    letter-spacing: 1.3px;
+    padding-left: 10px;
+    color: #555;
+    text-align: center;
+}
+
+.wrapper .form-field input {
+    width: 100%;
+    display: block;
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 1.2rem;
+    color: #666;
+    padding: 10px 15px 10px 10px;
+}
+
+.wrapper .form-field input:focus {
+    border: none;
+    outline: 2px solid #03A9F4; /* Bright blue outline */
+    background: #f0f0f0; /* Slightly lighter background */
+    color: #000; /* Make text more visible */
+}
+
+.wrapper .form-field {
+    padding-left: 10px;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #fff;
+}
+
+/* Button Styling */
+.wrapper .btn {
+    box-shadow: none;
+    width: 100%;
+    height: 50px; /* Increased height for proportional scaling */
+    background-color: #03A9F4;
+    color: #fff;
+    border-radius: 25px;
+    box-shadow: 3px 3px 3px #b1b1b1, -3px -3px 3px #fff;
+    letter-spacing: 1.3px;
+    font-size: 1.2rem;
+}
+
+.wrapper .btn:hover {
+    background-color: #039BE5;
+}
+
+/* Links */
+.wrapper a {
+    text-decoration: none;
+    font-size: 0.9rem; /* Slightly bigger */
+    color: #03A9F4;
+}
+
+.wrapper a:hover {
+    color: #039BE5;
+}
+
+@media (max-width: 380px) {
+    .wrapper {
+        margin: 30px 20px;
+        padding: 40px 15px 15px 15px;
+    }
+}
