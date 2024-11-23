@@ -1,27 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import CalendarLogo from '../assets/calendar-logo.png'; // Assuming you're using a local logo
+import React, { useState } from 'react';
+import CalendarLogo from '../assets/calendar-logo.png'; // Adjust the path as needed
 
 function Login() {
   const [isDarkMode, setIsDarkMode] = useState(false); // State to toggle dark mode
 
-  // Dynamically load the correct CSS file
-  useEffect(() => {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.type = 'text/css';
-    link.href = `/styles/${isDarkMode ? 'login-dark.css' : 'login-light.css'}`; // Use absolute path from public
-    document.head.appendChild(link);
-  
-    return () => {
-      document.head.removeChild(link); // Clean up the stylesheet
-    };
-  }, [isDarkMode]);
-  
-
-  // Toggle dark mode
+  // Toggle light/dark mode and enable/disable preloaded styles
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
+  
+    // Select the preloaded stylesheets
+    const lightLink = document.querySelector('link[href="/styles/login-light.css"]');
+    const darkLink = document.querySelector('link[href="/styles/login-dark.css"]');
+  
+    console.log("Before toggle:", {
+      lightDisabled: lightLink?.disabled,
+      darkDisabled: darkLink?.disabled,
+    });
+  
+    // Toggle the disabled property
+    if (isDarkMode) {
+      lightLink.disabled = false; // Enable light mode
+      darkLink.disabled = true;  // Disable dark mode
+    } else {
+      lightLink.disabled = true; // Disable light mode
+      darkLink.disabled = false; // Enable dark mode
+    }
+  
+    console.log("After toggle:", {
+      lightDisabled: lightLink?.disabled,
+      darkDisabled: darkLink?.disabled,
+    });
   };
+  
 
   return (
     <div className="wrapper">
@@ -50,7 +60,7 @@ function Login() {
       </div>
 
       {/* App Name */}
-      <div className="text-center mt-4 name">ShitCalender</div>
+      <div className="text-center mt-4 name">ShitCalendar</div>
 
       {/* Login Form */}
       <form className="p-3 mt-3">

@@ -30,7 +30,7 @@ body {
     padding: 50px 40px 40px 40px;
     background-color: #ecf0f3;
     border-radius: 15px;
-    box-shadow: 17px 17px 40px #242525;
+    box-shadow: 17px 17px 40px #3f4444;
 }
 
 /* Logo */
@@ -63,33 +63,32 @@ body {
     font-size: 1.8rem; /* Slightly bigger text */
     letter-spacing: 1.3px;
     padding-left: 10px;
-    color: #555;
+    color: #2e92c0;
     text-align: center;
 }
 
-.wrapper .form-field input {
+.wrapper .form-field input,
+.wrapper .form-field input:-webkit-autofill {
     width: 100%;
     display: block;
     border: none;
     outline: none;
     background: none;
     font-size: 1.2rem;
-    color: #666;
+    color: #666; /* Text color */
     padding: 10px 15px 10px 10px;
+    box-shadow: none; /* No shadow for autofill */
+    background-color: transparent !important; /* Transparent autofill background */
 }
 
-.wrapper .form-field input:focus {
-    border: none;
-    outline: 2px solid #03A9F4; /* Bright blue outline */
-    background: #f0f0f0; /* Slightly lighter background */
-    color: #000; /* Make text more visible */
-}
+
+
 
 .wrapper .form-field {
     padding-left: 10px;
     margin-bottom: 20px;
     border-radius: 20px;
-    box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #fff;
+    box-shadow: inset 8px 8px 8px #94989b, inset -8px -8px 8px #ffffff;
 }
 
 /* Button Styling */
@@ -106,7 +105,7 @@ body {
 }
 
 .wrapper .btn:hover {
-    background-color: #039BE5;
+    background-color: #0088cc;
 }
 
 /* Links */
