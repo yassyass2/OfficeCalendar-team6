@@ -44,7 +44,7 @@ function Login() {
       // Redirect to the Calendar
       navigate('/Calendar');
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      setError(err.response?.data?.message || 'Wrong credentials! Please check your email or password.');
     }
   };
 
@@ -105,15 +105,34 @@ function Login() {
     <button className="btn mt-3" type="submit">Login</button>
     </form>
 
-        {/* Forgot Password and Sign Up Links */}
-        <div className="text-center fs-6 mt-3">
-        <a href="/forgot-password" className="forgot-password">Forgot Password?</a>
+    <div className="text-center fs-6 mt-3">
+        <button
+            className="forgot-password-btn"
+            onClick={() => navigate('/forgot-password')}
+            style={{
+            background: 'none',
+            border: 'none',
+            color: '#007bff',
+            textDecoration: 'underline',
+            cursor: 'pointer',
+            padding: 0,
+            }}
+        >
+            Forgot Password?
+        </button>
         <span> or </span>
         <a href="/sign-up" className="sign-up">Sign Up</a>
         </div>
 
-      {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
-      {message && <p style={{ color: 'green', textAlign: 'center' }}>{message}</p>}
+        {/* Error and Success Messages */}
+      <div className="message-container">
+        {error && <p className="error-message">{error}</p>}
+        {message && <p className="success-message">{message}</p>}
+      </div>
+
+
+
+      
     </div>
   );
 }

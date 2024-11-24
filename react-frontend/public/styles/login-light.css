@@ -146,6 +146,43 @@ body {
     gap: 5px;
 }
 
+.message-container {
+    height: 20px; /* Fixed height for messages */
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .error-message {
+    color: rgb(255, 0, 0);
+    font-size: 0.8rem;
+    text-align: center;
+    animation: fadeInScale 0.5s ease-in-out; /* Add animation */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+  }
+  
+  /* Keyframes for fade-in and scale effect */
+  @keyframes fadeInScale {
+    0% {
+      opacity: 0;
+      transform: scale(0.8); /* Start smaller */
+    }
+    70% {
+      opacity: 0.5;
+      transform: scale(1); /* Slightly bigger */
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1); /* Final size */
+    }
+  }
+  
+  
+  .success-message {
+    color: green;
+    font-size: 0.9rem;
+  }
+  
+
 
 
 @media (max-width: 380px) {
