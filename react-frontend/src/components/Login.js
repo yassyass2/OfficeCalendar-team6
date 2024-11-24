@@ -75,34 +75,42 @@ function Login() {
       </div>
 
       {/* App Name */}
-      <div className="text-center mt-4 name">ShitCalendar</div>
+      <div className="text-center mt-4 name">OfficeCalendar</div>
 
       {/* Login Form */}
-      <form className="p-3 mt-3" onSubmit={handleLogin}>
-        <div className="form-field d-flex align-items-center">
-          <span className="far fa-user"></span>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+    <form className="p-3 mt-3" onSubmit={handleLogin}>
+    <div className="form-field d-flex align-items-center">
+        <span className="far fa-user"></span>
+        <input
+        type="text"
+        name="email"
+        id="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        autoComplete="off" /* Prevents autofill */
+        />
+    </div>
+    <div className="form-field d-flex align-items-center">
+        <span className="fas fa-key"></span>
+        <input
+        type="password"
+        name="password"
+        id="pwd"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        />
+    </div>
+    <button className="btn mt-3" type="submit">Login</button>
+    </form>
+
+        {/* Forgot Password and Sign Up Links */}
+        <div className="text-center fs-6 mt-3">
+        <a href="/forgot-password" className="forgot-password">Forgot Password?</a>
+        <span> or </span>
+        <a href="/sign-up" className="sign-up">Sign Up</a>
         </div>
-        <div className="form-field d-flex align-items-center">
-          <span className="fas fa-key"></span>
-          <input
-            type="password"
-            name="password"
-            id="pwd"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button className="btn mt-3" type="submit">Login</button>
-      </form>
 
       {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
       {message && <p style={{ color: 'green', textAlign: 'center' }}>{message}</p>}

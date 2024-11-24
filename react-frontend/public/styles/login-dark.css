@@ -11,32 +11,32 @@
 
 /* Body for dark mode */
 body {
-    background: linear-gradient(45deg, #5a0f31, #110e70, #031433); /* Dark gradient */
+    background: radial-gradient(circle at center, #2d1763, #121223); /* Radiant background */
     transition: background 0.5s ease, color 0.5s ease;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    color: #000;
+    color: #f0f0f0;
 }
 
 /* Wrapper styling */
 .wrapper {
-    max-width: 525px;
-    min-height: 750px;
+    max-width: 600px; /* Matched to light mode */
+    min-height: 800px; /* Matched to light mode */
     transition: background 0.5s ease, box-shadow 0.5s ease;
     margin: auto;
-    padding: 50px 40px 40px 40px;
+    padding: 60px 50px 50px 50px;
     background: #282828;
-    border-radius: 15px;
-    box-shadow: 10px 10px 20px #020202;
+    border-radius: 20px;
+    box-shadow: 17px 17px 40px #141414; /* Same shadow depth as light mode */
 }
 
 /* Logo */
 .logo {
-    width: 120px; /* Keeps the outer circle size fixed */
-    height: 120px; /* Ensures it's a perfect circle */
+    width: 140px; /* Same size as light mode */
+    height: 140px; /* Ensures it's a perfect circle */
     margin: auto;  
     position: relative;
     border-radius: 50%;
@@ -52,67 +52,82 @@ body {
     position: relative;
     top: 10%; /* Align the image vertically */
     left: 10%; /* Align the image horizontally */
-    object-fit: contain; /* Ensures image scales correctly */
+    object-fit: contain;
     filter: brightness(1.2) contrast(1.2); /* Slight brightness/contrast adjustment for clarity */
     border-radius: 10%; /* Optional: keeps the logo smooth */
 }
 
-
-
 /* Text and form styling */
 .wrapper .name {
     font-weight: 600;
-    font-size: 1.8rem; /* Slightly bigger text */
+    font-size: 2rem; /* Matched to light mode */
     letter-spacing: 1.3px;
     padding-left: 10px;
-    color: #2562b3;
+    color: #47a1f7; /* A softer blue */
     text-align: center;
 }
 
-.wrapper .form-field input {
+.wrapper .form-field input,
+.wrapper .form-field input:-webkit-autofill {
     width: 100%;
     display: block;
     border: none;
     outline: none;
     background: none;
-    font-size: 1.2rem;
-    color: #ffffff;
-    padding: 10px 15px 10px 10px;
+    font-size: 1.4rem;
+    color: #ffffff; /* White for better contrast */
+    padding: 15px 20px; /* More padding for better look */
+    box-shadow: none;
+    background-color: transparent !important;
 }
 
 .wrapper .form-field {
     padding-left: 10px;
     margin-bottom: 20px;
     border-radius: 20px;
-    box-shadow: inset 5px 5px 10px #111, inset -5px -5px 10px #3c3c3c;
+    box-shadow: inset 8px 8px 8px #151515, inset -8px -8px 8px #3c3c3c;
 }
 
 /* Button Styling */
 .wrapper .btn {
     box-shadow: none;
     width: 100%;
-    height: 50px; /* Increased height for proportional scaling */
-    background-color: #444;
+    height: 55px; /* Increased height to match light mode */
+    background-color: #2562b3;
     color: #fff;
     border-radius: 25px;
+    box-shadow: 3px 3px 5px #0a0a0a, -3px -3px 5px #3e3e4e;
     letter-spacing: 1.3px;
     font-size: 1.2rem;
+    transition: background-color 0.5s ease, box-shadow 0.5s ease;
 }
 
 .wrapper .btn:hover {
-    background-color: #555;
-    box-shadow: 4px 4px 5px #2386f7;
+    background-color: #3399ff;
 }
 
 /* Links */
 .wrapper a {
     text-decoration: none;
-    font-size: 0.9rem;
-    color: #03A9F4;
+    font-size: 1rem; /* Slightly bigger */
+    color: #47a1f7;
 }
 
 .wrapper a:hover {
-    color: #039BE5;
-    font-size: 1.1rem; /* Slightly bigger */
-    transition: font-size 0.5s ease-out;
+    color: #5fb1ff;
+}
+
+.wrapper .text-center span {
+    color: #b0b0b0; /* Light grey for better visibility in dark mode */
+    font-size: 1rem; /* Same size as the links for consistency */
+    margin: 0 5px; /* Add a bit of spacing around "or" */
+    transition: color 0.5s ease; /* Smooth transition for dark/light mode */
+}
+
+
+@media (max-width: 380px) {
+    .wrapper {
+        margin: 30px 20px;
+        padding: 40px 15px 15px 15px;
+    }
 }
