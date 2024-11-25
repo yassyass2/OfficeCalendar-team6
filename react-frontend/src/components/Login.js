@@ -113,12 +113,11 @@ function Login() {
             background: 'none',
             border: 'none',
             color: '#007bff',
-            textDecoration: 'underline',
             cursor: 'pointer',
             padding: 0,
             }}
         >
-            Forgot Password?
+            Forgot Password
         </button>
         <span> or </span>
         <a href="/sign-up" className="sign-up">Sign Up</a>
