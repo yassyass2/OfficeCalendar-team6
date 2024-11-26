@@ -2,50 +2,67 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-function ForgotPassword() {
-  const [email, setEmail] = useState('');
-  const [code, setCode] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [stage, setStage] = useState(1); // 1: Email Input, 2: Code and Password Input
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
+// Component
+const ForgotPassword: React.FC = () => {
+  const [email, setEmail] = useState<string>('');
+  const [code, setCode] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [stage, setStage] = useState<number>(1); // 1: Email Input, 2: Code and Password Input
+  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
   // Request reset code
   const requestResetCode = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/login/forgot-password', { email });
+      const response = await axios.post<string>('http://localhost:5000/api/login/forgot-password', { email });
       setMessage(response.data);
       setStage(2); // Move to the next stage
-    } catch (err) {
-      setError(err.response?.data || 'Failed to request reset code');
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data || 'Failed to request reset code');
+      } else {
+        setError('An unexpected error occurred.');
+      }
     }
   };
 
   // Reset the password
   const resetPassword = async () => {
+    if (password !== confirmPassword) {
+      setError('Passwords do not match!');
+      return;
+    }
     try {
-      const response = await axios.post('http://localhost:5000/api/login/reset-password', {
+      const response = await axios.post<string>('http://localhost:5000/api/login/reset-password', {
         code,
         password,
         confirmPassword,
       });
       setMessage(response.data);
       navigate('/'); // Redirect to login after successful reset
-    } catch (err) {
-      setError(err.response?.data || 'Failed to reset password');
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data || 'Failed to reset password');
+      } else {
+        setError('An unexpected error occurred.');
+      }
     }
   };
 
   // Resend the reset code
   const resendCode = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/login/forgot-password', { email });
+      const response = await axios.post<string>('http://localhost:5000/api/login/forgot-password', { email });
       setMessage('Reset code resent! Please check your email.');
-    } catch (err) {
-      setError(err.response?.data || 'Failed to resend reset code');
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data || 'Failed to resend reset code');
+      } else {
+        setError('An unexpected error occurred.');
+      }
     }
   };
 
@@ -141,6 +158,6 @@ function ForgotPassword() {
       {message && stage === 1 && <p style={{ color: 'green', textAlign: 'center' }}>{message}</p>}
     </div>
   );
-}
+};
 
 export default ForgotPassword;
