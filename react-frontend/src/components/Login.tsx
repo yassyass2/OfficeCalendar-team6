@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import the hook
-import CalendarLogo from '../assets/calendar-logo.png'; // Ensure correct path for the image
 import axios from 'axios';
 import '../index.css'; // Global styles
 import '../styles/login-light.css'; // Include any required CSS styles
@@ -46,9 +45,6 @@ const Login: React.FC = () => {
   return (
     <div className="login-page">
       <div className="login-wrapper">
-        {/* Logo */}
-        
-
         {/* App Name */}
         <div className="text-center mt-4 name">OfficeCalendar</div>
 
@@ -77,9 +73,13 @@ const Login: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button className="btn mt-3" type="submit">
+          <button
+            className="btn mt-3"
+            type="submit"
+          >
             Login
           </button>
+
         </form>
 
         {/* Forgot Password and Sign Up */}
@@ -87,13 +87,6 @@ const Login: React.FC = () => {
           <button
             className="forgot-password-btn"
             onClick={() => navigate('/forgot-password')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#007bff',
-              cursor: 'pointer',
-              padding: 0,
-            }}
           >
             Forgot Password
           </button>

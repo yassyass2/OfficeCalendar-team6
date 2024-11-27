@@ -1,4 +1,4 @@
-/* Resetting */
+/* Reset and Global Styles */
 * {
     margin: 0;
     padding: 0;
@@ -7,87 +7,210 @@
 }
 
 body, html {
-    margin: 0;
-    padding: 0;
     height: 100%;
     width: 100%;
     overflow: hidden;
     box-sizing: border-box;
 }
 
-/* Header */
-header {
-    height: 100px;
+/* Header Styling */
+.header {
     background-color: #000;
-    margin: 0;
-    padding: 0;
-    border: none;
-    box-shadow: none;
-    position: fixed; /* Keep it fixed */
-    width: 100%; /* Full width */
-    z-index: 1000; /* Ensure it is above other elements */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Distribute logo, nav, and status evenly */
+    height: 60px;
+    padding: 0 20px;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    
+}
+
+/* Logo Container */
+.logo-container {
+    flex: 0; /* Prevent growth */
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #f0c43e; /* Yellow for "Office" */
+    margin-left: 80px; /* Adjust distance from the left edge */
+    font-family: 'Montserrat';
+}
+
+.logo span {
+    color: #ffffff; /* White for "Calendar" */
+    font-weight: normal;
+    font-family: 'Montserrat';
+}
+
+/* Navigation container: Absolutely centered */
+.nav-container {
+    position: absolute;
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Shift back by 50% of its width for true centering */
+}
+
+nav {
+    display: flex;
+    gap: 20px; /* Space between navigation links */
+}
+
+nav a {
+    color: white;
+    font-family: 'Montserrat';
+    font-size: 16px;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* Login Status */
+.login-status {
+    font-size: 16px;
+    color: #ddd;
+    margin-right: 60px; /* Adjust distance from the right edge */
+}
+
+/* Footer Styling */
+.footer {
+    background-color: #000;
+    color: white;
+    text-align: center;
+    height: 60px;
+    line-height: 40px; /* Vertically centers text */
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 
 /* Login Page */
 .login-page {
-    background: radial-gradient(circle at center, #dbe8f5, #9dc2f1, #5f72be);
+    background: radial-gradient(circle at center, #ddb3ff, #a82eff, #6C3BAA); /* Light yellow to orange */
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 100px); /* Subtract header height */
+    height: calc(100vh - 120px); /* Subtract header and footer height */
     width: 100vw;
-    margin-top: 100px; /* Offset for header */
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Wrapper Styling */
+
+/* Login Wrapper */
 .login-wrapper {
     min-width: 400px;
-    padding: 60px 50px;
+    padding: 40px 30px;
     background-color: #ecf0f3;
     border-radius: 20px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1), 0 0 20px rgba(29, 30, 31, 0.3);
+    text-align: center;
 }
 
-/* Text and Form Styling */
+/* Login Page Text and Form */
 .login-wrapper .name {
     font-weight: 600;
     font-size: 2rem;
-    color: #2562b3;
-    text-align: center;
+    color: #f0c43e;
     margin-bottom: 20px;
 }
 
 .form-field input {
     width: 100%;
-    display: block;
     border: none;
     outline: none;
     font-size: 1.4rem;
     color: #666;
-    padding: 15px 20px;
+    padding: 10px 15px;
+    margin-bottom: 20px;
     background-color: transparent;
+    border-bottom: 2px solid #ddd; /* Light underline for inputs */
 }
 
-.btn {
+.login-page .btn {
     width: 100%;
-    height: 60px;
-    background-color: #03A9F4;
-    color: #fff;
-    border-radius: 30px;
-    font-size: 1.3rem;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 50px;
+    background-color: #ffa41b; /* Orange */
+    color: white;
+    font-weight: bold;
+    border-radius: 25px;
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    outline: none; /* Removes focus outlines */
+    border: none;
+    box-shadow: 0 2px 5px black; /* This creates the black shadow */
 }
 
 .btn:hover {
-    background-color: #0088cc;
-    transform: scale(1.02);
+    background-color: #ef9000; /* Darker orange for hover effect */
+    transform: scale(1.03);
 }
 
-/* Error and Success Messages */
+/* Forgot Password Button */
+.forgot-password-btn {
+    color: #ff9800;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 2px solid transparent; /* Subtle underline effect */
+    transition: all 0.3s ease-in-out;
+    background: none; /* No background for link-like styling */
+    padding: 0; /* Removes padding to make it look like a link */
+    cursor: pointer;
+    outline: none; /* Removes focus outlines */
+    border: none;
+}
+
+.forgot-password-btn:hover {
+    color: #cd6700; /* Darker orange */
+    transition: all 0.3s ease-in-out;
+
+}
+
+
+/* Sign-Up Link */
+.sign-up {
+    background: linear-gradient(135deg, #ffcc80, #ff9800); /* Gradient orange */
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 25px;
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase; /* Adds a modern touch */
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    display: inline-block; /* Ensure it behaves like a button */
+}
+
+.sign-up:hover {
+    transform: scale(1.05); /* Subtle hover effect */
+    background: linear-gradient(135deg, #ffb74d, #f57c00); /* Slightly darker gradient on hover */
+}
+
+
+
+
+/* Message Containers */
 .message-container {
     height: 20px;
     text-align: center;
     margin-top: 10px;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+}
+
+.success-message {
+    color: green;
+    font-size: 14px;
 }

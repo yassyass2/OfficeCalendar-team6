@@ -9,16 +9,30 @@ const App: React.FC = () => {
   return (
     <Router>
       <div className="app-container">
-        {/* Header */}
         <header className="header">
-          <div className="logo">OfficeCalendar</div>
-          <nav>
-            <a href="/">Home</a>
-            <a href="/about">About</a>
-            <a href="/contact">Contact</a>
-          </nav>
-          <div className="login-status">Please log in to continue</div>
+          {/* Logo container */}
+          <div className="logo-container">
+              <div className="logo">
+                  Office<span>Calendar</span>
+              </div>
+          </div>
+
+          {/* Navigation container */}
+          <div className="nav-container">
+              <nav>
+                  <a href="/">Home</a>
+                  <a href="/about">About</a>
+                  <a href="/contact">Contact</a>
+              </nav>
+          </div>
+
+          {/* Login status container */}
+          <div className="login-status">
+              Please log in to continue
+          </div>
         </header>
+
+
 
         {/* Main Content */}
         <main className="main-content">
@@ -31,7 +45,7 @@ const App: React.FC = () => {
 
         {/* Footer */}
         <footer className="footer">
-          <p>&copy; 2024 - OfficeCalendar. Made by [Your Team]</p>
+          <p>&copy; 2024 - OfficeCalendar. Made by Team 6</p>
         </footer>
       </div>
     </Router>

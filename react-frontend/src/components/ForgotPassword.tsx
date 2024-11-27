@@ -74,7 +74,8 @@ const ForgotPassword: React.FC = () => {
       <div className="forgot-password-wrapper">
         {stage === 1 && (
           <div>
-            <h2 className="header">Forgot Password</h2>
+            {/* Changed "Forgot Password" from header to a div */}
+            <div className="forgot-password-title">Forgot Password</div>
             <div className="form-field">
               <input
                 type="email"
@@ -94,7 +95,8 @@ const ForgotPassword: React.FC = () => {
 
         {stage === 2 && (
           <div>
-            <h2 className="header">Reset Password</h2>
+            {/* Changed "Reset Password" from header to a div */}
+            <div className="forgot-password-title">Reset Password</div>
             <p className="message">{message || 'Enter the code sent to your email.'}</p>
             <div className="form-field">
               <input
