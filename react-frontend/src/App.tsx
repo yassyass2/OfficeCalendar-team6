@@ -31,7 +31,7 @@ const App: React.FC = () => {
 
         {/* Footer */}
         <footer className="footer">
-          <p>&copy; 2024 - OfficeCalendar. Made by [Your Team]</p>
+          <p>&copy; 2024 - OfficeCalendar. Made by [Team 6]</p>
         </footer>
       </div>
     </Router>
