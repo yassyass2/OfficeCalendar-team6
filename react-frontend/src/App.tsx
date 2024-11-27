@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/Login'; // Your unchanged Login component
 import Calendar from './components/Calendar';
-import ForgotPassword from './components/ForgotPassword';
 import './styles/App.css'; // Add a CSS file for header/footer styles
 
 const App: React.FC = () => {
@@ -39,7 +38,6 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<Login />} /> {/* Keep login centered */}
             <Route path="/Calendar" element={<Calendar />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
           </Routes>
         </main>
 
