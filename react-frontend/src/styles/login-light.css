@@ -1,0 +1,128 @@
+/* Importing fonts from Google */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+/* Resetting */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+header {
+    height: 100px; /* Increase to make the header larger */
+    background-color: #000;
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+}
+
+/* Reset styles for the page */
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+
+/* Login Page */
+.login-page {
+    background: radial-gradient(circle at center, #dbe8f5, #9dc2f1, #5f72be);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    width: 100vw; /* Full viewport width */
+    margin: 0; /* Remove any default margins */
+    padding: 0; /* Remove any default padding */
+    box-sizing: border-box; /* Ensure padding doesn't break layout */
+}
+
+
+/* Wrapper Styling */
+.login-wrapper {
+    min-width: 400px;
+    padding: 60px 50px;
+    background-color: #ecf0f3;
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1), 0 0 20px rgba(29, 30, 31, 0.3);
+}
+
+/* Text and Form Styling */
+.login-wrapper .name {
+    font-weight: 600;
+    font-size: 2rem;
+    color: #2562b3;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+.form-field input {
+    width: 100%;
+    display: block;
+    border: none;
+    outline: none;
+    font-size: 1.4rem;
+    color: #666;
+    padding: 15px 20px;
+    background-color: transparent;
+}
+
+.btn {
+    width: 100%;
+    height: 60px;
+    background-color: #03A9F4;
+    color: #fff;
+    border-radius: 30px;
+    font-size: 1.3rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #0088cc;
+    transform: scale(1.02);
+}
+
+/* Forgot Password and Links */
+.text-center {
+    margin-top: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.text-center a {
+    text-decoration: none;
+    font-size: 1rem;
+    color: #03A9F4;
+    transition: color 0.3s ease;
+}
+
+.text-center a:hover {
+    color: #007bbf;
+}
+
+/* Error and Success Messages */
+.message-container {
+    height: 20px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.error-message {
+    color: rgb(255, 0, 0);
+    font-size: 0.6rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.success-message {
+    color: green;
+    font-size: 0.9rem;
+}
