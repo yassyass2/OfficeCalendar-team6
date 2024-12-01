@@ -94,6 +94,7 @@ const Login: React.FC = () => {
           </form>
         )}
 
+
         {view === 'forgotPassword' && (
           <div className="forgot-password-form">
             <p className="forgot-password-instructions">
