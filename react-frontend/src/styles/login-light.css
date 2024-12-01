@@ -1,0 +1,376 @@
+/* Reset and Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body, html {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* Header Styling */
+.header {
+    background-color: #000;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Distribute logo, nav, and status evenly */
+    height: 60px;
+    padding: 0 20px;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    
+}
+
+/* Logo Container */
+.logo-container {
+    flex: 0; /* Prevent growth */
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #f0c43e; /* Yellow for "Office" */
+    margin-left: 80px; /* Adjust distance from the left edge */
+    font-family: 'Montserrat';
+}
+
+.logo span {
+    color: #ffffff; /* White for "Calendar" */
+    font-weight: normal;
+    font-family: 'Montserrat';
+}
+
+/* Navigation container: Absolutely centered */
+.nav-container {
+    position: absolute;
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Shift back by 50% of its width for true centering */
+}
+
+nav {
+    display: flex;
+    gap: 20px; /* Space between navigation links */
+}
+
+nav a {
+    color: white;
+    font-family: 'Montserrat';
+    font-size: 16px;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* Login Status */
+.login-status {
+    font-size: 16px;
+    color: #ddd;
+    margin-right: 60px; /* Adjust distance from the right edge */
+}
+
+/* Footer Styling */
+.footer {
+    background-color: #000;
+    color: white;
+    text-align: center;
+    height: 60px;
+    line-height: 40px; /* Vertically centers text */
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+
+
+
+/* Login Page */
+.login-page {
+    background: radial-gradient(circle at center, #ddb3ff, #a82eff, #6C3BAA); /* Light yellow to orange */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 120px); /* Subtract header and footer height */
+    width: 100vw;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Login Wrapper */
+.login-wrapper {
+    min-width: 400px;
+    padding: 40px 30px;
+    background-color: #ecf0f3;
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1), 0 0 20px rgba(29, 30, 31, 0.3);
+    text-align: center;
+}
+
+/* Login Page Text and Form */
+.login-wrapper .name {
+    font-weight: 700;
+    font-size: 2rem;
+    color: #6C3BAA;
+    margin-bottom: 30px;
+}
+
+.form-field input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 1.4rem;
+    color: #666;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    background-color: transparent;
+    border-bottom: 2px solid #ddd; /* Light underline for inputs */
+}
+
+.login-page .btn {
+    width: 100%;
+    height: 50px;
+    background-color: #6C3BAA; /* Orange */
+    color: white;
+    font-weight: bold;
+    border-radius: 25px;
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    outline: none; /* Removes focus outlines */
+    border: none;
+    box-shadow: 0 2px 5px black; /* This creates the black shadow */
+}
+
+.btn:hover {
+    background-color: #ef9000; /* Darker orange for hover effect */
+    transform: scale(1.03);
+}
+
+
+
+/* Options Row: "Remember Me" and "Forgot Password?" */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.form-options .remember-me {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #666;
+}
+
+
+
+/* Forgot Password Button */
+.forgot-password-btn {
+    color: #6C3BAA;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 2px solid transparent; /* Subtle underline effect */
+    transition: all 0.3s ease-in-out;
+    background: none; /* No background for link-like styling */
+    padding: 0; /* Removes padding to make it look like a link */
+    margin-top: 10;
+    margin-bottom: 10;
+    cursor: pointer;
+    outline: none; /* Removes focus outlines */
+    border: none;
+}
+
+.forgot-password-btn:hover {
+    color: #dd6f00; /* Darker orange */
+    transition: all 0.2s ease-in-out;
+
+}
+
+
+
+/* Register Section */
+.register-section {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+.register-link {
+    color: #6C3BAA;
+    font-weight: bold;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+.register-link:hover {
+    color: #dd6f00; /* Darker orange */
+    transition: all 0.2s ease-in-out;
+}
+
+
+
+
+/* Sign-Up Link */
+.sign-up {
+    background: linear-gradient(135deg, #ffcc80, #ff9800); /* Gradient orange */
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 25px;
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase; /* Adds a modern touch */
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    display: inline-block; /* Ensure it behaves like a button */
+}
+
+.sign-up:hover {
+    transform: scale(1.05); /* Subtle hover effect */
+    background: linear-gradient(135deg, #ffb74d, #f57c00); /* Slightly darker gradient on hover */
+}
+
+
+
+
+/* Message Containers */
+.message-container {
+    height: 20px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+
+}
+
+.success-message {
+    color: green;
+    font-size: 14px;
+}
+
+
+
+/* Forgot Password Form */
+.forgot-password-form {
+    text-align: center;
+    margin-top: 20px;
+    max-width: 400px;
+}
+
+.forgot-password-instructions {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px; /* Add space below the instructions */
+    line-height: 1.5; /* Improve readability */
+}
+
+/* Email input field */
+.forgot-password-form .form-field {
+    margin-bottom: 30px; /* Add space below the email input */
+}
+
+.forgot-password-form .form-field input {
+    width: 90%;
+    max-width: 400px; /* Limit the input field width */
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.forgot-password-form .form-field input:focus {
+    border-color: #6C3BAA;
+    box-shadow: 0 0 5px rgba(108, 59, 170, 0.5);
+}
+
+/* Reset Password Button */
+.forgot-password-form .btn {
+    width: 90%;
+    max-width: 400px;
+    padding: 12px;
+    background-color: #6C3BAA;
+    color: white;
+    font-weight: bold;
+    border-radius: 25px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+    margin-top: 10px; /* Add space between the button and other elements */
+}
+
+.forgot-password-form .btn:hover {
+    background-color: #4a2588;
+    transform: scale(1.03);
+}
+
+/* Back to Login Link */
+.link-btn {
+    display: block; /* Make it a block element for better positioning */
+    margin: 20px auto 0; /* Add spacing above and center it */
+    color: #6C3BAA;
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.link-btn:hover {
+    color: #4a2588;
+}
+
+/* Remove unnecessary elements in Forgot Password view */
+.register-section {
+    display: none; /* Ensure this section is hidden in Forgot Password */
+}
+
+
+
+/* Responsive Design */
+@media screen and (max-width: 500px) {
+    .login-wrapper {
+        min-width: 300px;
+        padding: 20px;
+    }
+
+    .form-field input {
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+
+    .btn {
+        font-size: 1rem;
+        padding: 10px;
+    }
+
+    .form-options {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .form-options .forgot-password-btn {
+        margin-top: 10px;
+    }
+
+    .register-section {
+        font-size: 12px;
+    }
+}
