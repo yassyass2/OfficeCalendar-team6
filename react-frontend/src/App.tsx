@@ -2,6 +2,10 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/Login'; // Your unchanged Login component
 import Calendar from './components/Calendar';
+import AdminMenu from './components/AdminMenu';
+import AddEvent from 'components/AddEvent';
+import ModifyEvent from 'components/ModifyEvent';
+import DeleteEvent from 'components/DeleteEvent';
 import './styles/App.css'; // Add a CSS file for header/footer styles
 
 const App: React.FC = () => {
@@ -38,6 +42,10 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<Login />} /> {/* Keep login centered */}
             <Route path="/Calendar" element={<Calendar />} />
+            <Route path="/admin" element={<AdminMenu />} /> {/* Admin route */}
+            <Route path="/admin/add" element={<AddEvent />} />
+            <Route path="/admin/modify" element={<ModifyEvent />} />
+            <Route path="/admin/delete" element={<DeleteEvent />} />
           </Routes>
         </main>
 
