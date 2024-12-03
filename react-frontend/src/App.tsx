@@ -3,9 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
 import Calendar from './components/Calendar';
 import AdminMenu from './components/AdminMenu';
-import AddEvent from './components/AddEvent';
-import ModifyEvent from './components/ModifyEvent';
-import DeleteEvent from './components/DeleteEvent';
 import './styles/App.css';
 
 const App: React.FC = () => {
@@ -39,9 +36,6 @@ const App: React.FC = () => {
             <Route path="/" element={<Login />} />
             <Route path="/Calendar" element={<Calendar />} />
             <Route path="/admin" element={<AdminMenu />} />
-            <Route path="/admin/modify/:eventId" element={<ModifyEvent />} />
-            <Route path="/admin/delete/:eventId" element={<DeleteEvent />} />
-            <Route path="/admin/add" element={<AddEvent />} />
           </Routes>
         </main>
 
