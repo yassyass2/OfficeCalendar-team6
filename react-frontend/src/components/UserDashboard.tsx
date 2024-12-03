@@ -21,13 +21,14 @@ interface Attendance{
 const UserDashboard: React.FC = () => {
   // State to manage attendances
   const [attendances, setAttendances] = useState<Attendance[]>([]);
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<Event[]>([{id: "1", title: "mock event 1", date: "01-01-2025", start_time: "09:00", end_time: "10:00", location: "Rotterdam", description: "meeting"},
+    {id: "2", title: "mock event 2", date: "01-01-2025", start_time: "11:00", end_time: "13:00", location: "Utrecht", description: "Conference"}
+  ]);
   const [currentEventIndex, setCurrentEventIndex] = useState(0);
 
   // State for modals
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [showModifyModal, setShowModifyModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [attendanceModal, setAttendanceModal] = useState(false);
+  const [inviteModal, setInviteModal] = useState(false);
 
   const [newEventData, setNewEventData] = useState<Event>({
     id: '',
@@ -39,7 +40,7 @@ const UserDashboard: React.FC = () => {
     description: '',
   });
 
-  const currentEvent = events[currentEventIndex];
+  const [currentEvent, setCurrentEvent] = useState<Event>(events[currentEventIndex]);
 
   // Load attendances from local storage on component mount
   useEffect(() => {
@@ -56,13 +57,16 @@ const UserDashboard: React.FC = () => {
 
   // Handle navigation
   const goToNextEvent = () => {
-    setCurrentEventIndex((prevIndex) => (prevIndex + 1) % attendances.length);
+    setCurrentEventIndex((prevIndex) => Math.min(prevIndex + 1, events.length-1));
+  console.log(currentEventIndex)
+  setCurrentEvent(() => events[currentEventIndex])
   };
 
   const goToPreviousEvent = () => {
     setCurrentEventIndex(
-      (prevIndex) => (prevIndex - 1 + attendances.length) % attendances.length
-    );
+      (prevIndex) => Math.max(prevIndex - 1, 0));
+    console.log(currentEventIndex)
+    setCurrentEvent(() => events[currentEventIndex])
   };
 
   // Handle Attendance
@@ -110,7 +114,7 @@ const UserDashboard: React.FC = () => {
         {/* Right Section: Current Event Details */}
         <div className="right-section">
           <h3>Current Event</h3>
-          {currentEvent ? (
+          {(
             <div className="event-details">
               <h4>{currentEvent.title}</h4>
               <p>{currentEvent.description}</p>
@@ -123,22 +127,14 @@ const UserDashboard: React.FC = () => {
               <p>
                 <strong>Location:</strong> {currentEvent.location}
               </p>
-              <button className="btn" onClick={() => setShowModifyModal(true)}>
-                Update Event
-              </button>
-              <button className="btn" onClick={() => setShowDeleteModal(true)}>
-                Delete Event
-              </button>
             </div>
-          ) : (
-            <p>No event selected.</p>
           )}
 
           {/* Navigation Buttons */}
           <div className="event-navigation">
             <button onClick={goToPreviousEvent}>&lt; Previous</button>
-            <button onClick={() => setShowAddModal(true)}>Attend Event</button>
-            <button onClick={() => setShowAddModal(true)}>Invite an employee</button>
+            <button onClick={() => setAttendanceModal(true)}>Attend Event</button>
+            <button onClick={() => setInviteModal(true)}>Invite an employee</button>
             <button onClick={goToNextEvent}>Next &gt;</button>
           </div>
         </div>
