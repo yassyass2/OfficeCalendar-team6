@@ -2,11 +2,10 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:5000/api'; // Backend URL
 
-// Export the structure of the response data
-export interface LoginResponse {
+// Define the structure of the response data
+interface LoginResponse {
   token: string;
   message: string;
-  role: "admin" | "user";
 }
 
 // Define the function's input parameters and return type
