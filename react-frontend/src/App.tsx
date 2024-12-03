@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
 import Calendar from './components/Calendar';
 import AdminMenu from './components/AdminMenu';
+import UserDashboard from 'components/UserDashboard';
 import './styles/App.css';
 
 const App: React.FC = () => {
@@ -36,6 +37,7 @@ const App: React.FC = () => {
             <Route path="/" element={<Login />} />
             <Route path="/Calendar" element={<Calendar />} />
             <Route path="/admin" element={<AdminMenu />} />
+            <Route path ="/user" element={<UserDashboard/>} />
           </Routes>
         </main>
 
