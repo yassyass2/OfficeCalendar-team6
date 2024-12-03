@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { LoginResponse } from '../api/login-api';
 import '../index.css'; // Global styles
 import '../styles/login-light.css'; // Login-specific styles
 
@@ -17,22 +16,15 @@ const Login: React.FC = () => {
     e.preventDefault();
     setError(null);
     setMessage(null);
-  
+
     try {
-      const response = await axios.post<LoginResponse>('http://localhost:5000/api/login', {
+      const response = await axios.post('http://localhost:5000/api/login', {
         email,
         password,
       });
-  
       setMessage(response.data.message);
       localStorage.setItem('authToken', response.data.token);
-  
-      // Redirect based on role
-      if (response.data.role === 'admin') {
-        navigate('/admin'); // Admin panel
-      } else {
-        navigate('/calendar'); // Regular user panel
-      }
+      navigate('/Calendar'); // Redirect to Calendar
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || 'Login failed. Check your credentials.');
@@ -40,7 +32,7 @@ const Login: React.FC = () => {
         setError('An unexpected error occurred.');
       }
     }
-  };  
+  };
 
   const requestResetCode = async () => {
     try {
