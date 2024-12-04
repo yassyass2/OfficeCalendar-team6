@@ -22,16 +22,10 @@ const AdminMenu: React.FC = () => {
   const [showModifyModal, setShowModifyModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const [newEventData, setNewEventData] = useState<Event>({
-    id: '',
-    title: '',
-    date: '',
-    start_time: '',
-    end_time: '',
-    location: '',
-    description: '',
-  });
+  // State for the form data
+  const [newEventData, setNewEventData] = useState<Event | null>(null);
 
+  // Current event
   const currentEvent = events[currentEventIndex];
 
   // Load events from local storage component mount
@@ -47,43 +41,62 @@ const AdminMenu: React.FC = () => {
     localStorage.setItem('events', JSON.stringify(events));
   }, [events]);
 
+  // Sort events by date
+  const sortEvents = (events: Event[]) => {
+    return events.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  };
+
   // Handle navigation
   const goToNextEvent = () => {
-    setCurrentEventIndex((prevIndex) => (prevIndex + 1) % events.length);
+    if (events.length > 0) {
+      setCurrentEventIndex((prevIndex) => (prevIndex + 1) % events.length);
+    }
   };
 
   const goToPreviousEvent = () => {
-    setCurrentEventIndex(
-      (prevIndex) => (prevIndex - 1 + events.length) % events.length
-    );
+    if (events.length > 0) {
+      setCurrentEventIndex(
+        (prevIndex) => (prevIndex - 1 + events.length) % events.length
+      );
+    }
   };
 
   // Handle Add Event
   const handleAddEvent = () => {
-    const newEvent = {
-      ...newEventData,
-      id: Date.now().toString(), // Generate unique ID
-    };
-    setEvents((prevEvents) => [...prevEvents, newEvent]);
-    setShowAddModal(false);
-    resetNewEventData();
+    if (newEventData) {
+      const newEvent = {
+        ...newEventData,
+        id: Date.now().toString(), // Generate unique ID
+      };
+      const updatedEvents = [...events, newEvent];
+      setEvents(sortEvents(updatedEvents)); // Sort after adding
+      setShowAddModal(false);
+      resetNewEventData();
+    }
   };
 
   // Handle Modify Event
   const handleModifyEvent = () => {
-    const updatedEvents = events.map((event) =>
-      event.id === currentEvent.id ? { ...currentEvent, ...newEventData } : event
-    );
-    setEvents(updatedEvents);
-    setShowModifyModal(false);
-    resetNewEventData();
+    if (newEventData && currentEvent) {
+      const updatedEvents = events.map((event) =>
+        event.id === currentEvent.id ? { ...event, ...newEventData } : event
+      );
+      setEvents(sortEvents(updatedEvents)); // Sort after modifying
+      setShowModifyModal(false);
+      resetNewEventData();
+    }
   };
 
   // Handle Delete Event
   const handleDeleteEvent = () => {
     const updatedEvents = events.filter((event) => event.id !== currentEvent.id);
     setEvents(updatedEvents);
-    setCurrentEventIndex(0); // Reset to the first event
+
+    // Adjust index to prevent out-of-bounds access
+    if (currentEventIndex >= updatedEvents.length) {
+      setCurrentEventIndex(Math.max(0, updatedEvents.length - 1));
+    }
+
     setShowDeleteModal(false);
   };
 
@@ -109,8 +122,15 @@ const AdminMenu: React.FC = () => {
           <div className="event-list">
             <h3>Upcoming Events</h3>
             <ul>
-              {events.map((event) => (
-                <li key={event.id}>
+              {events.map((event, index) => (
+                <li
+                  key={event.id}
+                  onClick={() => setCurrentEventIndex(index)}
+                  style={{
+                    cursor: 'pointer',
+                    fontWeight: currentEventIndex === index ? 'bold' : 'normal',
+                  }}
+                >
                   <strong>{event.title}</strong> - {event.date}, {event.start_time} to{' '}
                   {event.end_time}
                 </li>
@@ -135,7 +155,13 @@ const AdminMenu: React.FC = () => {
               <p>
                 <strong>Location:</strong> {currentEvent.location}
               </p>
-              <button className="btn" onClick={() => setShowModifyModal(true)}>
+              <button
+                className="btn"
+                onClick={() => {
+                  setNewEventData(currentEvent);
+                  setShowModifyModal(true);
+                }}
+              >
                 Update Event
               </button>
               <button className="btn" onClick={() => setShowDeleteModal(true)}>
@@ -149,12 +175,20 @@ const AdminMenu: React.FC = () => {
           {/* Navigation Buttons */}
           <div className="event-navigation">
             <button onClick={goToPreviousEvent}>&lt; Previous</button>
-            <button onClick={() => setShowAddModal(true)}>Add Event</button>
+            <button
+              onClick={() => {
+                resetNewEventData();
+                setShowAddModal(true);
+              }}
+            >
+              Add Event
+            </button>
             <button onClick={goToNextEvent}>Next &gt;</button>
           </div>
         </div>
       </div>
 
+      {/* Modals */}
       {/* Add Event Modal */}
       {showAddModal && (
         <div className="modal">
@@ -166,14 +200,75 @@ const AdminMenu: React.FC = () => {
                 handleAddEvent();
               }}
             >
-              <label>Title: <input type="text" value={newEventData.title} onChange={(e) => setNewEventData({ ...newEventData, title: e.target.value })} required /></label>
-              <label>Date: <input type="date" value={newEventData.date} onChange={(e) => setNewEventData({ ...newEventData, date: e.target.value })} required /></label>
-              <label>Start Time: <input type="time" value={newEventData.start_time} onChange={(e) => setNewEventData({ ...newEventData, start_time: e.target.value })} required /></label>
-              <label>End Time: <input type="time" value={newEventData.end_time} onChange={(e) => setNewEventData({ ...newEventData, end_time: e.target.value })} required /></label>
-              <label>Location: <input type="text" value={newEventData.location} onChange={(e) => setNewEventData({ ...newEventData, location: e.target.value })} required /></label>
-              <label>Description: <textarea value={newEventData.description} onChange={(e) => setNewEventData({ ...newEventData, description: e.target.value })} required /></label>
+              <label>
+                Title:
+                <input
+                  type="text"
+                  value={newEventData?.title || ''}
+                  onChange={(e) =>
+                    setNewEventData({ ...newEventData!, title: e.target.value })
+                  }
+                  required
+                />
+              </label>
+              <label>
+                Date:
+                <input
+                  type="date"
+                  value={newEventData?.date || ''}
+                  onChange={(e) =>
+                    setNewEventData({ ...newEventData!, date: e.target.value })
+                  }
+                  required
+                />
+              </label>
+              <label>
+                Start Time:
+                <input
+                  type="time"
+                  value={newEventData?.start_time || ''}
+                  onChange={(e) =>
+                    setNewEventData({ ...newEventData!, start_time: e.target.value })
+                  }
+                  required
+                />
+              </label>
+              <label>
+                End Time:
+                <input
+                  type="time"
+                  value={newEventData?.end_time || ''}
+                  onChange={(e) =>
+                    setNewEventData({ ...newEventData!, end_time: e.target.value })
+                  }
+                  required
+                />
+              </label>
+              <label>
+                Location:
+                <input
+                  type="text"
+                  value={newEventData?.location || ''}
+                  onChange={(e) =>
+                    setNewEventData({ ...newEventData!, location: e.target.value })
+                  }
+                  required
+                />
+              </label>
+              <label>
+                Description:
+                <textarea
+                  value={newEventData?.description || ''}
+                  onChange={(e) =>
+                    setNewEventData({ ...newEventData!, description: e.target.value })
+                  }
+                  required
+                />
+              </label>
               <button type="submit">Add Event</button>
-              <button type="button" onClick={() => setShowAddModal(false)}>Close</button>
+              <button type="button" onClick={() => setShowAddModal(false)}>
+                Close
+              </button>
             </form>
           </div>
         </div>
@@ -190,14 +285,75 @@ const AdminMenu: React.FC = () => {
                 handleModifyEvent();
               }}
             >
-              <label>Title: <input type="text" value={newEventData.title || currentEvent.title} onChange={(e) => setNewEventData({ ...newEventData, title: e.target.value })} /></label>
-              <label>Date: <input type="date" value={newEventData.date || currentEvent.date} onChange={(e) => setNewEventData({ ...newEventData, date: e.target.value })} /></label>
-              <label>Start Time: <input type="time" value={newEventData.start_time || currentEvent.start_time} onChange={(e) => setNewEventData({ ...newEventData, start_time: e.target.value })} /></label>
-              <label>End Time: <input type="time" value={newEventData.end_time || currentEvent.end_time} onChange={(e) => setNewEventData({ ...newEventData, end_time: e.target.value })} /></label>
-              <label>Location: <input type="text" value={newEventData.location || currentEvent.location} onChange={(e) => setNewEventData({ ...newEventData, location: e.target.value })} /></label>
-              <label>Description: <textarea value={newEventData.description || currentEvent.description} onChange={(e) => setNewEventData({ ...newEventData, description: e.target.value })} /></label>
+              <label>
+                Title:
+                <input
+                  type="text"
+                  value={newEventData?.title || ''}
+                  onChange={(e) =>
+                    setNewEventData({ ...newEventData!, title: e.target.value })
+                  }
+                  required
+                />
+              </label>
+              <label>
+                Date:
+                <input
+                  type="date"
+                  value={newEventData?.date || ''}
+                  onChange={(e) =>
+                    setNewEventData({ ...newEventData!, date: e.target.value })
+                  }
+                  required
+                />
+              </label>
+              <label>
+                Start Time:
+                <input
+                  type="time"
+                  value={newEventData?.start_time || ''}
+                  onChange={(e) =>
+                    setNewEventData({ ...newEventData!, start_time: e.target.value })
+                  }
+                  required
+                />
+              </label>
+              <label>
+                End Time:
+                <input
+                  type="time"
+                  value={newEventData?.end_time || ''}
+                  onChange={(e) =>
+                    setNewEventData({ ...newEventData!, end_time: e.target.value })
+                  }
+                  required
+                />
+              </label>
+              <label>
+                Location:
+                <input
+                  type="text"
+                  value={newEventData?.location || ''}
+                  onChange={(e) =>
+                    setNewEventData({ ...newEventData!, location: e.target.value })
+                  }
+                  required
+                />
+              </label>
+              <label>
+                Description:
+                <textarea
+                  value={newEventData?.description || ''}
+                  onChange={(e) =>
+                    setNewEventData({ ...newEventData!, description: e.target.value })
+                  }
+                  required
+                />
+              </label>
               <button type="submit">Update Event</button>
-              <button type="button" onClick={() => setShowModifyModal(false)}>Close</button>
+              <button type="button" onClick={() => setShowModifyModal(false)}>
+                Close
+              </button>
             </form>
           </div>
         </div>
