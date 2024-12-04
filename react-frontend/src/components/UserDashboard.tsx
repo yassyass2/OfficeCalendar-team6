@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Calendar from './Calendar'; // Import the Calendar component
-//import '../styles/AdminMenu.css';
+import Calendar from './Calendar';
 
 interface Event {
   id: string;
