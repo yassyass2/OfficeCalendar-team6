@@ -153,8 +153,6 @@ nav a:hover {
     transform: scale(1.03);
 }
 
-
-
 /* Options Row: "Remember Me" and "Forgot Password?" */
 .form-options {
     display: flex;
@@ -162,46 +160,29 @@ nav a:hover {
     align-items: center;
     margin-bottom: 20px;
     font-size: 14px;
-}
-
-.form-options .remember-me {
-    display: flex;
-    align-items: center;
-    gap: 5px;
     color: #666;
 }
 
-
-
-/* Forgot Password Button */
 .forgot-password-btn {
     color: #6C3BAA;
     font-weight: 600;
-    text-decoration: none;
-    border-bottom: 2px solid transparent; /* Subtle underline effect */
-    transition: all 0.3s ease-in-out;
-    background: none; /* No background for link-like styling */
-    padding: 0; /* Removes padding to make it look like a link */
-    margin-top: 10;
-    margin-bottom: 10;
-    cursor: pointer;
-    outline: none; /* Removes focus outlines */
     border: none;
+    background: none;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.3s;
 }
 
 .forgot-password-btn:hover {
-    color: #dd6f00; /* Darker orange */
-    transition: all 0.2s ease-in-out;
-
+    color: #4a2588;
 }
-
-
 
 /* Register Section */
 .register-section {
     margin-top: 20px;
     font-size: 14px;
     color: #666;
+    display: block; /* Ensure visibility */
 }
 
 .register-link {
@@ -210,61 +191,13 @@ nav a:hover {
     cursor: pointer;
     background: none;
     border: none;
+    text-decoration: underline;
+    transition: color 0.3s;
 }
 
 .register-link:hover {
-    color: #dd6f00; /* Darker orange */
-    transition: all 0.2s ease-in-out;
+    color: #4a2588;
 }
-
-
-
-
-/* Sign-Up Link */
-.sign-up {
-    background: linear-gradient(135deg, #ffcc80, #ff9800); /* Gradient orange */
-    border: none;
-    color: white;
-    padding: 8px 15px;
-    border-radius: 15px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 25px;
-    transition: all 0.3s ease-in-out;
-    text-transform: uppercase; /* Adds a modern touch */
-    text-decoration: none;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-    display: inline-block; /* Ensure it behaves like a button */
-}
-
-.sign-up:hover {
-    transform: scale(1.05); /* Subtle hover effect */
-    background: linear-gradient(135deg, #ffb74d, #f57c00); /* Slightly darker gradient on hover */
-}
-
-
-
-
-/* Message Containers */
-.message-container {
-    height: 20px;
-    text-align: center;
-    margin-top: 10px;
-}
-
-.error-message {
-    color: red;
-    font-size: 14px;
-
-}
-
-.success-message {
-    color: green;
-    font-size: 14px;
-}
-
-
 
 /* Forgot Password Form */
 .forgot-password-form {
@@ -276,73 +209,20 @@ nav a:hover {
 .forgot-password-instructions {
     font-size: 16px;
     color: #555;
-    margin-bottom: 20px; /* Add space below the instructions */
-    line-height: 1.5; /* Improve readability */
+    margin-bottom: 20px;
+    line-height: 1.5;
 }
 
-/* Email input field */
-.forgot-password-form .form-field {
-    margin-bottom: 30px; /* Add space below the email input */
+/* Message Containers */
+.error-message {
+    color: red;
+    font-size: 14px;
 }
 
-.forgot-password-form .form-field input {
-    width: 90%;
-    max-width: 400px; /* Limit the input field width */
-    padding: 10px 15px;
-    font-size: 16px;
-    color: #333;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    outline: none;
-    transition: all 0.3s ease;
+.success-message {
+    color: green;
+    font-size: 14px;
 }
-
-.forgot-password-form .form-field input:focus {
-    border-color: #6C3BAA;
-    box-shadow: 0 0 5px rgba(108, 59, 170, 0.5);
-}
-
-/* Reset Password Button */
-.forgot-password-form .btn {
-    width: 90%;
-    max-width: 400px;
-    padding: 12px;
-    background-color: #6C3BAA;
-    color: white;
-    font-weight: bold;
-    border-radius: 25px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    border: none;
-    transition: all 0.3s ease;
-    margin-top: 10px; /* Add space between the button and other elements */
-}
-
-.forgot-password-form .btn:hover {
-    background-color: #4a2588;
-    transform: scale(1.03);
-}
-
-/* Back to Login Link */
-.link-btn {
-    display: block; /* Make it a block element for better positioning */
-    margin: 20px auto 0; /* Add spacing above and center it */
-    color: #6C3BAA;
-    font-weight: bold;
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.link-btn:hover {
-    color: #4a2588;
-}
-
-/* Remove unnecessary elements in Forgot Password view */
-.register-section {
-    display: none; /* Ensure this section is hidden in Forgot Password */
-}
-
-
 
 /* Responsive Design */
 @media screen and (max-width: 500px) {
@@ -364,10 +244,6 @@ nav a:hover {
     .form-options {
         flex-direction: column;
         align-items: flex-start;
-    }
-
-    .form-options .forgot-password-btn {
-        margin-top: 10px;
     }
 
     .register-section {

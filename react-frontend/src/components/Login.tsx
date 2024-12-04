@@ -5,17 +5,18 @@ import '../index.css'; // Global styles
 import '../styles/login-light.css'; // Login-specific styles
 
 const Login: React.FC = () => {
-  const [view, setView] = useState<'login' | 'forgotPassword'>('login'); // Track current view
-  const [email, setEmail] = useState<string>(''); // stores Email input
-  const [password, setPassword] = useState<string>(''); // stores Password input
-  const [error, setError] = useState<string | null>(null); // display Error message
-  const [message, setMessage] = useState<string | null>(null); // display Success message
+  const [view, setView] = useState<'login' | 'forgotPassword' | 'register'>('login');
+  const [email, setEmail] = useState<string>(''); // Stores email/username input
+  const [password, setPassword] = useState<string>(''); // Stores password input
+  const [confirmPassword, setConfirmPassword] = useState<string>(''); // For register view
+  const [error, setError] = useState<string | null>(null); // Displays error messages
+  const [message, setMessage] = useState<string | null>(null); // Displays success messages
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
-    setMessage(null); // this to send a post request the the api login endpoint
+    setMessage(null);
 
     try {
       const response = await axios.post('http://localhost:5000/api/login', {
@@ -24,7 +25,7 @@ const Login: React.FC = () => {
       });
       setMessage(response.data.message);
       localStorage.setItem('authToken', response.data.token);
-      navigate('/Calendar'); // Redirect to Calendar
+      navigate('/Calendar'); // Redirect to Calendar after login
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || 'Login failed. Check your credentials.');
@@ -48,11 +49,35 @@ const Login: React.FC = () => {
     }
   };
 
+  const handleRegister = async () => {
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/register', {
+        email,
+        password,
+      });
+      setMessage('Registration successful! You can now log in.');
+      setView('login'); // Switch back to login view
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.message || 'Registration failed.');
+      } else {
+        setError('An unexpected error occurred.');
+      }
+    }
+  };
+
   return (
     <div className="login-page">
       <div className="login-wrapper">
         <div className="text-center mt-4 name">
-          {view === 'login' ? 'Login' : 'Forgot Password'}
+          {view === 'login' && 'Login'}
+          {view === 'forgotPassword' && 'Forgot Password'}
+          {view === 'register' && 'Register'}
         </div>
 
         {view === 'login' && (
@@ -94,7 +119,6 @@ const Login: React.FC = () => {
           </form>
         )}
 
-
         {view === 'forgotPassword' && (
           <div className="forgot-password-form">
             <p className="forgot-password-instructions">
@@ -127,12 +151,72 @@ const Login: React.FC = () => {
           </div>
         )}
 
-        <div className="register-section">
-          Don’t have an account?{' '}
-          <button className="register-link" onClick={() => navigate('/sign-up')}>
-            Register
-          </button>
-        </div>
+        {view === 'register' && (
+          <div className="register-form">
+            <p className="register-instructions">
+              Please fill in your details to create an account.
+            </p>
+            <div className="form-field">
+              <input
+                type="text"
+                placeholder="Username"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="form-field">
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div className="form-field">
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </div>
+            <button className="btn mt-3" onClick={handleRegister}>
+              Register
+            </button>
+            <button
+              className="link-btn mt-3"
+              onClick={() => setView('login')}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#6C3BAA',
+                textDecoration: 'underline',
+                cursor: 'pointer',
+              }}
+            >
+              Back to Login
+            </button>
+          </div>
+        )}
+
+        {view === 'login' && (
+          <div className="register-section">
+            Don’t have an account?{' '}
+            <button
+              className="register-link"
+              onClick={() => setView('register')}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#6C3BAA',
+                textDecoration: 'underline',
+                cursor: 'pointer',
+              }}
+            >
+              Register
+            </button>
+          </div>
+        )}
 
         {error && <p className="error-message">{error}</p>}
         {message && <p className="success-message">{message}</p>}
