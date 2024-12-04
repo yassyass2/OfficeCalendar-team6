@@ -34,7 +34,7 @@ const AdminMenu: React.FC = () => {
 
   const currentEvent = events[currentEventIndex];
 
-  // Load events from local storage on component mount
+  // Load events from local storage component mount
   useEffect(() => {
     const storedEvents = localStorage.getItem('events');
     if (storedEvents) {
