@@ -6,16 +6,16 @@ import '../styles/login-light.css'; // Login-specific styles
 
 const Login: React.FC = () => {
   const [view, setView] = useState<'login' | 'forgotPassword'>('login'); // Track current view
-  const [email, setEmail] = useState<string>(''); // Email input
-  const [password, setPassword] = useState<string>(''); // Password input
-  const [error, setError] = useState<string | null>(null); // Error message
-  const [message, setMessage] = useState<string | null>(null); // Success message
+  const [email, setEmail] = useState<string>(''); // stores Email input
+  const [password, setPassword] = useState<string>(''); // stores Password input
+  const [error, setError] = useState<string | null>(null); // display Error message
+  const [message, setMessage] = useState<string | null>(null); // display Success message
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
-    setMessage(null);
+    setMessage(null); // this to send a post request the the api login endpoint
 
     try {
       const response = await axios.post('http://localhost:5000/api/login', {
