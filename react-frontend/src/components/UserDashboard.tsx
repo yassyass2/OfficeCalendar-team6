@@ -11,10 +11,13 @@ interface Event {
   description: string;
 }
 
-interface Attendance{
-    eventId: string;
-    userId: string;
-    attend_time: string
+interface Invitation{
+  eventId: string;
+  userId: string;
+}
+
+interface Attendance extends Invitation {
+  attend_time: string;
 }
 
 const UserDashboard: React.FC = () => {
@@ -57,14 +60,12 @@ const UserDashboard: React.FC = () => {
   // Handle navigation
   const goToNextEvent = () => {
     setCurrentEventIndex((prevIndex) => Math.min(prevIndex + 1, events.length-1));
-  console.log(currentEventIndex)
   setCurrentEvent(() => events[currentEventIndex])
   };
 
   const goToPreviousEvent = () => {
     setCurrentEventIndex(
       (prevIndex) => Math.max(prevIndex - 1, 0));
-    console.log(currentEventIndex)
     setCurrentEvent(() => events[currentEventIndex])
   };
 
