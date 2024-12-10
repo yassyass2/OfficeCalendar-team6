@@ -55,9 +55,16 @@ const App: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="footer">
-        <p>&copy; 2024 - OfficeCalendar. Made by [Team 6]</p>
-      </footer>
+      <div className="container-fluid footer-parent fixed-bottom">
+        <footer className="container d-flex justify-content-center">
+          <div className="row">
+            <div className="col-auto text-center">
+              <p>&copy; 2024 - OfficeCalendar.</p>
+              <p>Made by Yassine, Maurice, Mohammad, Halit en Thijs</p>
+            </div>
+          </div>
+        </footer>
+      </div>
     </Router>
   );
 };
