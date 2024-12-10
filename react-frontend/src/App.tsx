@@ -4,48 +4,51 @@ import Login from './components/Login';
 import Calendar from './components/Calendar';
 import AdminMenu from './components/AdminMenu';
 import UserDashboard from 'components/UserDashboard';
-import './styles/App.css';
+import SidePanel from 'components/SidePanel';
+
+import './scss/style.scss';
 
 const App: React.FC = () => {
   return (
     <Router>
-      <div className="app-container">
-        <header className="header">
-          {/* Logo container */}
-          <div className="logo-container">
-            <div className="logo">
+      <div className="container-fluid navbar-parent">
+        <nav className="container navbar">
+          <div className="row">
+            {/* Logo container */}
+            <div className="col-auto logo-container">
               Office<span>Calendar</span>
             </div>
-          </div>
 
-          {/* Navigation container */}
-          <div className="nav-container">
-            <nav>
-              <a href="/">Home</a>
-              <a href="/about">About</a>
-              <a href="/contact">Contact</a>
-            </nav>
-          </div>
+            {/* Navigation container */}
+            <div className="col-auto nav-container">
+              <nav>
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
+              </nav>
+            </div>
 
-          {/* Login status container */}
-          <div className="login-status">Please log in to continue</div>
-        </header>
-
-        {/* Main Content */}
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/Calendar" element={<Calendar />} />
-            <Route path="/admin" element={<AdminMenu />} />
-            <Route path ="/user" element={<UserDashboard/>} />
-          </Routes>
-        </main>
-
-        {/* Footer */}
-        <footer className="footer">
-          <p>&copy; 2024 - OfficeCalendar. Made by [Team 6]</p>
-        </footer>
+            {/* Login status container */}
+            <div className="col-auto login-status">Please log in to continue</div>
+            </div>
+        </nav>
       </div>
+
+      {/* Main Content */}
+      <main className="main-content">
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/Calendar" element={<Calendar />} />
+          <Route path="/admin" element={<AdminMenu />} />
+          <Route path ="/user" element={<UserDashboard/>} />
+          <Route path ="/sidepanel" element={<SidePanel/>} />
+        </Routes>
+      </main>
+
+      {/* Footer */}
+      <footer className="footer">
+        <p>&copy; 2024 - OfficeCalendar. Made by [Team 6]</p>
+      </footer>
     </Router>
   );
 };
