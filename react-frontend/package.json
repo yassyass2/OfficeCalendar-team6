@@ -11,14 +11,14 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "animate.css": "^4.1.1",
-    "axios": "^1.7.7",
+    "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "date-fns": "^4.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^7.0.1",
-    "react-scripts": "5.0.1",
+    "react-router-dom": "^7.0.2",
+    "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -46,8 +46,11 @@
     ]
   },
   "devDependencies": {
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/axios": "^0.14.4",
+    "@types/react": "^18.3.14",
+    "@types/react-dom": "^18.3.3",
+    "@types/react-router-dom": "^5.3.3",
+    "sass": "^1.82.0",
     "typescript": "^5.7.2"
   }
 }
