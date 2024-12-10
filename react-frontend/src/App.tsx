@@ -6,6 +6,10 @@ import AdminMenu from './components/AdminMenu';
 import UserDashboard from 'components/UserDashboard';
 import SidePanel from 'components/SidePanel';
 
+// Import images
+import profileImage from './assets/profile-image-placeholder@4x.png';
+
+// Import main stylesheet
 import './scss/style.scss';
 
 const App: React.FC = () => {
