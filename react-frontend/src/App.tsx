@@ -35,7 +35,10 @@ const App: React.FC = () => {
             </div>
 
             {/* Login status container */}
-            <div className="col-auto login-status">Please log in to continue</div>
+            <div className="col-auto login-status-container">
+                <span className="login-status-text"><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Please log in to continue</a></span>
+                <img src={profileImage} alt='' width={40} height={40}/>
+              </div>
             </div>
         </nav>
       </div>
