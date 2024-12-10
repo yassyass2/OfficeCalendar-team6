@@ -26,7 +26,7 @@ const App: React.FC = () => {
             </div>
 
             {/* Navigation container */}
-            <div className="col-auto nav-container">
+            <div className="col-auto nav-container position-absolute top-50 start-50 translate-middle">
               <nav>
                 <a href="/">Home</a>
                 <a href="/about">About</a>
