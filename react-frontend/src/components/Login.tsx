@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../index.css'; // Global styles
-import '../styles/login-light.css'; // Login-specific styles
+
 
 const Login: React.FC = () => {
   const [view, setView] = useState<'login' | 'forgotPassword'>('login'); // Track current view
