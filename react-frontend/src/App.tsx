@@ -20,7 +20,9 @@ const App: React.FC = () => {
           <div className="row">
             {/* Logo container */}
             <div className="col-auto logo-container">
-              Office<span>Calendar</span>
+              <a href="/">
+                Office<span>Calendar<b>.</b></span>
+              </a>
             </div>
 
             {/* Navigation container */}
