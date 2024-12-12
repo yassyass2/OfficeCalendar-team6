@@ -48,16 +48,15 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="login-page">
-      <div className="login-wrapper">
-        <div className="text-center mt-4 name">
+    <section className="row">
+      <div className="col-4 login-container position-absolute top-50 start-50 translate-middle text-center align-items-center">
+        <div className="login-text">
           {view === 'login' ? 'Login' : 'Forgot Password'}
         </div>
 
         {view === 'login' && (
-          <form className="p-3 mt-3" onSubmit={handleLogin}>
-            <div className="form-field d-flex align-items-center">
-              <span className="far fa-user"></span>
+          <form className="login-form align-items-center" onSubmit={handleLogin}>
+            <div className="form-field d-flex">
               <input
                 type="text"
                 placeholder="Username or Email"
@@ -66,8 +65,7 @@ const Login: React.FC = () => {
                 autoComplete="off"
               />
             </div>
-            <div className="form-field d-flex align-items-center">
-              <span className="fas fa-key"></span>
+            <div className="form-field d-flex">
               <input
                 type="password"
                 placeholder="Password"
@@ -75,24 +73,38 @@ const Login: React.FC = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
+
+            <div className="container-fluid">
+              <div className="row">
+                <button className="btn-primary" type="submit">
+                  Login
+                  <i className="fa-solid fa-caret-right"></i>
+                </button>
+              </div>
+            </div>
+
             <div className="form-options d-flex justify-content-between">
-              <label className="remember-me">
+              {/* <label className="remember-me">
                 <input type="checkbox" /> Remember me
-              </label>
-              <button
-                className="forgot-password-btn"
-                type="button"
+              </label> */}
+              <a
+                className="btn-simple"
                 onClick={() => setView('forgotPassword')}
               >
                 Forgot Password?
-              </button>
+              </a>
             </div>
-            <button className="btn mt-3" type="submit">
-              Login
-            </button>
           </form>
         )}
 
+        <div className="container-fluid">
+          <div className="row">
+            <span className="mb-1">Don’t have an account?{' '}</span>
+            <a className="btn-simple" onClick={() => navigate('/sign-up')}>
+              Register here
+            </a>
+          </div>
+        </div>
 
         {view === 'forgotPassword' && (
           <div className="forgot-password-form">
@@ -107,29 +119,30 @@ const Login: React.FC = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <button className="btn mt-3" onClick={requestResetCode}>
-              Reset Password
-            </button>
-            <button
-              className="link-btn mt-3"
-              onClick={() => setView('login')}
-            >
-              Back to Login
-            </button>
+            <div className="container-fluid">
+              <div className="row">
+                <button className="btn-primary mt-3" onClick={requestResetCode}>
+                  Reset Password
+                </button>
+              </div>
+            </div>
+            <div className="container-fluid">
+              <div className="row">
+                <a
+                  className="btn-simple pt-3"
+                  onClick={() => setView('login')}
+                >
+                  Back to Login
+                </a>
+              </div>
+            </div>
           </div>
         )}
-
-        <div className="register-section">
-          Don’t have an account?{' '}
-          <button className="register-link" onClick={() => navigate('/sign-up')}>
-            Register
-          </button>
-        </div>
 
         {error && <p className="error-message">{error}</p>}
         {message && <p className="success-message">{message}</p>}
       </div>
-    </div>
+    </section >
   );
 };
 
