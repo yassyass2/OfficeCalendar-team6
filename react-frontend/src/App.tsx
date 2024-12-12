@@ -44,7 +44,7 @@ const App: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <main className="main-content">
+      <main className="container main-content">
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/Calendar" element={<Calendar />} />
