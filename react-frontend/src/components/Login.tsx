@@ -26,9 +26,9 @@ const Login: React.FC = () => {
       navigate('/Calendar'); // Redirect to Calendar
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
-        setError(err.response?.data?.message || 'Login failed. Check your credentials.');
+        setError(err.response?.data?.message || 'Login failed. Check your credentials');
       } else {
-        setError('An unexpected error occurred.');
+        setError('An unexpected error occurred');
       }
     }
   };
@@ -36,13 +36,13 @@ const Login: React.FC = () => {
   const requestResetCode = async () => {
     try {
       const response = await axios.post('http://localhost:5000/api/login/forgot-password', { email });
-      setMessage('Reset instructions have been sent to your email.');
+      setMessage('Reset instructions have been sent to your email');
       setError(null);
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
-        setError(err.response?.data || 'Failed to send reset instructions.');
+        setError(err.response?.data || 'Failed to send reset instructions');
       } else {
-        setError('An unexpected error occurred.');
+        setError('An unexpected error occurred');
       }
     }
   };
@@ -60,7 +60,7 @@ const Login: React.FC = () => {
               <span className="far fa-user"></span>
               <input
                 type="text"
-                placeholder="Username"
+                placeholder="Username or Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="off"
