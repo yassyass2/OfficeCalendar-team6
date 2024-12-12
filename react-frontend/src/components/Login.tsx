@@ -113,13 +113,6 @@ const Login: React.FC = () => {
             <button
               className="link-btn mt-3"
               onClick={() => setView('login')}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: '#6C3BAA',
-                textDecoration: 'underline',
-                cursor: 'pointer',
-              }}
             >
               Back to Login
             </button>
