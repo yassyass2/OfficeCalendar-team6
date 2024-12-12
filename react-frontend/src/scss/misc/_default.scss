@@ -2,6 +2,12 @@
     line-height: normal;
     font-family: "Montserrat", sans-serif;
 }
+
+html,
+body {
+    background-color: $bg-color;
+}
+
 .btn-primary {
     display: flex;
     align-items: center;
