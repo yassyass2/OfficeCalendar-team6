@@ -59,7 +59,7 @@ const App: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <div className="container-fluid footer-parent fixed-bottom">
+      <div className="container-fluid footer-parent">
         <footer className="container d-flex justify-content-center">
           <div className="row">
             <div className="col-auto text-center">
