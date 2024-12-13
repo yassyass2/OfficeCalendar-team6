@@ -105,10 +105,7 @@ const SidePanel: React.FC = () => {
           }}
         >
           ATTEND EVENT
-          <FontAwesomeIcon
-            icon={faPlay}
-            style={{ marginLeft: '10px', color: '#ffffff' }}
-          />
+          <i className="fa-solid fa-caret-right" style={{ marginLeft: '10px', color: '#ffffff' }}></i>
         </button>
       </div>
     </div>
