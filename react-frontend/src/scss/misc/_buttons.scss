@@ -1,0 +1,33 @@
+.btn-primary {
+    display: flex;
+    align-items: center;
+    align-self: stretch;
+    justify-content: center;
+    color: $white;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    background-color: $primary-color;
+    border-radius: $corner-radius;
+    border: 1px solid $primary-color;
+    box-shadow: $box-shadow;
+    padding: 10px 12px;
+    transition: background-color .15s ease-in-out;
+
+    &:hover {
+        background-color: $primary-50;
+    }
+}
+
+.btn-simple {
+    color: $text-color-50;
+    font-size: 16px;
+    font-weight: 400;
+    transition: color .15s ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+        color: $primary-50;
+    }
+}
