@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Utility function to get the number of days in a month
 const getDaysInMonth = (year: number, month: number): number => {
@@ -76,6 +77,24 @@ const Calendar: React.FC = () => {
               </div>
             ))}
           </div>
+
+          {/* Render the calendar days */}
+          <div className="weekdays-numbers-wrapper">
+            {calendarDays.map((day, index) => {
+              const isToday =
+                day === today.getDate() &&
+                currentMonth === today.getMonth() &&
+                currentYear === today.getFullYear();
+
+              return (
+                <div
+                  className={`weekdays-numbers ${isToday ? "current-day" : ""}`}
+                  key={index}
+                >
+                  {day ? day : ""}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
