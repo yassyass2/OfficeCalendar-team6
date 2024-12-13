@@ -22,7 +22,7 @@ body {
     border-radius: $corner-radius;
     border: 1px solid $primary-color;
     box-shadow: $box-shadow;
-    padding: 10px 0px;
+    padding: 10px 12px;
     transition: background-color .15s ease-in-out;
 
     &:hover {
