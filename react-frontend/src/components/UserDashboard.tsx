@@ -20,8 +20,11 @@ interface Attendance {
 const UserDashboard: React.FC = () => {
   // State to manage attendances
   const [attendances, setAttendances] = useState<Attendance[]>([]);
-  const [events, setEvents] = useState<Event[]>([{ id: "1", title: "mock event 1", date: "01-01-2025", start_time: "09:00", end_time: "10:00", location: "Rotterdam", description: "meeting" },
-  { id: "2", title: "mock event 2", date: "01-01-2025", start_time: "11:00", end_time: "13:00", location: "Utrecht", description: "Conference" }
+  const [events, setEvents] = useState<Event[]>([
+    { id: "1", title: "Meeting met HR - U wordt ontslagen L + ratio", date: "01-01-2025", start_time: "09:00", end_time: "10:00", location: "Rotterdam", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae dui id turpis venenatis ultrices vel sed urna." },
+    { id: "2", title: "Eindejaarsborrel #5 - 2014", date: "01-01-2025", start_time: "11:00", end_time: "13:00", location: "Utrecht", description: "Integer at quam eu tellus tempor tempor. Curabitur malesuada ipsum ullamcorper blandit posuere. Aliquam dictum lacinia." },
+    { id: "3", title: "Eindejaarsborrel #6", date: "01-01-2025", start_time: "11:00", end_time: "13:00", location: "Utrecht", description: "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed dignissim hendrerit." },
+    { id: "4", title: "Weekly stand-up van Jeanine en Alex", date: "01-01-2025", start_time: "11:00", end_time: "13:00", location: "Utrecht", description: "Nunc pulvinar diam ut enim mattis laoreet. Donec sollicitudin laoreet tellus, sed sodales velit." }
   ]);
   const [currentEventIndex, setCurrentEventIndex] = useState(0);
 
