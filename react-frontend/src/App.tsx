@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
 import Calendar from './components/Calendar';
 import AdminMenu from './components/AdminMenu';
-import UserDashboard from 'components/UserDashboard';
-import SidePanel from 'components/SidePanel';
+import UserDashboard from './components/UserDashboard';
+import SidePanel from './components/SidePanel';
 import Breadcrumbs from './components/misc/Breadcrumbs';
 
 // Import images
@@ -49,7 +49,7 @@ const App: React.FC = () => {
       {<Breadcrumbs/>}
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/Calendar" element={<Calendar />} />
+          <Route path="/calendar" element={<Calendar />} />
           <Route path="/admin" element={<AdminMenu />} />
           <Route path ="/user" element={<UserDashboard/>} />
           <Route path ="/sidepanel" element={<SidePanel/>} />
