@@ -126,15 +126,13 @@ const UserDashboard: React.FC = () => {
               <p>
                 <strong>Location:</strong> {currentEvent.location}
               </p>
+            {/* Navigation Buttons */}
+            <div className="event-navigation">
+              <button className="prev-btn" onClick={goToPreviousEvent}><i className="fa-solid fa-chevron-left"></i></button>
+              <button onClick={() => setAttendanceModal(true)}>Attend Event</button>
+              <button onClick={() => setInviteModal(true)}>Invite an employee</button>
+              <button className="next-btn" onClick={goToNextEvent}><i className="fa-solid fa-chevron-right"></i></button>
             </div>
-          )}
-
-          {/* Navigation Buttons */}
-          <div className="event-navigation">
-            <button onClick={goToPreviousEvent}>&lt; Previous</button>
-            <button onClick={() => setAttendanceModal(true)}>Attend Event</button>
-            <button onClick={() => setInviteModal(true)}>Invite an employee</button>
-            <button onClick={goToNextEvent}>Next &gt;</button>
           </div>
         </div>
       </div>

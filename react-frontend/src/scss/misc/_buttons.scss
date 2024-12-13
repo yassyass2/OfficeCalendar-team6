@@ -1,3 +1,7 @@
+button {
+    border: unset;
+}
+
 .btn-primary {
     display: flex;
     align-items: center;
@@ -29,5 +33,22 @@
 
     &:hover {
         color: $primary-50;
+    }
+}
+
+.prev-btn,
+.next-btn {
+    color: $primary-color;
+    font-size: 20px;
+    width: 50px;
+    height: 50px;
+    padding: auto;
+    border-radius: $corner-radius; // Design = 8px
+    background-color: $white;
+    box-shadow: $box-shadow-soft;
+    transition: color .15s ease-in-out;
+
+    &:hover {
+        color: $secondary-color;
     }
 }
