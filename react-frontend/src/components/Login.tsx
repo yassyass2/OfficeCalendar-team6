@@ -97,15 +97,6 @@ const Login: React.FC = () => {
           </form>
         )}
 
-        <div className="container-fluid">
-          <div className="row">
-            <span className="mb-1">Don’t have an account?{' '}</span>
-            <a className="btn-simple" onClick={() => navigate('/sign-up')}>
-              Register here
-            </a>
-          </div>
-        </div>
-
         {view === 'forgotPassword' && (
           <div className="forgot-password-form">
             <p className="forgot-password-instructions">
@@ -138,6 +129,15 @@ const Login: React.FC = () => {
             </div>
           </div>
         )}
+
+        <div className="container-fluid">
+          <div className="row">
+            <span className="mb-1">Don’t have an account?{' '}</span>
+            <a className="btn-simple" onClick={() => navigate('/sign-up')}>
+              Register here
+            </a>
+          </div>
+        </div>
 
         {error && <p className="error-message">{error}</p>}
         {message && <p className="success-message">{message}</p>}
