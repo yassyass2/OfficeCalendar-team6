@@ -50,55 +50,54 @@ const Calendar: React.FC = () => {
   };
 
   return (
-    <>
-      <section className="row">
-        <div className="col-3 g-0 calendar-container">
+    <div className="row">
+      <div className="col-3 g-0 calendar-container">
 
-          <div className="calendar-header">
-            <div className="current-date">
-              <span>
-                {new Date(currentYear, currentMonth).toLocaleString("default", { month: "long" })}
-              </span>
-              &nbsp;
-              <span>{currentYear}</span>
-            </div>
-
-            <div className="calendar-button-group">
-              <a onClick={() => switchMonth(-1)} className="btn-simple p-2">{<i className="fa-solid fa-chevron-left"></i>}</a>
-              <a onClick={() => switchMonth(1)} className="btn-simple p-2">{<i className="fa-solid fa-chevron-right"></i>}</a>
-            </div>
+        <div className="calendar-header">
+          <div className="current-date">
+            <span>
+              {new Date(currentYear, currentMonth).toLocaleString("default", { month: "long" })}
+            </span>
+            &nbsp;
+            <span>{currentYear}</span>
           </div>
 
-          {/* Render the days of the week */}
-          <div className="weekday-names-header">
-            {daysOfWeek.map((day) => (
-              <div key={day}>
-                {day}
-              </div>
-            ))}
-          </div>
-
-          {/* Render the calendar days */}
-          <div className="weekdays-numbers-wrapper">
-            {calendarDays.map((day, index) => {
-              const isToday =
-                day === today.getDate() &&
-                currentMonth === today.getMonth() &&
-                currentYear === today.getFullYear();
-
-              return (
-                <div
-                  className={`weekdays-numbers ${isToday ? "current-day" : ""}`}
-                  key={index}
-                >
-                  {day ? day : ""}
-                </div>
-              );
-            })}
+          <div className="calendar-button-group">
+            <a onClick={() => switchMonth(-1)} className="btn-simple p-2">{<i className="fa-solid fa-chevron-left"></i>}</a>
+            <a onClick={() => switchMonth(1)} className="btn-simple p-2">{<i className="fa-solid fa-chevron-right"></i>}</a>
           </div>
         </div>
-      </section>
-    </>
+
+        {/* Render the days of the week */}
+        <div className="weekday-names-header">
+          {daysOfWeek.map((day) => (
+            <div key={day}>
+              {day}
+            </div>
+          ))}
+        </div>
+
+        {/* Render the calendar days */}
+        <div className="weekdays-numbers-wrapper">
+          {calendarDays.map((day, index) => {
+            const isToday =
+              day === today.getDate() &&
+              currentMonth === today.getMonth() &&
+              currentYear === today.getFullYear();
+
+            return (
+              <div
+                className={`weekdays-numbers ${isToday ? "current-day" : ""}`}
+                key={index}
+              >
+                {day ? day : ""}
+              </div>
+            );
+          })}
+        </div>
+        
+      </div>
+    </div>
   );
 };
 
