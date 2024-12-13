@@ -14,7 +14,7 @@ const Breadcrumbs: React.FC = () => {
     return (
         <>
             <div className="row">
-                <div className="col g-0 breadcrumbs-container">
+                <div className="col breadcrumbs-container">
                     <span><a href="/" className="btn-simple">Home</a> <i className="fa-solid fa-chevron-right"></i> <a href={location.pathname} className="btn-simple">{breadcrumb}</a></span>
                 </div>
             </div>
