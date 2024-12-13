@@ -50,26 +50,17 @@ const SidePanel: React.FC = () => {
           color: 'rgba(56, 58, 67, 0.5)',
         }}
       >
-        <FontAwesomeIcon
-          icon={faBookOpen}
-          style={{ color: '#6C3BAA', opacity: '80%', marginRight: '5px' }}
-        />
+        <i className="fa-regular fa-calendar" style={{ color: '#6C3BAA', opacity: '80%', marginRight: '8px' }}></i>
         <span>{mockEventData.date}</span>
 
         <span style={{ margin: '0 20px' }}></span>
 
-        <FontAwesomeIcon
-          icon={faClock}
-          style={{ color: '#6C3BAA', opacity: '80%', marginRight: '5px' }}
-        />
+        <i className="fa-regular fa-clock" style={{ color: '#6C3BAA', opacity: '80%', marginRight: '8px' }}></i>
         <span>{mockEventData.time}</span>
 
         <span style={{ margin: '0 20px' }}></span>
 
-        <FontAwesomeIcon
-          icon={faBolt}
-          style={{ color: '#6C3BAA', opacity: '80%' }}
-        />
+        <i className="fa-solid fa-user" style={{ color: '#6C3BAA', opacity: '80%', marginRight: '8px' }}></i>
         <span>
           <span style={{ fontWeight: 700, fontStyle: 'italic' }}>
             {mockEventData.attendees}
