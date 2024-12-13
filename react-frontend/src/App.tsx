@@ -45,7 +45,7 @@ const App: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <main className="container main-content g-0">
+      <main className="container main-content g-0 flex-1">
         {<Breadcrumbs />}
         <Routes>
           <Route path="/" element={<Login />} />
