@@ -7,7 +7,7 @@ const getDaysInMonth = (year: number, month: number): number => {
 
 // Utility function to get the first day of the month (0 = Sunday, 1 = Monday, etc.)
 const getFirstDayOfMonth = (year: number, month: number): number => {
-  return new Date(year, month, 1).getDay();
+  return new Date(year, month, 0).getDay();
 };
 
 const Calendar: React.FC = () => {
@@ -19,8 +19,8 @@ const Calendar: React.FC = () => {
   const daysInMonth = getDaysInMonth(currentYear, currentMonth);
   const firstDay = getFirstDayOfMonth(currentYear, currentMonth);
 
-  // Create an array to represent days of the week (Sunday to Saturday)
-  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  // Create an array to represent days of the week (Monaday to Sunday)
+  const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
   // Create an array with empty slots for the first row if the month doesn't start on Sunday
   const emptySlots = Array(firstDay).fill(null);
