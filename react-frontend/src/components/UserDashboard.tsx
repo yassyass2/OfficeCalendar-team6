@@ -11,17 +11,17 @@ interface Event {
   description: string;
 }
 
-interface Attendance{
-    eventId: string;
-    userId: string;
-    attend_time: string
+interface Attendance {
+  eventId: string;
+  userId: string;
+  attend_time: string
 }
 
 const UserDashboard: React.FC = () => {
   // State to manage attendances
   const [attendances, setAttendances] = useState<Attendance[]>([]);
-  const [events, setEvents] = useState<Event[]>([{id: "1", title: "mock event 1", date: "01-01-2025", start_time: "09:00", end_time: "10:00", location: "Rotterdam", description: "meeting"},
-    {id: "2", title: "mock event 2", date: "01-01-2025", start_time: "11:00", end_time: "13:00", location: "Utrecht", description: "Conference"}
+  const [events, setEvents] = useState<Event[]>([{ id: "1", title: "mock event 1", date: "01-01-2025", start_time: "09:00", end_time: "10:00", location: "Rotterdam", description: "meeting" },
+  { id: "2", title: "mock event 2", date: "01-01-2025", start_time: "11:00", end_time: "13:00", location: "Utrecht", description: "Conference" }
   ]);
   const [currentEventIndex, setCurrentEventIndex] = useState(0);
 
@@ -56,9 +56,9 @@ const UserDashboard: React.FC = () => {
 
   // Handle navigation
   const goToNextEvent = () => {
-    setCurrentEventIndex((prevIndex) => Math.min(prevIndex + 1, events.length-1));
-  console.log(currentEventIndex)
-  setCurrentEvent(() => events[currentEventIndex])
+    setCurrentEventIndex((prevIndex) => Math.min(prevIndex + 1, events.length - 1));
+    console.log(currentEventIndex)
+    setCurrentEvent(() => events[currentEventIndex])
   };
 
   const goToPreviousEvent = () => {
@@ -70,7 +70,7 @@ const UserDashboard: React.FC = () => {
 
   // Handle Attendance
   const handleAttend = () => {
-    
+
   };
 
   // Handle Modify Event
