@@ -37,22 +37,22 @@ const App: React.FC = () => {
 
             {/* Login status container */}
             <div className="col-auto login-status-container">
-                <span className="login-status-text"><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Please log in to continue</a></span>
-                <img src={profileImage} alt='' width={40} height={40}/>
-              </div>
+              <span className="login-status-text"><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Please log in to continue</a></span>
+              <img src={profileImage} alt='' width={40} height={40} />
             </div>
+          </div>
         </nav>
       </div>
 
       {/* Main Content */}
       <main className="container main-content">
-      {<Breadcrumbs/>}
+        {<Breadcrumbs />}
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/admin" element={<AdminMenu />} />
-          <Route path ="/user" element={<UserDashboard/>} />
-          <Route path ="/sidepanel" element={<SidePanel/>} />
+          <Route path="/user" element={<UserDashboard />} />
+          <Route path="/sidepanel" element={<SidePanel />} />
         </Routes>
       </main>
 
