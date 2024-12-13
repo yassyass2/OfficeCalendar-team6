@@ -4,6 +4,13 @@ import { useLocation } from 'react-router-dom';
 const Breadcrumbs: React.FC = () => {
     const location = useLocation();
 
+    const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+    const breadcrumb = location.pathname
+        .split('/')
+        .filter(Boolean)
+        .map(capitalize);
+
     return (
         <>
             <div className="container-fluid breadcrumbs-container">
