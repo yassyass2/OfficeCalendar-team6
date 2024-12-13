@@ -88,22 +88,7 @@ const SidePanel: React.FC = () => {
         className="d-flex justify-content-center align-items-center"
         style={{ marginTop: '30px', paddingLeft: '30px' }}
       >
-        <button
-          style={{
-            backgroundColor: '#6C3BAA',
-            width: '200px',
-            height: '40px',
-            borderRadius: '10px',
-            border: 'none',
-            color: '#ffffff',
-            fontFamily: 'Montserrat, sans-serif',
-            fontWeight: 600,
-            letterSpacing: '10%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
+        <button className="btn-primary">
           ATTEND EVENT
           <i className="fa-solid fa-caret-right" style={{ marginLeft: '10px', color: '#ffffff' }}></i>
         </button>
