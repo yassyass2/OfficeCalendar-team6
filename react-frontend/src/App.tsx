@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/Login';
 import Calendar from './components/Calendar';
 import AdminMenu from './components/AdminMenu';
@@ -45,7 +45,7 @@ const App: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <main className="container main-content">
+      <main className="container main-content g-0">
         {<Breadcrumbs />}
         <Routes>
           <Route path="/" element={<Login />} />
@@ -53,6 +53,8 @@ const App: React.FC = () => {
           <Route path="/admin" element={<AdminMenu />} />
           <Route path="/user" element={<UserDashboard />} />
           <Route path="/sidepanel" element={<SidePanel />} />
+          <Route path="/404" element={<div className="g-0 pt-4"><h3><strong>Error 404 - Not Found</strong></h3></div>} />
+          <Route path="*" element={<Navigate replace to="/404" />} />
         </Routes>
       </main>
 
