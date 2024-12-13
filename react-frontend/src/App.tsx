@@ -5,6 +5,7 @@ import Calendar from './components/Calendar';
 import AdminMenu from './components/AdminMenu';
 import UserDashboard from 'components/UserDashboard';
 import SidePanel from 'components/SidePanel';
+import Breadcrumbs from './components/misc/Breadcrumbs';
 
 // Import images
 import profileImage from './assets/profile-image-placeholder@4x.png';
@@ -45,6 +46,7 @@ const App: React.FC = () => {
 
       {/* Main Content */}
       <main className="container main-content">
+      {<Breadcrumbs/>}
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/Calendar" element={<Calendar />} />
