@@ -12,13 +12,11 @@ const Breadcrumbs: React.FC = () => {
         .map(capitalize);
 
     return (
-        <>
-            <div className="row">
-                <div className="col breadcrumbs-container">
-                    <span><a href="/" className="btn-simple">Home</a> <i className="fa-solid fa-chevron-right"></i> <a href={location.pathname} className="btn-simple">{breadcrumb}</a></span>
-                </div>
+        <section className="row">
+            <div className="col breadcrumbs-container">
+                <span><a href="/" className="btn-simple">Home</a> <i className="fa-solid fa-chevron-right"></i> <a href={location.pathname} className="btn-simple">{breadcrumb}</a></span>
             </div>
-        </>
+        </section>
     );
 }
 
