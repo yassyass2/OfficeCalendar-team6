@@ -95,40 +95,47 @@ const UserDashboard: React.FC = () => {
   };
 
   return (
-    <div className="User-Dashboard">
-      <div className="main-container">
-        {/* Left Section: Calendar + Event List */}
-        <div className="left-section">
-          <Calendar />
-          <div className="event-list">
-            <h3>Upcoming events</h3>
-            <ul>
-              {events.map((event: Event) => (
-                <li key={event.id}>
-                  <strong>{event.title}</strong> - {event.date}, {event.start_time} to{' '}
-                  {event.end_time}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+    <section className="row">
+      <Calendar />
+      <div className="row">
+        <div className="col-4 g-0">
 
-        {/* Right Section: Current Event Details */}
-        <div className="right-section">
-          <h3>Current Event</h3>
-          {(
-            <div className="event-details">
-              <h4>{currentEvent.title}</h4>
-              <p>{currentEvent.description}</p>
-              <p>
-                <strong>Date:</strong> {currentEvent.date}
-              </p>
-              <p>
-                <strong>Time:</strong> {currentEvent.start_time} - {currentEvent.end_time}
-              </p>
-              <p>
-                <strong>Location:</strong> {currentEvent.location}
-              </p>
+          {/* Left Section: Event List */}
+          <div className="event-list-container">
+            {events.map((event: Event) => (
+              <div className="event" key={event.id}>
+                <span className="event-title">{event.title}</span>
+                <p className="event-description">
+                  {event.description}
+                  {/* <br />
+                  {event.date}, {event.start_time} to{' '}
+                  {event.end_time} */}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Right Section: Current Event Details */}
+          {/* --- VERVANG ONDERSRAANDE MET SidePanel.tsx --- */}
+          <div className="right-section">
+            <h3>Current Event</h3>
+            {(
+              <div className="event-details">
+                <h4>{currentEvent.title}</h4>
+                <p>{currentEvent.description}</p>
+                <p>
+                  <strong>Date:</strong> {currentEvent.date}
+                </p>
+                <p>
+                  <strong>Time:</strong> {currentEvent.start_time} - {currentEvent.end_time}
+                </p>
+                <p>
+                  <strong>Location:</strong> {currentEvent.location}
+                </p>
+              </div>
+            )}
+            {/* --------- */}
+
             {/* Navigation Buttons */}
             <div className="event-navigation">
               <button className="prev-btn" onClick={goToPreviousEvent}><i className="fa-solid fa-chevron-left"></i></button>
@@ -139,7 +146,7 @@ const UserDashboard: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
