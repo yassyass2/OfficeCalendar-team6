@@ -1,0 +1,31 @@
+.event-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-top: 25px;
+
+    .event {
+        padding-left: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        border-radius: 0px 10px 10px 0px;
+        // Border color en Background in code vervangen met de juiste kleuren
+        border-left: 2px solid #FF605C;
+        background: rgba(255, 96, 92, 0.10);
+        box-shadow: $box-shadow;
+
+        .event-title {
+            color: $dark-text-color;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .event-description {
+            color: $text-color;
+            display: inline-block;
+            margin-bottom: 0;
+        }
+    }
+}

@@ -1,0 +1,18 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    max-width: 270px;
+
+    .login-text {
+        color: $dark-text-color;
+        font-size: 36px;
+        font-weight: 700;
+    }
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}

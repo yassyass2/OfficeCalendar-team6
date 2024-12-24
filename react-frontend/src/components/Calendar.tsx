@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Utility function to get the number of days in a month
 const getDaysInMonth = (year: number, month: number): number => {
@@ -7,7 +8,7 @@ const getDaysInMonth = (year: number, month: number): number => {
 
 // Utility function to get the first day of the month (0 = Sunday, 1 = Monday, etc.)
 const getFirstDayOfMonth = (year: number, month: number): number => {
-  return new Date(year, month, 1).getDay();
+  return new Date(year, month, 0).getDay();
 };
 
 const Calendar: React.FC = () => {
@@ -19,8 +20,8 @@ const Calendar: React.FC = () => {
   const daysInMonth = getDaysInMonth(currentYear, currentMonth);
   const firstDay = getFirstDayOfMonth(currentYear, currentMonth);
 
-  // Create an array to represent days of the week (Sunday to Saturday)
-  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  // Create an array to represent days of the week (Monaday to Sunday)
+  const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
   // Create an array with empty slots for the first row if the month doesn't start on Sunday
   const emptySlots = Array(firstDay).fill(null);
@@ -49,41 +50,52 @@ const Calendar: React.FC = () => {
   };
 
   return (
-    <div>
-      <div>
-        <button onClick={() => switchMonth(-1)}>{'<'}</button>
-        <span>
-          {new Date(currentYear, currentMonth).toLocaleString("default", { month: "long" })}
-          {currentYear}
-        </span>
-        <button onClick={() => switchMonth(1)}>{'>'}</button>
-      </div>
+    <div className="row">
+      <div className="col-3 g-0 calendar-container">
 
-      {/* Render the days of the week */}
-      <div style={{ display: "flex" }}>
-        {daysOfWeek.map((day) => (
-          <div key={day} style={{ width: "14.28%", textAlign: "center" }}>
-            {day}
+        <div className="calendar-header">
+          <div className="current-date">
+            <span>
+              {new Date(currentYear, currentMonth).toLocaleString("default", { month: "long" })}
+            </span>
+            &nbsp;
+            <span>{currentYear}</span>
           </div>
-        ))}
-      </div>
 
-      {/* Render the calendar days */}
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
-        {calendarDays.map((day, index) => (
-          <div
-            key={index}
-            style={{
-              width: "14.28%",
-              textAlign: "center",
-              height: "40px",
-              lineHeight: "40px",
-              border: "1px solid #ddd",
-            }}
-          >
-            {day ? day : ""}
+          <div className="calendar-button-group">
+            <a onClick={() => switchMonth(-1)} className="btn-simple p-2">{<i className="fa-solid fa-chevron-left"></i>}</a>
+            <a onClick={() => switchMonth(1)} className="btn-simple p-2">{<i className="fa-solid fa-chevron-right"></i>}</a>
           </div>
-        ))}
+        </div>
+
+        {/* Render the days of the week */}
+        <div className="weekday-names-header">
+          {daysOfWeek.map((day) => (
+            <div key={day}>
+              {day}
+            </div>
+          ))}
+        </div>
+
+        {/* Render the calendar days */}
+        <div className="weekdays-numbers-wrapper">
+          {calendarDays.map((day, index) => {
+            const isToday =
+              day === today.getDate() &&
+              currentMonth === today.getMonth() &&
+              currentYear === today.getFullYear();
+
+            return (
+              <div
+                className={`weekdays-numbers ${isToday ? "current-day" : ""}`}
+                key={index}
+              >
+                {day ? day : ""}
+              </div>
+            );
+          })}
+        </div>
+        
       </div>
     </div>
   );

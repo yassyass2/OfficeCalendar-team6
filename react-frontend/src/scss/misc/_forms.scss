@@ -1,0 +1,14 @@
+input {
+    color: $text-color-50;
+    font-size: 16px;
+    font-weight: 400;
+    background-color: $white;
+    border-radius: $corner-radius;
+    padding: 10px 0px 10px 15px;
+    border: 1px solid $primary-color;
+    box-shadow: $box-shadow;
+
+    &:focus {
+        outline: 1px solid $secondary-light;
+    }
+}

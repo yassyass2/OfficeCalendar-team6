@@ -1,0 +1,17 @@
+// Misc items
+// Keep variables & default as the first items for proper hierarchy
+@import 'pages/variables';
+@import 'misc/default';
+@import 'misc/nav';
+@import 'misc/footer';
+@import 'misc/buttons';
+@import 'misc/forms';
+@import 'misc/breadcrumbs';
+
+// Components stylesheets
+@import 'components/calendar';
+
+// Page specific stylesheets
+@import 'pages/login';
+@import 'pages/admin-panel';
+@import 'pages/user-dashboard';

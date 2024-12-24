@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../index.css'; // Global styles
-import '../styles/login-light.css'; // Login-specific styles
+
 
 const Login: React.FC = () => {
   const [view, setView] = useState<'login' | 'forgotPassword' | 'register'>('login');
@@ -28,9 +27,9 @@ const Login: React.FC = () => {
       navigate('/Calendar'); // Redirect to Calendar after login
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
-        setError(err.response?.data?.message || 'Login failed. Check your credentials.');
+        setError(err.response?.data?.message || 'Login failed. Check your credentials');
       } else {
-        setError('An unexpected error occurred.');
+        setError('An unexpected error occurred');
       }
     }
   };
@@ -38,62 +37,36 @@ const Login: React.FC = () => {
   const requestResetCode = async () => {
     try {
       const response = await axios.post('http://localhost:5000/api/login/forgot-password', { email });
-      setMessage('Reset instructions have been sent to your email.');
+      setMessage('Reset instructions have been sent to your email');
       setError(null);
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
-        setError(err.response?.data || 'Failed to send reset instructions.');
+        setError(err.response?.data || 'Failed to send reset instructions');
       } else {
-        setError('An unexpected error occurred.');
-      }
-    }
-  };
-
-  const handleRegister = async () => {
-    if (password !== confirmPassword) {
-      setError('Passwords do not match.');
-      return;
-    }
-
-    try {
-      const response = await axios.post('http://localhost:5000/api/register', {
-        email,
-        password,
-      });
-      setMessage('Registration successful! You can now log in.');
-      setView('login'); // Switch back to login view
-    } catch (err: unknown) {
-      if (axios.isAxiosError(err)) {
-        setError(err.response?.data?.message || 'Registration failed.');
-      } else {
-        setError('An unexpected error occurred.');
+        setError('An unexpected error occurred');
       }
     }
   };
 
   return (
-    <div className="login-page">
-      <div className="login-wrapper">
-        <div className="text-center mt-4 name">
-          {view === 'login' && 'Login'}
-          {view === 'forgotPassword' && 'Forgot Password'}
-          {view === 'register' && 'Register'}
+    <section className="row">
+      <div className="col-4 login-container position-absolute top-50 start-50 translate-middle text-center align-items-center">
+        <div className="login-text">
+          {view === 'login' ? 'Login' : 'Forgot Password'}
         </div>
 
         {view === 'login' && (
-          <form className="p-3 mt-3" onSubmit={handleLogin}>
-            <div className="form-field d-flex align-items-center">
-              <span className="far fa-user"></span>
+          <form className="login-form align-items-center" onSubmit={handleLogin}>
+            <div className="form-field d-flex">
               <input
                 type="text"
-                placeholder="Username"
+                placeholder="Username or Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="off"
               />
             </div>
-            <div className="form-field d-flex align-items-center">
-              <span className="fas fa-key"></span>
+            <div className="form-field d-flex">
               <input
                 type="password"
                 placeholder="Password"
@@ -101,21 +74,27 @@ const Login: React.FC = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
+
+            <div className="container-fluid">
+              <div className="row">
+                <button className="btn-primary" type="submit">
+                  Login
+                  <i className="fa-solid fa-caret-right"></i>
+                </button>
+              </div>
+            </div>
+
             <div className="form-options d-flex justify-content-between">
-              <label className="remember-me">
+              {/* <label className="remember-me">
                 <input type="checkbox" /> Remember me
-              </label>
-              <button
-                className="forgot-password-btn"
-                type="button"
+              </label> */}
+              <a
+                className="btn-simple"
                 onClick={() => setView('forgotPassword')}
               >
                 Forgot Password?
-              </button>
+              </a>
             </div>
-            <button className="btn mt-3" type="submit">
-              Login
-            </button>
           </form>
         )}
 
@@ -132,96 +111,39 @@ const Login: React.FC = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <button className="btn mt-3" onClick={requestResetCode}>
-              Reset Password
-            </button>
-            <button
-              className="link-btn mt-3"
-              onClick={() => setView('login')}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: '#6C3BAA',
-                textDecoration: 'underline',
-                cursor: 'pointer',
-              }}
-            >
-              Back to Login
-            </button>
+            <div className="container-fluid">
+              <div className="row">
+                <button className="btn-primary mt-3" onClick={requestResetCode}>
+                  Reset Password
+                </button>
+              </div>
+            </div>
+            <div className="container-fluid">
+              <div className="row">
+                <a
+                  className="btn-simple pt-3"
+                  onClick={() => setView('login')}
+                >
+                  Back to Login
+                </a>
+              </div>
+            </div>
           </div>
         )}
 
-        {view === 'register' && (
-          <div className="register-form">
-            <p className="register-instructions">
-              Please fill in your details to create an account.
-            </p>
-            <div className="form-field">
-              <input
-                type="text"
-                placeholder="Username"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className="form-field">
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <div className="form-field">
-              <input
-                type="password"
-                placeholder="Confirm Password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-            </div>
-            <button className="btn mt-3" onClick={handleRegister}>
-              Register
-            </button>
-            <button
-              className="link-btn mt-3"
-              onClick={() => setView('login')}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: '#6C3BAA',
-                textDecoration: 'underline',
-                cursor: 'pointer',
-              }}
-            >
-              Back to Login
-            </button>
+        <div className="container-fluid">
+          <div className="row">
+            <span className="mb-1">Don’t have an account?{' '}</span>
+            <a className="btn-simple" onClick={() => navigate('/sign-up')}>
+              Register here
+            </a>
           </div>
-        )}
-
-        {view === 'login' && (
-          <div className="register-section">
-            Don’t have an account?{' '}
-            <button
-              className="register-link"
-              onClick={() => setView('register')}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: '#6C3BAA',
-                textDecoration: 'underline',
-                cursor: 'pointer',
-              }}
-            >
-              Register
-            </button>
-          </div>
-        )}
+        </div>
 
         {error && <p className="error-message">{error}</p>}
         {message && <p className="success-message">{message}</p>}
       </div>
-    </div>
+    </section >
   );
 };
 

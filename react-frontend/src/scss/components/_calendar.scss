@@ -1,0 +1,56 @@
+.calendar-container {
+    color: $text-color;
+    font-size: 14px;
+    padding: 14px;
+    background-color: $white;
+    border-radius: $corner-radius;
+    box-shadow: $box-shadow-soft;
+
+    .calendar-header {
+        display: flex;
+        padding: 10px;
+        user-select: none;
+
+        .current-date {
+            font-weight: 700;
+            margin: auto auto auto 0;
+        }
+
+        .calendar-button-group {
+            display: inline-block;
+        }
+    }
+
+    .weekday-names-header {
+        display: flex;
+        padding-top: 10px;
+        justify-content: space-evenly;
+        user-select: none;
+    }
+
+    .weekdays-numbers-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+
+        .weekdays-numbers {
+            width: calc(100%/7);
+            text-align: center;
+            line-height: 40px;
+            border-radius: 100%;
+            transition: background-color .15s ease-in-out;
+
+            &.current-day {
+                color: $dark-text-color;
+                font-weight: 700;
+                text-align: center;
+                border-radius: 100%;
+                background-color: $primary-50;
+            }
+
+            &:hover {
+                cursor: pointer;
+                background-color: $secondary-color;
+            }
+        }
+    }
+}
