@@ -4,11 +4,12 @@ import axios from 'axios';
 
 
 const Login: React.FC = () => {
-  const [view, setView] = useState<'login' | 'forgotPassword'>('login'); // Track current view
-  const [email, setEmail] = useState<string>(''); // Email input
-  const [password, setPassword] = useState<string>(''); // Password input
-  const [error, setError] = useState<string | null>(null); // Error message
-  const [message, setMessage] = useState<string | null>(null); // Success message
+  const [view, setView] = useState<'login' | 'forgotPassword' | 'register'>('login');
+  const [email, setEmail] = useState<string>(''); // Stores email/username input
+  const [password, setPassword] = useState<string>(''); // Stores password input
+  const [confirmPassword, setConfirmPassword] = useState<string>(''); // For register view
+  const [error, setError] = useState<string | null>(null); // Displays error messages
+  const [message, setMessage] = useState<string | null>(null); // Displays success messages
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -23,7 +24,7 @@ const Login: React.FC = () => {
       });
       setMessage(response.data.message);
       localStorage.setItem('authToken', response.data.token);
-      navigate('/Calendar'); // Redirect to Calendar
+      navigate('/Calendar'); // Redirect to Calendar after login
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || 'Login failed. Check your credentials');

@@ -67,7 +67,6 @@ const UserDashboard: React.FC = () => {
   const goToPreviousEvent = () => {
     setCurrentEventIndex(
       (prevIndex) => Math.max(prevIndex - 1, 0));
-    console.log(currentEventIndex)
     setCurrentEvent(() => events[currentEventIndex])
   };
 
