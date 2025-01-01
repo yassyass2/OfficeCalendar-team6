@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/Login';
+import Register from './components/Register'; // Import your new Register page
 import Calendar from './components/Calendar';
 import AdminMenu from './components/AdminMenu';
 import UserDashboard from './components/UserDashboard';
@@ -49,6 +50,7 @@ const App: React.FC = () => {
         {<Breadcrumbs />}
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/sign-up" element={<Register />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/admin" element={<AdminMenu />} />
           <Route path="/user" element={<UserDashboard />} />
