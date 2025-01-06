@@ -56,26 +56,26 @@ const Register: React.FC = () => {
     <section className="row">
       <div className="col-4 login-container position-absolute top-50 start-50 translate-middle text-center align-items-center">
         <h2>Register</h2>
-        
+
         <form onSubmit={handleRegister}>
 
-            <div className="form-field d-flex">
-                <input
-                    type="text"
-                    placeholder="First Name"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                />
-            </div>
+          <div className="form-field d-flex">
+            <input
+              type="text"
+              placeholder="First Name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+          </div>
 
-            <div className="form-field d-flex">
-                <input
-                    type="text"
-                    placeholder="Last Name"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                />
-            </div>  
+          <div className="form-field d-flex">
+            <input
+              type="text"
+              placeholder="Last Name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+          </div>
 
 
           <div className="form-field d-flex">
