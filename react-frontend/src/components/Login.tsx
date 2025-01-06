@@ -99,7 +99,7 @@ const Login: React.FC = () => {
   return (
     <section className="row">
       <div className="col-4 login-container position-absolute top-50 start-50 translate-middle text-center align-items-center">
-        
+
         {/* Title depends on which view we're on */}
         <div className="login-text">
           {view === 'login'
@@ -216,7 +216,7 @@ const Login: React.FC = () => {
                 autoComplete="off"
               />
             </div>
-            
+
             <div className="form-field d-flex">
               <input
                 type="password"
@@ -225,7 +225,7 @@ const Login: React.FC = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            
+
             <div className="form-field d-flex">
               <input
                 type="password"
