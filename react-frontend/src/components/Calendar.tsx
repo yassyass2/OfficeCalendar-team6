@@ -51,7 +51,7 @@ const Calendar: React.FC = () => {
 
   return (
     <div className="row">
-      <div className="col-3 g-0 calendar-container">
+      <div className="calendar-container">
 
         <div className="calendar-header">
           <div className="current-date">
@@ -95,7 +95,7 @@ const Calendar: React.FC = () => {
             );
           })}
         </div>
-        
+
       </div>
     </div>
   );

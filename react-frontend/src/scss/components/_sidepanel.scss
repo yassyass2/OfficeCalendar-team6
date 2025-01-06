@@ -1,0 +1,42 @@
+.sidepanel-container {
+    padding: 30px;
+    border-left: 2px solid #0D99FF;
+    box-shadow: $box-shadow-soft;
+    border-top-right-radius: $corner-radius;
+    border-bottom-right-radius: $corner-radius;
+    background-color: $white;
+
+    h2 {
+        font-size: 24px;
+        font-weight: 600;
+    }
+
+    .event-metadata {
+        color: $text-color-50;
+        font-size: 14px;
+        font-style: italic;
+        align-items: center;
+        margin-top: 10px;
+        display: flex;
+        user-select: none;
+
+        span:not(:last-of-type) {
+            margin-right: 20px;
+        }
+
+        i {
+            color: $primary-color;
+            opacity: 80%;
+            margin-right: 8px;
+        }
+
+        .attendees-number {
+            font-weight: 600;
+        }
+    }
+
+    .event-body {
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+}

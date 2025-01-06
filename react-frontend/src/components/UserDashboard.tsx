@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Calendar from './Calendar'; // Import the Calendar component
+
+import Calendar from './Calendar';
+import SidePanel from './SidePanel';
 
 interface Event {
   id: string;
@@ -95,46 +97,41 @@ const UserDashboard: React.FC = () => {
 
   return (
     <section className="row">
-      <Calendar />
       <div className="row">
-        <div className="col-4 g-0">
 
-          {/* Left Section: Event List */}
-          <div className="event-list-container">
-            {events.map((event: Event) => (
-              <div className="event" key={event.id}>
-                <span className="event-title">{event.title}</span>
-                <p className="event-description">
-                  {event.description}
-                  {/* <br />
-                  {event.date}, {event.start_time} to{' '}
-                  {event.end_time} */}
-                </p>
-              </div>
-            ))}
+        {/* Left Section: Event List */}
+        <div className="col-4">
+
+          <div className="row g-0">
+            <Calendar />
           </div>
 
-          {/* Right Section: Current Event Details */}
-          {/* --- VERVANG ONDERSRAANDE MET SidePanel.tsx --- */}
-          <div className="right-section">
-            <h3>Current Event</h3>
-            {(
-              <div className="event-details">
-                <h4>{currentEvent.title}</h4>
-                <p>{currentEvent.description}</p>
-                <p>
-                  <strong>Date:</strong> {currentEvent.date}
-                </p>
-                <p>
-                  <strong>Time:</strong> {currentEvent.start_time} - {currentEvent.end_time}
-                </p>
-                <p>
-                  <strong>Location:</strong> {currentEvent.location}
-                </p>
-              </div>
-            )}
-            {/* --------- */}
+          <div className="row g-0">
+            <div className="event-list-container">
+              {events.map((event: Event) => (
+                <div className="event" key={event.id}>
+                  <span className="event-title">{event.title}</span>
+                  <p className="event-description">
+                    {event.description}
+                    {/* <br />
+                  {event.date}, {event.start_time} to{' '}
+                  {event.end_time} */}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
 
+        <div className="col-1">
+          <div className="divider-horizontal g-0"></div> {/* Center divider */}
+        </div>
+
+        <div className="col-7 g-0">
+          <div className="row g-0">
+            <SidePanel />
+          </div>
+          <div className="row g-0">
             {/* Navigation Buttons */}
             <div className="event-navigation">
               <button className="prev-btn" onClick={goToPreviousEvent}><i className="fa-solid fa-chevron-left"></i></button>
@@ -144,6 +141,26 @@ const UserDashboard: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Right Section: Current Event Details */}
+        {/* <div className="right-section">
+          <h3>Current Event</h3>
+          {(
+            <div className="event-details">
+              <h4>{currentEvent.title}</h4>
+              <p>{currentEvent.description}</p>
+              <p>
+                <strong>Date:</strong> {currentEvent.date}
+              </p>
+              <p>
+                <strong>Time:</strong> {currentEvent.start_time} - {currentEvent.end_time}
+              </p>
+              <p>
+                <strong>Location:</strong> {currentEvent.location}
+              </p>
+            </div>
+          )}
+        </div> */}
       </div>
     </section>
   );

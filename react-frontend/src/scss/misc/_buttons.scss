@@ -52,3 +52,13 @@ button {
         color: $secondary-color;
     }
 }
+
+a.btn-link {
+    color: $secondary-color;
+    text-decoration: none;
+    transition: color .15s ease-in-out;
+
+    &:hover {
+        color: $primary-light;
+    }
+}
