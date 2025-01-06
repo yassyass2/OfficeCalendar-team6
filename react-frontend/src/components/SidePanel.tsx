@@ -1,8 +1,7 @@
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const mockEventData = {
-  title: 'Weekly stand-up van Jeanine en Alex - BaseCamp (1 dec)',
+  title: 'Weekly stand-up van Jeanine en Alex - BaseCamp',
   date: '1 december 2014',
   time: '09:00 - 09:30',
   attendees: 12,
@@ -12,82 +11,29 @@ const mockEventData = {
 
 const SidePanel: React.FC = () => {
   return (
-    <div
-      className="position-fixed"
-      style={{
-        right: '0',
-        width: '58.3333%',
-        height: '640px',
-        backgroundColor: '#ffffff',
-        borderLeft: '2px solid #0D99FF',
-        boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.10)',
-        borderTopRightRadius: '10px',
-        borderBottomRightRadius: '10px',
-        overflowY: 'auto',
-        padding: '30px',
-      }}
-    >
-      <h2
-        style={{
-          fontFamily: 'Montserrat, sans-serif',
-          fontWeight: 600,
-          fontSize: '24px',
-          paddingTop: '30px',
-          paddingLeft: '30px',
-        }}
-      >
-        {mockEventData.title}
-      </h2>
+    <div className="row g-0">
+      <div className="col-auto sidepanel-container">
+        <h2>{mockEventData.title}</h2>
+        <div className="event-metadata">
+          <i className="fa-regular fa-calendar"></i>
+          <span>{mockEventData.date}</span>
 
-      <div
-        className="d-flex align-items-center"
-        style={{
-          marginTop: '20px',
-          paddingLeft: '30px',
-          fontFamily: 'Montserrat, sans-serif',
-          fontSize: '14px',
-          fontStyle: 'italic',
-          color: 'rgba(56, 58, 67, 0.5)',
-        }}
-      >
-        <i className="fa-regular fa-calendar" style={{ color: '#6C3BAA', opacity: '80%', marginRight: '8px' }}></i>
-        <span>{mockEventData.date}</span>
+          <i className="fa-regular fa-clock"></i>
+          <span>{mockEventData.time}</span>
 
-        <span style={{ margin: '0 20px' }}></span>
+          <i className="fa-solid fa-user"></i>
+          <span>
+            <span className="attendees-number">
+              {mockEventData.attendees}
+            </span>{' '}
+            attending
+          </span>
+        </div>
 
-        <i className="fa-regular fa-clock" style={{ color: '#6C3BAA', opacity: '80%', marginRight: '8px' }}></i>
-        <span>{mockEventData.time}</span>
+        <div className="event-body">
+          {mockEventData.description}
+        </div>
 
-        <span style={{ margin: '0 20px' }}></span>
-
-        <i className="fa-solid fa-user" style={{ color: '#6C3BAA', opacity: '80%', marginRight: '8px' }}></i>
-        <span>
-          <span style={{ fontWeight: 700, fontStyle: 'italic' }}>
-            {mockEventData.attendees}
-          </span>{' '}
-          attending
-        </span>
-      </div>
-
-      <div
-        style={{
-          marginTop: '30px',
-          paddingLeft: '30px',
-          fontFamily: 'Montserrat, sans-serif',
-          fontSize: '18px',
-          fontWeight: 400,
-          color: '#383A43',
-          wordWrap: 'break-word',
-          whiteSpace: 'normal',
-        }}
-      >
-        {mockEventData.description}
-      </div>
-
-      <div
-        className="d-flex justify-content-center align-items-center"
-        style={{ marginTop: '30px', paddingLeft: '30px' }}
-      >
         <button className="btn-primary">
           ATTEND EVENT
           <i className="fa-solid fa-caret-right" style={{ marginLeft: '10px', color: '#ffffff' }}></i>
@@ -95,6 +41,6 @@ const SidePanel: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 export default SidePanel;
