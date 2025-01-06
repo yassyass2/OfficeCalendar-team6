@@ -6,7 +6,7 @@ const Login: React.FC = () => {
   const [view, setView] = useState<'login' | 'forgotPassword' | 'register'>('login');
 
   // For login & forgot password
-  const [email, setEmail] = useState<string>(''); 
+  const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
   // For register
@@ -105,8 +105,8 @@ const Login: React.FC = () => {
           {view === 'login'
             ? 'Login'
             : view === 'forgotPassword'
-            ? 'Forgot Password'
-            : 'Register'}
+              ? 'Forgot Password'
+              : 'Register'}
         </div>
 
         {/* ----- LOGIN VIEW ----- */}
