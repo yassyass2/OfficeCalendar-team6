@@ -187,26 +187,6 @@ const sendInvitation = async (attendee: string) => {
           <button onClick={() => setInviteModal(false)}>Close</button>
         </div>
       )}
-
-        {/* Right Section: Current Event Details */}
-        {/* <div className="right-section">
-          <h3>Current Event</h3>
-          {(
-            <div className="event-details">
-              <h4>{currentEvent.title}</h4>
-              <p>{currentEvent.description}</p>
-              <p>
-                <strong>Date:</strong> {currentEvent.date}
-              </p>
-              <p>
-                <strong>Time:</strong> {currentEvent.start_time} - {currentEvent.end_time}
-              </p>
-              <p>
-                <strong>Location:</strong> {currentEvent.location}
-              </p>
-            </div>
-          )}
-        </div> */}
       </div>
     </section>
   );
