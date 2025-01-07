@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 
-const Breadcrumbs: React.FC = () => {
+export const Breadcrumbs: React.FC = () => {
     const location = useLocation();
 
     const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -19,5 +19,3 @@ const Breadcrumbs: React.FC = () => {
         </section>
     );
 }
-
-export default Breadcrumbs;

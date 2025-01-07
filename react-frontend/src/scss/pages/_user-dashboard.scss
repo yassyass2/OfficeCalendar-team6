@@ -29,3 +29,15 @@
         }
     }
 }
+
+.event-navigation {
+    margin-top: 30px;
+    position: relative;
+
+    button {
+        &:last-child {
+            right: 0;
+            position: absolute;
+        }
+    }
+}
