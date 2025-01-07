@@ -17,8 +17,9 @@ interface Attendance {
   attend_time: string
 }
 
+
 const UserDashboard: React.FC = () => {
-  // State to manage attendances
+
   const [attendances, setAttendances] = useState<Attendance[]>([]);
   const [events, setEvents] = useState<Event[]>([
     { id: "1", title: "Meeting met HR - U wordt ontslagen L + ratio", date: "01-01-2025", start_time: "09:00", end_time: "10:00", location: "Rotterdam", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae dui id turpis venenatis ultrices vel sed urna." },
@@ -28,7 +29,6 @@ const UserDashboard: React.FC = () => {
   ]);
   const [currentEventIndex, setCurrentEventIndex] = useState(0);
 
-  // State for modals
   const [attendanceModal, setAttendanceModal] = useState(false);
   const [inviteModal, setInviteModal] = useState(false);
 
@@ -75,7 +75,7 @@ const UserDashboard: React.FC = () => {
 
   };
 
-  // Handle Modify Event
+  // Handle Invitation screen
   const handleInvitation = () => {
 
   };

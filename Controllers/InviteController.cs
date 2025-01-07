@@ -20,7 +20,7 @@ namespace Controllers
 
         [HttpPost()]
         [Authorize(Roles = "User,Admin")]
-        public async Task<IActionResult> SendInvite(Guid ToInvite, Guid WhatEvent)
+        public async Task<IActionResult> SendInvite([FromQuery] Guid ToInvite, [FromQuery] Guid WhatEvent)
         {
             if (ToInvite == Guid.Empty || WhatEvent == Guid.Empty) return BadRequest("traget Id or Event Id not given");
             if (!_invitation.SendInvitation(ToInvite, WhatEvent)) return NotFound("employee or Event do not exist");
