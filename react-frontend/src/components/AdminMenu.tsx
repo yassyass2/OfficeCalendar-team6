@@ -22,23 +22,32 @@ const AdminMenu: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // State for the form data
-  const [newEventData, setNewEventData] = useState<Event | null>(null);
+  const [newEventData, setNewEventData] = useState<Event>({
+    id: '',
+    title: '',
+    date: '',
+    start_time: '',
+    end_time: '',
+    location: '',
+    description: '',
+  });
 
   // Current event
   const currentEvent = events[currentEventIndex];
 
-  // Load events from local storage component mount
+  // Load events from backend on component mount
   useEffect(() => {
-    const storedEvents = localStorage.getItem('events');
-    if (storedEvents) {
-      setEvents(JSON.parse(storedEvents));
-    }
+    const fetchEvents = async () => {
+      const response = await fetch('/events', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      const data = await response.json();
+      setEvents(data);
+    };
+    fetchEvents();
   }, []);
-
-  // Save events to local storage whenever they change
-  useEffect(() => {
-    localStorage.setItem('events', JSON.stringify(events));
-  }, [events]);
 
   // Sort events by date
   const sortEvents = (events: Event[]) => {
@@ -61,42 +70,70 @@ const AdminMenu: React.FC = () => {
   };
 
   // Handle Add Event
-  const handleAddEvent = () => {
+  const handleAddEvent = async () => {
     if (newEventData) {
       const newEvent = {
         ...newEventData,
         id: Date.now().toString(), // Generate unique ID
       };
-      const updatedEvents = [...events, newEvent];
-      setEvents(sortEvents(updatedEvents)); // Sort after adding
-      setShowAddModal(false);
-      resetNewEventData();
+      const response = await fetch('/events', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(newEvent)
+      });
+      if (response.ok) {
+        const updatedEvents = [...events, newEvent];
+        setEvents(sortEvents(updatedEvents)); // Sort after adding
+        setShowAddModal(false);
+        resetNewEventData();
+      }
     }
   };
 
   // Handle Modify Event
-  const handleModifyEvent = () => {
+  const handleModifyEvent = async () => {
     if (newEventData && currentEvent) {
-      const updatedEvents = events.map((event) =>
-        event.id === currentEvent.id ? { ...event, ...newEventData } : event
-      );
-      setEvents(sortEvents(updatedEvents)); // Sort after modifying
-      setShowModifyModal(false);
-      resetNewEventData();
+      const response = await fetch(`/events/${currentEvent.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(newEventData)
+      });
+      if (response.ok) {
+        const updatedEvents = events.map((event) =>
+          event.id === currentEvent.id ? { ...event, ...newEventData } : event
+        );
+        setEvents(sortEvents(updatedEvents)); // Sort after modifying
+        setShowModifyModal(false);
+        resetNewEventData();
+      }
     }
   };
 
   // Handle Delete Event
-  const handleDeleteEvent = () => {
-    const updatedEvents = events.filter((event) => event.id !== currentEvent.id);
-    setEvents(updatedEvents);
+  const handleDeleteEvent = async () => {
+    const response = await fetch(`/events/${currentEvent.id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    if (response.ok) {
+      const updatedEvents = events.filter((event) => event.id !== currentEvent.id);
+      setEvents(updatedEvents);
 
-    // Adjust index to prevent out-of-bounds access
-    if (currentEventIndex >= updatedEvents.length) {
-      setCurrentEventIndex(Math.max(0, updatedEvents.length - 1));
+      // Adjust index to prevent out-of-bounds access
+      if (currentEventIndex >= updatedEvents.length) {
+        setCurrentEventIndex(Math.max(0, updatedEvents.length - 1));
+      }
+
+      setShowDeleteModal(false);
     }
-
-    setShowDeleteModal(false);
   };
 
   // Reset New Event Data
