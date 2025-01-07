@@ -93,6 +93,21 @@ const handleInvitation = async () => {
   }
 };
 
+const sendInvitation = async (attendee: string) => {
+  try {
+    const url = new URL("http://localhost:5000/invite");
+    url.searchParams.append("value", attendee);
+    url.searchParams.append("param", "3FA85F64-5717-4562-B3FC-2C963F66AFA6");
+
+    await fetch(url.toString(), {
+      method: "POST",
+    });
+    alert(`Invitation sent to ${attendee}`);
+  } catch (error) {
+    console.error("Error sending invitation:", error);
+  }
+};
+
   // Reset New Event Data
   const resetNewEventData = () => {
     setNewEventData({
@@ -155,20 +170,22 @@ const handleInvitation = async () => {
 
         {/* Invite Modal */}
       {inviteModal && (
-        <h2>Invite an Employee</h2>
-        
-        {loading ? (
-          <p>Loading attendees...</p>
-        ) : (
-          <ul>
-            {attendees.map((attendee, index) => (
-              <li key={index}>
-                <button onClick={() => sendInvitation(attendee)}>{attendee}</button>
-              </li>
-            ))}
-          </ul>
-        )}
-        <button onClick={() => setInviteModal(false)}>Close</button>
+        <div>
+          <h2>Invite an Employee</h2>
+          
+          {loading ? (
+            <p>Loading attendees...</p>
+          ) : (
+            <ul>
+              {attendees.map((attendee, index) => (
+                <li key={index}>
+                  <button onClick={() => sendInvitation(attendee)}>{attendee}</button>
+                </li>
+              ))}
+            </ul>
+          )}
+          <button onClick={() => setInviteModal(false)}>Close</button>
+        </div>
       )}
 
         {/* Right Section: Current Event Details */}
