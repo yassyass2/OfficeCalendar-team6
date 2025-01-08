@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import Calendar from './Calendar';
 import SidePanel from './SidePanel';
+import InviteModal from './InviteModal';
 
 interface Event {
   id: string;
@@ -32,7 +33,7 @@ const UserDashboard: React.FC = () => {
   const [currentEventIndex, setCurrentEventIndex] = useState(0);
 
   const [attendanceModal, setAttendanceModal] = useState(false);
-  const [inviteModal, setInviteModal] = useState(false);
+  const [inviteScreen, setInviteModal] = useState(false);
   const [attendees, setAttendees] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -168,22 +169,10 @@ const sendInvitation = async (attendee: string) => {
           </div>
         </div>
 
-        {/* Invite Modal */}
-      {inviteModal && (
+      {/* Invite Modal */}
+      {inviteScreen && (
         <div>
-          <h2>Invite an Employee</h2>
-          
-          {loading ? (
-            <p>Loading attendees...</p>
-          ) : (
-            <ul>
-              {attendees.map((attendee, index) => (
-                <li key={index}>
-                  <button onClick={() => sendInvitation(attendee)}>{attendee}</button>
-                </li>
-              ))}
-            </ul>
-          )}
+          <InviteModal/>
           <button onClick={() => setInviteModal(false)}>Close</button>
         </div>
       )}
