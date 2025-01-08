@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Event } from './UserDashboard';
 
 
-const InviteModal: React.FC = () => {
+const InviteModal: React.FC<Event> = (props: Event) => {
 
     const [attendees, setAttendees] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);
@@ -9,8 +10,8 @@ const InviteModal: React.FC = () => {
     const handleInvitation = async () => {
         setLoading(true);
         try {
-            // eventId is hardcoded for now, should be based on CurrentEvent state ID
-            const response = await fetch("http://localhost:5000/api/Attendance/attendees?eventId=3FA85F64-5717-4562-B3FC-2C963F66AFA6");
+            // should be based on CurrentEvent state ID
+            const response = await fetch(`http://localhost:5000/api/Attendance/attendees?eventId=${props.id}`);
             const data = await response.json();
             setAttendees(data);
         } catch (error) {
@@ -24,7 +25,7 @@ const InviteModal: React.FC = () => {
         try {
             const url = new URL("http://localhost:5000/invite");
             url.searchParams.append("value", attendee);
-            url.searchParams.append("param", "3FA85F64-5717-4562-B3FC-2C963F66AFA6");
+            url.searchParams.append("param", props.id);
 
             await fetch(url.toString(), {
                 method: "POST",
@@ -43,6 +44,7 @@ const InviteModal: React.FC = () => {
                         <div className="modal-header">
                             <h1 className="modal-title fs-5" id="exampleModalLabel">Invite a Coworker!</h1>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            {props.id}
                         </div>
                         <div className="modal-body">
                             <h2>Invite an Employee</h2>
