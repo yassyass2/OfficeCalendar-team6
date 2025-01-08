@@ -31,9 +31,18 @@ const Login: React.FC = () => {
         email,
         password,
       });
+
       setMessage(response.data.message);
-      localStorage.setItem('authToken', response.data.token);
+      // Only store the token if it exists:
+      if (response.data.token) {
+        localStorage.setItem('authToken', response.data.token);
+      } else {
+        setError('No token received. Please try again.');
+        return;
+      }
+
       navigate('/user'); // Redirect to User after login
+      
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || 'Login failed. Check your credentials');
