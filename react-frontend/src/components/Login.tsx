@@ -101,17 +101,17 @@ const Login: React.FC = () => {
       <div className="col-4 login-container position-absolute top-50 start-50 translate-middle text-center align-items-center">
 
         {/* Title depends on which view we're on */}
-        <div className="login-text">
+        <h1>
           {view === 'login'
             ? 'Login'
             : view === 'forgotPassword'
               ? 'Forgot Password'
               : 'Register'}
-        </div>
+        </h1>
 
         {/* ----- LOGIN VIEW ----- */}
         {view === 'login' && (
-          <form className="login-form align-items-center" onSubmit={handleLogin}>
+          <form className="align-items-center" onSubmit={handleLogin}>
             <div className="form-field d-flex">
               <input
                 type="text"
