@@ -168,12 +168,8 @@ const UserDashboard: React.FC = () => {
         </div>
 
         {/* Invite Modal */}
-        {inviteScreen && (
-          <div>
-            <InviteModal />
-            <button onClick={() => setInviteModal(false)}>Close</button>
-          </div>
-        )}
+        <InviteModal />
+        {inviteScreen}
       </div>
     </section>
   );
