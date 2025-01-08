@@ -2,6 +2,16 @@ button {
     border: unset;
 }
 
+.button-group {
+    button {
+        display: inline-block;
+
+        &:not(:first-child) {
+            margin-left: 15px;
+        }
+    }
+}
+
 .btn-primary {
     display: flex;
     align-items: center;
@@ -21,6 +31,11 @@ button {
 
     &:hover {
         background-color: $primary-50;
+    }
+
+    i {
+        color: $white;
+        margin-left: 10px;
     }
 }
 
