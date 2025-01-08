@@ -43,6 +43,9 @@ const InviteModal: React.FC = () => {
                         <div className="modal-header">
                             <h1 className="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                                onClick= {() => handleInvitation()}>
+                            </button>
                         </div>
                         <div className="modal-body">
                             <h2>Invite an Employee</h2>
