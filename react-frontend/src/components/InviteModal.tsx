@@ -10,10 +10,14 @@ const InviteModal: React.FC<Event> = (props: Event) => {
     const handleInvitation = async () => {
         setLoading(true);
         try {
-            // should be based on CurrentEvent state ID
-            const response = await fetch(`http://localhost:5000/api/Attendance/attendees?eventId=${props.id}`);
+            const url = new URL("http://localhost:5000/api/Attendance/attendees");
+            url.searchParams.append("eventId", props.id);
+            const response = await fetch(url.toString(), {
+                method: "GET",
+            });
             const data = await response.json();
             setAttendees(data);
+
         } catch (error) {
             console.error("Error fetching attendees:", error);
         } finally {
@@ -24,8 +28,8 @@ const InviteModal: React.FC<Event> = (props: Event) => {
     const sendInvitation = async (attendee: string) => {
         try {
             const url = new URL("http://localhost:5000/invite");
-            url.searchParams.append("value", attendee);
-            url.searchParams.append("param", props.id);
+            url.searchParams.append("ToInvite", attendee);
+            url.searchParams.append("WhatEvent", props.id);
 
             await fetch(url.toString(), {
                 method: "POST",
