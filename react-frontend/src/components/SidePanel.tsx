@@ -1,5 +1,4 @@
 import React from 'react';
-import setInviteModal from './UserDashboard';
 
 const mockEventData = {
   title: 'Weekly stand-up van Jeanine en Alex - BaseCamp',
@@ -11,19 +10,10 @@ const mockEventData = {
 };
 
 type Props = {
-  onChange: (value: boolean) => void;
+  openInviteModal: () => void;
 };
 
-export function ChildComponent({ onChange }: Props) {
-  return (
-    <button onClick={() => onChange(true)} className="btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    INVITE EMPLOYEE
-    <i className="fa-solid fa-caret-right"></i>
-    </button>
-  );
-}
-
-const SidePanel: React.FC = () => {
+const SidePanel: React.FC<Props> = ({ openInviteModal }) => {
   return (
     <div className="row g-0">
       <div className="col-auto sidepanel-container">
@@ -53,7 +43,10 @@ const SidePanel: React.FC = () => {
             ATTEND EVENT
             <i className="fa-solid fa-caret-right"></i>
           </button>
-          {ChildComponent()}
+          <button onClick={openInviteModal} className="btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            INVITE EMPLOYEE
+            <i className="fa-solid fa-caret-right"></i>
+          </button>
         </div>
       </div>
     </div>

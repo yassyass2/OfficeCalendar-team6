@@ -4,18 +4,6 @@ import Calendar from './Calendar';
 import SidePanel from './SidePanel';
 import InviteModal from './InviteModal';
 
-import InviteEmployeeButton from './SidePanel';
-
-function SidePanelParent() {
-  const [state, setState] = useState(false);
-
-  const handleStateChange = (newState) => {
-      setState(newState);
-  };
-
-  return <SidePanel onChange={handleStateChange} />;
-}
-
 interface Event {
   id: string;
   title: string;
@@ -32,9 +20,7 @@ interface Attendance {
   attend_time: string
 }
 
-
 const UserDashboard: React.FC = () => {
-
   const [attendances, setAttendances] = useState<Attendance[]>([]);
   const [events, setEvents] = useState<Event[]>([
     { id: "1", title: "Meeting met HR - U wordt ontslagen L + ratio", date: "01-01-2025", start_time: "09:00", end_time: "10:00", location: "Rotterdam", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae dui id turpis venenatis ultrices vel sed urna." },
@@ -45,11 +31,7 @@ const UserDashboard: React.FC = () => {
   const [currentEventIndex, setCurrentEventIndex] = useState(0);
 
   const [attendanceModal, setAttendanceModal] = useState(false);
-
-  export function useInviteScreen() {
-    const [inviteScreen, setInviteModal] = useState(false);
-    return [inviteScreen, setInviteModal];
-  }
+  const [inviteScreen, setInviteModal] = useState(false);
 
   const [attendees, setAttendees] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -97,34 +79,34 @@ const UserDashboard: React.FC = () => {
 
   };
 
-const handleInvitation = async () => {
-  setLoading(true);
-  try {
-    // eventId is hardcoded for now, should be based on CurrentEvent state ID
-    const response = await fetch("http://localhost:5000/api/Attendance/attendees?eventId=3FA85F64-5717-4562-B3FC-2C963F66AFA6");
-    const data = await response.json();
-    setAttendees(data);
-  } catch (error) {
-    console.error("Error fetching attendees:", error);
-  } finally {
-    setLoading(false);
-  }
-};
+  const handleInvitation = async () => {
+    setLoading(true);
+    try {
+      // eventId is hardcoded for now, should be based on CurrentEvent state ID
+      const response = await fetch("http://localhost:5000/api/Attendance/attendees?eventId=3FA85F64-5717-4562-B3FC-2C963F66AFA6");
+      const data = await response.json();
+      setAttendees(data);
+    } catch (error) {
+      console.error("Error fetching attendees:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-const sendInvitation = async (attendee: string) => {
-  try {
-    const url = new URL("http://localhost:5000/invite");
-    url.searchParams.append("value", attendee);
-    url.searchParams.append("param", "3FA85F64-5717-4562-B3FC-2C963F66AFA6");
+  const sendInvitation = async (attendee: string) => {
+    try {
+      const url = new URL("http://localhost:5000/invite");
+      url.searchParams.append("value", attendee);
+      url.searchParams.append("param", "3FA85F64-5717-4562-B3FC-2C963F66AFA6");
 
-    await fetch(url.toString(), {
-      method: "POST",
-    });
-    alert(`Invitation sent to ${attendee}`);
-  } catch (error) {
-    console.error("Error sending invitation:", error);
-  }
-};
+      await fetch(url.toString(), {
+        method: "POST",
+      });
+      alert(`Invitation sent to ${attendee}`);
+    } catch (error) {
+      console.error("Error sending invitation:", error);
+    }
+  };
 
   // Reset New Event Data
   const resetNewEventData = () => {
@@ -173,7 +155,7 @@ const sendInvitation = async (attendee: string) => {
 
         <div className="col-7 g-0">
           <div className="row g-0">
-            <SidePanel />
+            <SidePanel openInviteModal={() => setInviteModal(true)} />
           </div>
           <div className="row g-0">
             {/* Navigation Buttons */}
@@ -185,13 +167,13 @@ const sendInvitation = async (attendee: string) => {
           </div>
         </div>
 
-      {/* Invite Modal */}
-      {inviteScreen && (
-        <div>
-          <InviteModal/>
-          <button onClick={() => setInviteModal(false)}>Close</button>
-        </div>
-      )}
+        {/* Invite Modal */}
+        {inviteScreen && (
+          <div>
+            <InviteModal />
+            <button onClick={() => setInviteModal(false)}>Close</button>
+          </div>
+        )}
       </div>
     </section>
   );
