@@ -1,5 +1,11 @@
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
 input {
-    color: $text-color-50;
+    color: $text-color;
     font-size: 16px;
     font-weight: 400;
     background-color: $white;
@@ -11,4 +17,41 @@ input {
     &:focus {
         outline: 1px solid $secondary-light;
     }
+
+    &::placeholder {
+        color: $text-color-50 !important;
+    }
+}
+
+textarea {
+    border-radius: $corner-radius;
+    padding: 10px 0px 10px 15px;
+    border: 1px solid $primary-color;
+    box-shadow: $box-shadow;
+    min-height: 250px;
+    max-height: 400px;
+
+    &:focus {
+        outline: 1px solid $secondary-light;
+    }
+
+    &::placeholder {
+        color: $text-color-50 !important;
+    }
+}
+
+select {
+    border: unset;
+    border-radius: $corner-radius;
+    padding: 10px 0px 10px 15px;
+    border: 1px solid $primary-color;
+    box-shadow: $box-shadow;
+
+    &:focus {
+        outline: 1px solid $secondary-light;
+    }
+}
+
+.required-notice {
+    color: $text-color-50;
 }
