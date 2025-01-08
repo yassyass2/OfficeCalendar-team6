@@ -31,7 +31,6 @@ const App: React.FC = () => {
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/admin" element={<AdminMenu />} />
           <Route path="/user" element={<UserDashboard />} />
-          <Route path="/sidepanel" element={<SidePanel />} />
           <Route path="/404" element={<div className="g-0 pt-4"><h3><strong>Error 404 - Not Found</strong></h3></div>} />
           <Route path="*" element={<Navigate replace to="/404" />} />
         </Routes>
