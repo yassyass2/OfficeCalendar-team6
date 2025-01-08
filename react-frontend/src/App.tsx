@@ -6,7 +6,7 @@ import Login from './components/Login';
 import Calendar from './components/Calendar';
 import AdminMenu from './components/AdminMenu';
 import UserDashboard from './components/UserDashboard';
-import SidePanel from './components/SidePanel';
+import ContactForm from './components/Contact';
 
 // Misc imports
 import { Breadcrumbs } from './components/misc/Breadcrumbs';
@@ -29,6 +29,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/calendar" element={<Calendar />} />
+          <Route path="/contact" element={<ContactForm />} />
           <Route path="/admin" element={<AdminMenu />} />
           <Route path="/user" element={<UserDashboard />} />
           <Route path="/404" element={<div className="g-0 pt-4"><h3><strong>Error 404 - Not Found</strong></h3></div>} />
