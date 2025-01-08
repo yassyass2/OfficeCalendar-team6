@@ -1,4 +1,5 @@
 import React from 'react';
+import setInviteModal from './UserDashboard';
 
 const mockEventData = {
   title: 'Weekly stand-up van Jeanine en Alex - BaseCamp',
@@ -8,6 +9,19 @@ const mockEventData = {
   description:
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae dui id turpis venenatis ultrices vel sed urna. Nunc bibendum sodales augue sed porttitor.Suspendisse potenti. Ut ac leo magna. Phasellus rhoncus arcu vitae sem ullamcorper, in feugiat dolor pulvinar.Sed auctor leo ut lorem sollicitudin congue. Integer rhoncus, est quis scelerisque commodo, massa velit hendrerit ligula, sed posuere mi felis quis enim.Nullam efficitur diam id velit pellentesque, quis volutpat arcu faucibus. Maecenas facilisis tempor dignissim. Phasellus consectetur congue porttitor. Mauris id sem et orci ornare efficitur eget vitae tellus. Phasellus porttitor ac turpis nec feugiat. Quisque ultricies nibh id tristique feugiat.Duis dignissim eros vel felis scelerisque, id fermentum ex facilisis. Suspendisse id dolor neque. Sed pellentesque finibus urna non interdum.',
 };
+
+type Props = {
+  onChange: (value: boolean) => void;
+};
+
+export function ChildComponent({ onChange }: Props) {
+  return (
+    <button onClick={() => onChange(true)} className="btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    INVITE EMPLOYEE
+    <i className="fa-solid fa-caret-right"></i>
+    </button>
+  );
+}
 
 const SidePanel: React.FC = () => {
   return (
@@ -34,10 +48,13 @@ const SidePanel: React.FC = () => {
           {mockEventData.description}
         </div>
 
-        <button className="btn-primary">
-          ATTEND EVENT
-          <i className="fa-solid fa-caret-right" style={{ marginLeft: '10px', color: '#ffffff' }}></i>
-        </button>
+        <div className="button-group">
+          <button className="btn-primary">
+            ATTEND EVENT
+            <i className="fa-solid fa-caret-right"></i>
+          </button>
+          {ChildComponent()}
+        </div>
       </div>
     </div>
   );

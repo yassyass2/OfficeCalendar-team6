@@ -4,6 +4,18 @@ import Calendar from './Calendar';
 import SidePanel from './SidePanel';
 import InviteModal from './InviteModal';
 
+import InviteEmployeeButton from './SidePanel';
+
+function SidePanelParent() {
+  const [state, setState] = useState(false);
+
+  const handleStateChange = (newState) => {
+      setState(newState);
+  };
+
+  return <SidePanel onChange={handleStateChange} />;
+}
+
 interface Event {
   id: string;
   title: string;
@@ -33,7 +45,12 @@ const UserDashboard: React.FC = () => {
   const [currentEventIndex, setCurrentEventIndex] = useState(0);
 
   const [attendanceModal, setAttendanceModal] = useState(false);
-  const [inviteScreen, setInviteModal] = useState(false);
+
+  export function useInviteScreen() {
+    const [inviteScreen, setInviteModal] = useState(false);
+    return [inviteScreen, setInviteModal];
+  }
+
   const [attendees, setAttendees] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -162,7 +179,6 @@ const sendInvitation = async (attendee: string) => {
             {/* Navigation Buttons */}
             <div className="event-navigation">
               <button className="prev-btn" onClick={goToPreviousEvent}><i className="fa-solid fa-chevron-left"></i></button>
-              <button onClick={() => setAttendanceModal(true)}>Attend Event</button>
               <button onClick={() => setInviteModal(true)}>Invite an employee</button>
               <button className="next-btn" onClick={goToNextEvent}><i className="fa-solid fa-chevron-right"></i></button>
             </div>
