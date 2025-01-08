@@ -33,7 +33,7 @@ const Login: React.FC = () => {
       });
       setMessage(response.data.message);
       localStorage.setItem('authToken', response.data.token);
-      navigate('/Calendar'); // Redirect to Calendar after login
+      navigate('/user'); // Redirect to User after login
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || 'Login failed. Check your credentials');

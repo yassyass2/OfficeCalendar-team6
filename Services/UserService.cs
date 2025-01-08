@@ -106,7 +106,8 @@ namespace Services
             // Send verification email
             try
             {
-                await _emailService.SendVerificationCode(request.Email, verificationCode);
+                // await _emailService.SendVerificationCode(request.Email, verificationCode);
+                Console.WriteLine(verificationCode);
                 return true;
             }
             catch (Exception)
