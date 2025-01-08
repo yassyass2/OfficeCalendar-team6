@@ -67,7 +67,6 @@ const InviteModal: React.FC = () => {
                 </div>
             </div>
         </>);
-
 }
 
 export default InviteModal;
