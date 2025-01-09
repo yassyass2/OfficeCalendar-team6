@@ -74,11 +74,6 @@ const UserDashboard: React.FC = () => {
     setCurrentEvent(() => events[currentEventIndex])
   };
 
-  // Handle Attendance
-  const handleAttend = () => {
-
-  };
-
   const handleInvitation = async () => {
     setLoading(true);
     try {
