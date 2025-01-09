@@ -30,37 +30,37 @@ namespace Controllers
                 return BadRequest("Invalid request format");
             }
 
-            string token;
-
-            // Check if the user is an admin
-            var adminToCheck = new Admin
+            // 1. Validate user credentials (either admin or regular user)
+            if (await _adminService.CheckAdmin(new Admin { Email = model.Email, Password = model.Password }))
             {
-                Email = model.Email,
-                Password = model.Password
-            };
+                // 2. Generate Admin token
+                var token = _tokenService.GenerateToken(model.Email, "Admin");
 
-            if (await _adminService.CheckAdmin(adminToCheck))
-            {
-                token = _tokenService.GenerateToken(model.Email, "Admin");
-                HttpContext.Session.Set("JwtToken", Encoding.UTF8.GetBytes(token));
-                return Ok(new { Message = $"Successfully logged in as Admin {model.Email}" });
+                // 3. Return token in JSON
+                return Ok(new
+                {
+                    Message = $"Successfully logged in as Admin {model.Email}",
+                    Token = token
+                });
             }
 
-            // Check if the user is a regular user
+            // 2. Check normal user
             var loginResult = await _userService.Login(model);
             if (!loginResult.Success)
             {
                 return Unauthorized(loginResult.Message);
             }
 
-            // Generate token for regular user
-            token = _tokenService.GenerateToken(model.Email, "User");
+            // Generate user token
+            var userToken = _tokenService.GenerateToken(model.Email, "User");
 
-            // Store the token in session for automatic usage by middleware
-            HttpContext.Session.Set("JwtToken", Encoding.UTF8.GetBytes(token));
-
-            return Ok(new { Message = "Login successful" });
+            return Ok(new
+            {
+                Message = "Login successful",
+                Token = userToken
+            });
         }
+
 
 
         [HttpPost("register")]
