@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Event } from './UserDashboard';
 import axiosInstance from '../axiosInstance';
 
+interface attendee {id: string, first_name: string, last_name: string}
+
 const InviteModal: React.FC<Event> = (props: Event) => {
 
     const [attendees, setAttendees] = useState<string[]>([]);
