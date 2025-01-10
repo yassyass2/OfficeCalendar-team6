@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Event } from './UserDashboard';
-
+import axiosInstance from '../axiosInstance';
 
 const InviteModal: React.FC<Event> = (props: Event) => {
 
@@ -10,13 +10,11 @@ const InviteModal: React.FC<Event> = (props: Event) => {
     const handleInvitation = async () => {
         setLoading(true);
         try {
-            const url = new URL("http://localhost:5000/api/Attendance/attendees");
-            url.searchParams.append("eventId", props.id);
-            const response = await fetch(url.toString(), {
-                method: "GET",
-            });
-            const data = await response.json();
-            setAttendees(data);
+            const response = await axiosInstance.get("/api/Attendance/attendees", {
+                params: {
+                    eventId: props.id
+            }});
+            setAttendees(response.data);
 
         } catch (error) {
             console.error("Error fetching attendees:", error);
