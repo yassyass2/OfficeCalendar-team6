@@ -13,6 +13,7 @@
         border-left: 2px solid #FF605C;
         background: rgba(255, 96, 92, 0.10);
         box-shadow: $box-shadow;
+        transition: box-shadow .15s ease-in-out;
 
         .event-title {
             color: $dark-text-color;
@@ -26,6 +27,11 @@
             color: $text-color;
             display: inline-block;
             margin-bottom: 0;
+        }
+
+        &:hover {
+            box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+            ;
         }
     }
 }
