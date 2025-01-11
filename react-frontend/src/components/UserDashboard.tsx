@@ -45,6 +45,11 @@ const UserDashboard: React.FC = () => {
     setSelectedEvent(event);
   };
 
+  const handleModalClose = () => {
+    setAttendanceModal(false);
+    setInviteModal(false);
+  };
+
   return (
     <section className="row">
       <div className="row">
@@ -82,8 +87,13 @@ const UserDashboard: React.FC = () => {
           />
         </div>
       </div>
-
-      {selectedEvent && (
+      
+      {selectedEvent && attendanceScreen ? (
+        <AttendanceModal
+          ToAttend={selectedEvent}
+          onClose={handleModalClose}
+        />
+      ) : selectedEvent && inviteScreen ? (
         <InviteModal
           id={selectedEvent.id}
           title={selectedEvent.title}
@@ -93,19 +103,8 @@ const UserDashboard: React.FC = () => {
           end_time={selectedEvent.end_time}
           location={selectedEvent.location}
         />
-      )}
+      ) : <></>}
 
-      {attendanceScreen && selectedEvent && (
-        <AttendanceModal
-          id={selectedEvent.id}
-          title={selectedEvent.title}
-          description={selectedEvent.description}
-          date={selectedEvent.date}
-          start_time={selectedEvent.start_time}
-          end_time={selectedEvent.end_time}
-          location={selectedEvent.location}
-        />
-      )}
     </section>
   );
 };

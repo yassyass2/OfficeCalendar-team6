@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { EventData } from './UserDashboard';
 import axiosInstance from '../axiosInstance';
 
-const AttendanceModal: React.FC<EventData> = (ToAttend: EventData) => {
+interface ModalProps {
+    ToAttend: EventData
+    onClose: () => void;
+  }
+
+const AttendanceModal: React.FC<ModalProps> = ({ ToAttend, onClose }) => {
 
     const [loading, setLoading] = useState(false);
     const [time, setTime] = useState(ToAttend.start_time);
@@ -35,11 +40,13 @@ const AttendanceModal: React.FC<EventData> = (ToAttend: EventData) => {
     const handleAttend = async () => {
         setLoading(true);
         try {
+            console.log(localStorage.getItem('userId'))
             const response = await axiosInstance.post("/api/Attendance/attend", {
                 UserId: localStorage.getItem('userId'),
                 EventId: ToAttend.id,
-                AttendAt: time
+                AttendAt: selectedTime
               });
+            alert(response.data)
 
         } catch (error) {
             console.error("Error attending event:", error);
@@ -55,7 +62,7 @@ const AttendanceModal: React.FC<EventData> = (ToAttend: EventData) => {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h1 className="modal-title fs-5" id="exampleModalLabel">Attend</h1>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}></button>
                             {ToAttend.title} on {ToAttend.date} at {ToAttend.start_time}-{ToAttend.end_time}
                         </div>
                         <div className="modal-body">
@@ -73,12 +80,11 @@ const AttendanceModal: React.FC<EventData> = (ToAttend: EventData) => {
                                         </option>
                                     ))}
                                 </select>
-                                <button onClick={() => setTime(selectedTime)}>Confirm choice</button>
                                 </>
                             )}
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={onClose}>Close</button>
                             <button type="button" className="btn btn-primary" onClick={() => handleAttend()}>Sign me up!</button>
                         </div>
                     </div>
