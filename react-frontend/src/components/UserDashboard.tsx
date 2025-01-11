@@ -72,11 +72,19 @@ const UserDashboard: React.FC = () => {
             openInviteModal={() => setInviteModal(true)}
           />
         </div>
-
-        {/* Invite Modal */}
-        {InviteModal(currentEvent)}
-        {inviteScreen}
       </div>
+
+      {inviteScreen && selectedEvent && (
+        <InviteModal
+          id={selectedEvent.id}
+          title={selectedEvent.title}
+          description={selectedEvent.description}
+          date={selectedEvent.date}
+          start_time={selectedEvent.start_time}
+          end_time={selectedEvent.end_time}
+          location={selectedEvent.location}
+        />
+      )}
     </section>
   );
 };
