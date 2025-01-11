@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import jwtDecode from 'jwt-decode';
+import {jwtDecode, JwtPayload} from 'jwt-decode';
 
 
 const Login: React.FC = () => {
     const [view, setView] = useState<'login' | 'forgotPassword' | 'register'>('login');
+
+    interface CustomJwtPayload extends JwtPayload {
+        Name?: string;
+        Role?: string;
+        Sid?: string;
+      }
 
     // For login & forgot password
     const [email, setEmail] = useState<string>('');
@@ -38,8 +44,8 @@ const Login: React.FC = () => {
             // Only store the token if it exists:
             if (response.data.token) {
                 localStorage.setItem('authToken', response.data.token);
-                const decoded = jwtDecode(response.data.token);
-                localStorage.setItem('userId', decoded.Sid)
+                const decoded = jwtDecode<CustomJwtPayload>(response.data.token);
+                localStorage.setItem('userId', decoded.Sid as string)
 
             } else {
                 setError('No token received. Please try again.');
