@@ -16,139 +16,61 @@ export interface EventData {
 }
 
 const UserDashboard: React.FC = () => {
-  const [attendances, setAttendances] = useState<Attendance[]>([]);
-  const [currentEventIndex, setCurrentEventIndex] = useState(0);
-
-  const [attendanceModal, setAttendanceModal] = useState(false);
+  const [eventData, setEventData] = useState<EventData[]>([]);
+  const [selectedEvent, setSelectedEvent] = useState<EventData | null>(null);
   const [inviteScreen, setInviteModal] = useState(false);
-
-  const [attendees, setAttendees] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const [newEventData, setNewEventData] = useState<Event>({
-    id: '',
-    title: '',
-    date: '',
-    start_time: '',
-    end_time: '',
-    location: '',
-    description: '',
-  });
-
-  const [currentEvent, setCurrentEvent] = useState<Event>(events[currentEventIndex]);
-
-  // Load attendances from local storage on component mount
-  useEffect(() => {
-    const storedattendances = localStorage.getItem('attendances');
-    if (storedattendances) {
-      setAttendances(JSON.parse(storedattendances));
-    }
-  }, []);
-
-  // Save attendances to local storage whenever they change
-  useEffect(() => {
-    localStorage.setItem('attendances', JSON.stringify(attendances));
-  }, [attendances]);
-
-  // Handle navigation
-  const goToNextEvent = () => {
-    setCurrentEventIndex((prevIndex) => Math.min(prevIndex + 1, events.length - 1));
-    console.log(currentEventIndex)
-    setCurrentEvent(() => events[currentEventIndex])
-  };
-
-  const goToPreviousEvent = () => {
-    setCurrentEventIndex(
-      (prevIndex) => Math.max(prevIndex - 1, 0));
-    setCurrentEvent(() => events[currentEventIndex])
-  };
-
-  const handleInvitation = async () => {
+  const fetchEventData = async () => {
     setLoading(true);
     try {
-      // eventId is hardcoded for now, should be based on CurrentEvent state ID
-      const response = await fetch("http://localhost:5000/api/Attendance/attendees?eventId=3FA85F64-5717-4562-B3FC-2C963F66AFA6");
-      const data = await response.json();
-      setAttendees(data);
+      const response = await axiosInstance.get('/events');
+      setEventData(response.data);
     } catch (error) {
-      console.error("Error fetching attendees:", error);
+      console.error('Error fetching events: ', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const sendInvitation = async (attendee: string) => {
-    try {
-      const url = new URL("http://localhost:5000/invite");
-      url.searchParams.append("value", attendee);
-      url.searchParams.append("param", "3FA85F64-5717-4562-B3FC-2C963F66AFA6");
+  useEffect(() => {
+    fetchEventData();
+  }, []);
 
-      await fetch(url.toString(), {
-        method: "POST",
-      });
-      alert(`Invitation sent to ${attendee}`);
-    } catch (error) {
-      console.error("Error sending invitation:", error);
-    }
-  };
-
-  // Reset New Event Data
-  const resetNewEventData = () => {
-    setNewEventData({
-      id: '',
-      title: '',
-      date: '',
-      start_time: '',
-      end_time: '',
-      location: '',
-      description: '',
-    });
+  const handleEventClick = (event: EventData) => {
+    setSelectedEvent(event);
   };
 
   return (
     <section className="row">
       <div className="row">
-
-        {/* Left Section: Event List */}
         <div className="col-4">
-
-          <div className="row g-0">
-            <Calendar />
-          </div>
-
-          <div className="row g-0">
-            <div className="event-list-container">
-              {events.map((event: Event) => (
-                <div className="event" key={event.id}>
+          <Calendar />
+          <div className="event-list-container">
+            {loading ? (
+              <p>Loading...</p>
+            ) : (
+              eventData.map((event) => (
+                <div
+                  key={event.id}
+                  className="event clickable"
+                  onClick={() => handleEventClick(event)}
+                >
                   <span className="event-title">{event.title}</span>
-                  <p className="event-description">
-                    {event.description}
-                    {/* <br />
-                  {event.date}, {event.start_time} to{' '}
-                  {event.end_time} */}
-                  </p>
+                  <p className="event-description">{event.description}</p>
                 </div>
-              ))}
-            </div>
+              ))
+            )}
           </div>
         </div>
-
         <div className="col-1">
-          <div className="divider-horizontal g-0"></div> {/* Center divider */}
+          <div className="divider-horizontal g-0"></div>
         </div>
-
         <div className="col-7 g-0">
-          <div className="row g-0">
-            <SidePanel openInviteModal={() => setInviteModal(true)} />
-          </div>
-          <div className="row g-0">
-            {/* Navigation Buttons */}
-            <div className="event-navigation">
-              <button className="prev-btn" onClick={goToPreviousEvent}><i className="fa-solid fa-chevron-left"></i></button>
-              <button onClick={() => setInviteModal(true)}>Invite an employee</button>
-              <button className="next-btn" onClick={goToNextEvent}><i className="fa-solid fa-chevron-right"></i></button>
-            </div>
-          </div>
+          <SidePanel
+            selectedEvent={selectedEvent}
+            openInviteModal={() => setInviteModal(true)}
+          />
         </div>
 
         {/* Invite Modal */}
