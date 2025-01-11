@@ -7,23 +7,21 @@ using Microsoft.OpenApi.Models;
 using Extensions;
 using Filters;
 
-
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
-
-//Configuring the JWT authenticationn
+// Configuring the JWT authentication
 builder.Services.ConfigureJwtAuthentication(builder.Configuration["JwtSettings:SecretKey"]);
 
+// Comment out session-related lines
+// builder.Services.AddDistributedMemoryCache(); // session data in memory, not persistent
 
-builder.Services.AddDistributedMemoryCache(); // sessie data in memory, niet persistent
-
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Hoe lang de sessie duurt
-    options.Cookie.HttpOnly = true; // sessie cookie alleen via http
-    options.Cookie.IsEssential = true; // sessie cookie altijd gestuurd
-});
+// builder.Services.AddSession(options =>
+// {
+//     options.IdleTimeout = TimeSpan.FromMinutes(30); // session timeout
+//     options.Cookie.HttpOnly = true; // session cookie only via http
+//     options.Cookie.IsEssential = true; // session cookie always sent
+// });
 
 builder.Services.AddCors(options =>
 {
@@ -35,8 +33,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-
-// services van Swagger UI toevoegen (optioneel)
+// Swagger services (optional)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -55,29 +52,28 @@ builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 builder.Services.AddScoped<NotificationFilter>();
 builder.Services.AddScoped<IInviteService, InviteService>();
 
-
 builder.Services.AddDbContext<MyContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 
 var app = builder.Build();
 app.Urls.Add("http://localhost:5000");
 
-app.UseSession();
-app.UseMiddleware<JwtSessionMiddleware>();
+// Comment out session usage
+// app.UseSession();
+// app.UseMiddleware<JwtSessionMiddleware>();
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors("AllowReactApp");
 
-
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection(); // hoort bij swagger
+app.UseHttpsRedirection(); // belongs to swagger
 
 app.MapControllers();
 

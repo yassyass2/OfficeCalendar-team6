@@ -4,15 +4,10 @@
     gap: 30px;
     max-width: 270px;
 
-    .login-text {
+    h1 {
         color: $dark-text-color;
         font-size: 36px;
         font-weight: 700;
+        margin-bottom: 0px;
     }
-}
-
-.login-form {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
 }

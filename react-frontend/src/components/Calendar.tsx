@@ -79,9 +79,11 @@ const Calendar: React.FC = () => {
     setCurrentYear(newYear);
   };
 
+
   return (
     <div className="row">
       <div className="calendar-container">
+
         <div className="calendar-header">
           <div className="current-date">
             <span>
@@ -97,12 +99,16 @@ const Calendar: React.FC = () => {
           </div>
         </div>
 
+        {/* Render the days of the week */}
         <div className="weekday-names-header">
           {daysOfWeek.map((day) => (
-            <div key={day}>{day}</div>
+            <div key={day}>
+              {day}
+            </div>
           ))}
         </div>
 
+        {/* Render the calendar days */}
         <div className="weekdays-numbers-wrapper">
           {calendarDays.map((day, index) => {
             const isToday =
@@ -120,29 +126,34 @@ const Calendar: React.FC = () => {
             );
           })}
         </div>
-      </div>
 
-      {/* Display fetched events */}
-      <div>
-        <h2>All Events</h2>
-        {events.length === 0 ? (
-          <p>No events available.</p>
-        ) : (
-          <ul>
-            {events.map((event) => (
-              <li key={event.id}>
-                <h3>{event.title}</h3>
-                <p><strong>Date:</strong> {event.date}</p>
-                <p><strong>Time:</strong> {event.start_time} - {event.end_time}</p>
-                <p><strong>Location:</strong> {event.location}</p>
-                <p>{event.description}</p>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
+        {/* Display fetched events */}
+        < div >
+          <h2>All Events</h2>
+          {
+            events.length === 0 ? (
+              <p>No events available.</p>
+            ) : (
+              <ul>
+                {events.map((event) => (
+                  <li key={event.id}>
+                    <h3>{event.title}</h3>
+                    <p><strong>Date:</strong> {event.date}</p>
+                    <p><strong>Time:</strong> {event.start_time} - {event.end_time}</p>
+                    <p><strong>Location:</strong> {event.location}</p>
+                    <p>{event.description}</p>
+                  </li>
+                ))}
+              </ul>
+            )
+          }
+        </div >
+      </div >
+      );
+
+    </div >
   );
+
 };
 
 export default Calendar;

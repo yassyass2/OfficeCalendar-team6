@@ -4,7 +4,6 @@ using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 
-
 namespace Services
 {
     public class JsonUserService : IUserService
@@ -44,9 +43,7 @@ namespace Services
         public async Task<string> GetEmail(Guid id){
             return "";
         }
-
     }
-
 
     public class UserService : IUserService
     {
@@ -74,7 +71,6 @@ namespace Services
                 return Convert.ToBase64String(hashedBytes);
             }
         }
-
 
         public async Task<bool> Register(UserRegisterRequest request)
         {
@@ -106,7 +102,8 @@ namespace Services
             // Send verification email
             try
             {
-                await _emailService.SendVerificationCode(request.Email, verificationCode);
+                await _emailService.SendVerificationCode(request.Email, verificationCode); // <---
+                Console.WriteLine(verificationCode);
                 return true;
             }
             catch (Exception)
@@ -138,9 +135,6 @@ namespace Services
 
             return new LoginResult { Success = true, Message = "Login successful" };
         }
-
-
-
 
         public async Task<LoginResult> VerifyAccount(string code)
         {
@@ -217,9 +211,6 @@ namespace Services
             return new LoginResult { Success = true, Message = "Password successfully reset!" };
         }
 
-
-
-
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
@@ -277,7 +268,5 @@ namespace Services
                 return "yassinabde@outlook.com";
             }
         }
-
-
     }
 }

@@ -4,7 +4,7 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using System.Threading.Tasks;
 
-namespace Services{
+namespace Services {
     public class EmailService : IEmailService
     {
         public async Task<bool> SendEmail(string to, string body)
@@ -12,14 +12,14 @@ namespace Services{
             try
             {
                 var email = new MimeMessage();
-                email.From.Add(MailboxAddress.Parse("office@shithosting.net"));
+                email.From.Add(MailboxAddress.Parse("office@boendermaker.com"));
                 email.To.Add(MailboxAddress.Parse(to));
                 email.Subject = "Account Verification";
                 email.Body = new TextPart(TextFormat.Html) { Text = body };
 
                 using var smtp = new SmtpClient();
-                smtp.Connect("shithosting.net", 465, SecureSocketOptions.SslOnConnect);
-                smtp.Authenticate("office@shithosting.net", "Rfwr96&48");
+                smtp.Connect("boendermaker.com", 465, SecureSocketOptions.SslOnConnect);
+                smtp.Authenticate("office@boendermaker.com", "4kp9Ky@18!");
                 await smtp.SendAsync(email);
                 smtp.Disconnect(true);
 
