@@ -28,7 +28,6 @@ namespace Services {
             catch (Exception ex)
             {
                 throw new Exception($"Failed to send email: {ex.Message}");
-                return false;
             }
         }
 
