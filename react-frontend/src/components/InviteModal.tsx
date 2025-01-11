@@ -4,7 +4,7 @@ import axiosInstance from '../axiosInstance';
 
 interface attendee { id: string, first_name: string, last_name: string }
 
-const InviteModal: React.FC<Event> = (props: Event) => {
+const InviteModal: React.FC<EventData> = (props: EventData) => {
 
     const [attendees, setAttendees] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);
