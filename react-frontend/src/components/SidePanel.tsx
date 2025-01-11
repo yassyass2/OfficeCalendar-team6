@@ -45,7 +45,9 @@ const SidePanel: React.FC<Props> = ({ selectedEvent, openInviteModal }) => {
                         </span>
                     </div>
 
-                    <div className="event-body">{selectedEvent.description}</div>
+                    <div className="event-body">
+                        {selectedEvent.description}
+                    </div>
 
                     <div className="button-group">
                         <button className="btn-primary">
