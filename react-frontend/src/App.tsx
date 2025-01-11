@@ -16,55 +16,55 @@ import './scss/style.scss';
 
 
 const App: React.FC = () => {
-  return (
-    <Router>
-      <Nav />
+    return (
+        <Router>
+            <Nav />
 
-      <main className="container main-content g-0 flex-1">
-        <Breadcrumbs />
-        <Routes>
-          {/* Public routes */}
-          <Route path="/" element={<Login />} />
-          <Route path="/calendar" element={<Calendar />} />
-          <Route path="/contact" element={<ContactForm />} />
+            <main className="container main-content g-0 flex-1">
+                <Breadcrumbs />
+                <Routes>
+                    {/* Public routes */}
+                    <Route path="/" element={<Login />} />
+                    <Route path="/calendar" element={<Calendar />} />
+                    <Route path="/contact" element={<ContactForm />} />
 
-          {/* this one is to protect from manually typing /user in url */}
-          <Route
-            path="/user"
-            element={
-              <PrivateRoute>
-                <UserDashboard />
-              </PrivateRoute>
-            }
-          />
+                    {/* this one is to protect from manually typing /user in url */}
+                    <Route
+                        path="/user"
+                        element={
+                            <PrivateRoute>
+                                <UserDashboard />
+                            </PrivateRoute>
+                        }
+                    />
 
-          {/* Possibly protect /admin too */}
-          <Route
-            path="/admin"
-            element={
-              <PrivateRoute>
-                <AdminMenu />
-              </PrivateRoute>
-            }
-          />
+                    {/* Possibly protect /admin too */}
+                    <Route
+                        path="/admin"
+                        element={
+                            <PrivateRoute>
+                                <AdminMenu />
+                            </PrivateRoute>
+                        }
+                    />
 
-          <Route
-            path="/404"
-            element={
-              <div className="g-0 pt-4">
-                <h3>
-                  <strong>Error 404 - Not Found</strong>
-                </h3>
-              </div>
-            }
-          />
-          <Route path="*" element={<Navigate replace to="/404" />} />
-        </Routes>
-      </main>
+                    <Route
+                        path="/404"
+                        element={
+                            <div className="g-0 pt-4">
+                                <h3>
+                                    <strong>Error 404 - Not Found</strong>
+                                </h3>
+                            </div>
+                        }
+                    />
+                    <Route path="*" element={<Navigate replace to="/404" />} />
+                </Routes>
+            </main>
 
-      <Footer />
-    </Router>
-  );
+            <Footer />
+        </Router>
+    );
 };
 
 export default App;
