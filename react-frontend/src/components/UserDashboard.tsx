@@ -78,7 +78,7 @@ const UserDashboard: React.FC = () => {
         </div>
       </div>
 
-      {inviteScreen && selectedEvent && (
+      {selectedEvent && (
         <InviteModal
           id={selectedEvent.id}
           title={selectedEvent.title}
