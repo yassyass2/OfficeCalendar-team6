@@ -7,9 +7,8 @@
     .event {
         padding: 8px;
         border-radius: 0px 10px 10px 0px;
-        // Border color en Background in code vervangen met de juiste kleuren
-        border-left: 2px solid #FF605C;
-        background: rgba(255, 96, 92, 0.10);
+        border-left: 2px solid $primary-color;
+        background: rgba(108, 59, 170, 0.10);
         box-shadow: $box-shadow;
         transition: box-shadow .15s ease-in-out;
         cursor: pointer;
