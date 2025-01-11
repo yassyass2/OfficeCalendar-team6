@@ -42,7 +42,7 @@ const Login: React.FC = () => {
       }
 
       navigate('/user'); // Redirect to User after login
-      
+
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || 'Login failed. Check your credentials');
