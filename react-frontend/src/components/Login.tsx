@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import jwtDecode from 'jwt-decode';
+
 
 const Login: React.FC = () => {
     const [view, setView] = useState<'login' | 'forgotPassword' | 'register'>('login');
@@ -36,6 +38,9 @@ const Login: React.FC = () => {
             // Only store the token if it exists:
             if (response.data.token) {
                 localStorage.setItem('authToken', response.data.token);
+                const decoded = jwtDecode(response.data.token);
+                localStorage.setItem('userId', decoded.Sid)
+
             } else {
                 setError('No token received. Please try again.');
                 return;
