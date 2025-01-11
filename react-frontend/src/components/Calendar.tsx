@@ -113,22 +113,48 @@ const Calendar: React.FC = () => {
                     }
                 </div>
 
-        {/* Render the calendar days */}
-        <div className="weekdays-numbers-wrapper" >
-          {
-            calendarDays.map((day, index) => {
-              const isToday =
-                day === today.getDate() &&
-                currentMonth === today.getMonth() &&
-                currentYear === today.getFullYear();
+                {/* Render the calendar days */}
+                <div className="weekdays-numbers-wrapper">
+                    {calendarDays.map((day, index) => {
+                        const isToday =
+                            day === today.getDate() &&
+                            currentMonth === today.getMonth() &&
+                            currentYear === today.getFullYear();
 
-              return (
-                <div
-                  className={`weekdays-numbers ${isToday ? "current-day" : ""}`
-                  }
-                  key={index}
-                >
-                  {day ? day : ""}
+                        // Count the number of events for the current day
+                        const eventsForDay = filteredEvents.filter((event) => {
+                            const [eventDay, eventMonth, eventYear] = event.date.split("-").map(Number);
+                            return (
+                                eventDay === day &&
+                                eventMonth - 1 === currentMonth &&
+                                eventYear === currentYear
+                            );
+                        });
+
+                        const eventCount = Math.min(eventsForDay.length, 3);
+
+                        return (
+                            <div
+                                className={`weekdays-numbers ${isToday ? "current-day" : ""}`}
+                                key={index}
+                            >
+                                {day ? (
+                                    <>
+                                        {day}
+                                        {eventCount > 0 && (
+                                            <div className="event-dots">
+                                                {Array.from({ length: eventCount }).map((_, i) => (
+                                                    <div key={i} className="event-dot"></div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </>
+                                ) : (
+                                    ""
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
 
             </div>
