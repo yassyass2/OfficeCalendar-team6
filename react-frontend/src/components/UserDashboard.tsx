@@ -13,11 +13,6 @@ export interface EventData {
   start_time: string;
   end_time: string;
   location: string;
-
-interface Attendance {
-  eventId: string;
-  userId: string;
-  attend_time: string
 }
 
 const UserDashboard: React.FC = () => {
