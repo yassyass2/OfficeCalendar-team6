@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axiosInstance from "axiosInstance";
+import { getMonth } from "date-fns";
 
 interface Event {
   id: string,
@@ -15,6 +16,12 @@ const getDaysInMonth = (year: number, month: number): number => {
 // Utility function to get the first day of the month
 const getFirstDayOfMonth = (year: number, month: number): number => {
   return new Date(year, month, 0).getDay();
+};
+
+// Utility function to parse "DD-MM-YYYY" to a JavaScript Date object
+const parseDate = (dateString: string): Date => {
+  const [day, month, year] = dateString.split("-").map(Number);
+  return new Date(year, month - 1, day);
 };
 
 const Calendar: React.FC = () => {
@@ -38,6 +45,17 @@ const Calendar: React.FC = () => {
     };
     fetchEvents();
   }, []);
+
+
+  // Filter events for the current month and year
+  const filteredEvents = events.filter((event) => {
+    const eventDate = parseDate(event.date);
+    return (
+      eventDate.getFullYear() === currentYear &&
+      eventDate.getMonth() === currentMonth
+    );
+  });
+
 
   // Generate array of days for the current month
   const daysInMonth = getDaysInMonth(currentYear, currentMonth);
@@ -91,52 +109,58 @@ const Calendar: React.FC = () => {
         </div>
 
         {/* Render the days of the week */}
-        <div className="weekday-names-header">
-          {daysOfWeek.map((day) => (
-            <div key={day}>
-              {day}
-            </div>
-          ))}
+        <div className="weekday-names-header" >
+          {
+            daysOfWeek.map((day) => (
+              <div key={day} >
+                {day}
+              </div>
+            ))
+          }
         </div>
 
         {/* Render the calendar days */}
-        <div className="weekdays-numbers-wrapper">
-          {calendarDays.map((day, index) => {
-            const isToday =
-              day === today.getDate() &&
-              currentMonth === today.getMonth() &&
-              currentYear === today.getFullYear();
+        <div className="weekdays-numbers-wrapper" >
+          {
+            calendarDays.map((day, index) => {
+              const isToday =
+                day === today.getDate() &&
+                currentMonth === today.getMonth() &&
+                currentYear === today.getFullYear();
 
-            return (
-              <div
-                className={`weekdays-numbers ${isToday ? "current-day" : ""}`}
-                key={index}
-              >
-                {day ? day : ""}
-              </div>
-            );
-          })}
+              return (
+                <div
+                  className={`weekdays-numbers ${isToday ? "current-day" : ""}`
+                  }
+                  key={index}
+                >
+                  {day ? day : ""}
+                </div>
+              );
+            })
+          }
         </div>
 
         {/* Display fetched events */}
-        < div >
-          <h2>All Events</h2>
+        <div>
+          <h2>Events</h2>
           {
-            events.length === 0 ? (
-              <p>No events available.</p>
+            filteredEvents.length === 0 ? (
+              <p>No events available for this month.</p>
             ) : (
               <ul>
-                {events.map((event) => (
-                  <li key={event.id}>
-                    <li>{event.date}</li>
-                  </li>
-                ))}
+                {
+                  filteredEvents.map((event) => (
+                    <li key={event.id}>
+                      <li>{event.date}</li>
+                    </li>
+                  ))
+                }
               </ul>
             )
           }
         </div >
       </div >
-
     </div >
   );
 
