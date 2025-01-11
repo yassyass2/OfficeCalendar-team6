@@ -18,7 +18,10 @@ export interface EventData {
 const UserDashboard: React.FC = () => {
   const [eventData, setEventData] = useState<EventData[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<EventData | null>(null);
+
   const [inviteScreen, setInviteModal] = useState(false);
+  const [attendanceScreen, setAttendanceModal] = useState(false);
+
   const [loading, setLoading] = useState(false);
 
   const fetchEventData = async () => {
@@ -74,6 +77,7 @@ const UserDashboard: React.FC = () => {
           <SidePanel
             selectedEvent={selectedEvent}
             openInviteModal={() => setInviteModal(true)}
+            openAttendanceModal={() => setAttendanceModal(true)}
           />
         </div>
       </div>
