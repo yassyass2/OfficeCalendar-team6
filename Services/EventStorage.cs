@@ -8,6 +8,7 @@ namespace Services
     public class JsonEventStorage : IEventStorage
     {
         public string path = "Data/events.json";
+
         public async Task<List<Event>> ReadEvents()
         {
             List<Event> events = new List<Event>();
@@ -55,6 +56,7 @@ namespace Services
     public class EventStorage : IEventStorage
     {
         private readonly MyContext _context;
+        
         public EventStorage(MyContext context)
         {
             _context = context;
@@ -107,7 +109,6 @@ namespace Services
                 return false;
             }
 
-
             to_update.Title = ev.Title;
             to_update.Description = ev.Description;
             to_update.Date = ev.Date;
@@ -128,7 +129,5 @@ namespace Services
                 return false;
             }
         }
-
-
     }
 }
