@@ -88,23 +88,16 @@ const UserDashboard: React.FC = () => {
         </div>
       </div>
       
-      {selectedEvent && attendanceScreen ? (
+      {selectedEvent && attendanceScreen && (
         <AttendanceModal
-          ToAttend={selectedEvent}
+          Event={selectedEvent}
           onClose={handleModalClose}
-        />
-      ) : selectedEvent && inviteScreen ? (
+        />)}
+        
+      {selectedEvent && inviteScreen && (
         <InviteModal
-          id={selectedEvent.id}
-          title={selectedEvent.title}
-          description={selectedEvent.description}
-          date={selectedEvent.date}
-          start_time={selectedEvent.start_time}
-          end_time={selectedEvent.end_time}
-          location={selectedEvent.location}
-        />
-      ) : <></>}
-
+        Event={selectedEvent}
+        onClose={handleModalClose}/>)}
     </section>
   );
 };

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { EventData } from './UserDashboard';
 import axiosInstance from '../axiosInstance';
+import {ModalProps} from './AttendanceModal'
 
 interface attendee { id: string, first_name: string, last_name: string }
 
-const InviteModal: React.FC<EventData> = (props: EventData) => {
+const InviteModal: React.FC<ModalProps> = ({ Event, onClose }) => {
 
     const [attendees, setAttendees] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);
@@ -14,7 +15,7 @@ const InviteModal: React.FC<EventData> = (props: EventData) => {
         try {
             const response = await axiosInstance.get("/api/Attendance/attendees", {
                 params: {
-                    eventId: props.id
+                    eventId: Event.id
                 }
             });
             setAttendees(response.data);
@@ -30,7 +31,7 @@ const InviteModal: React.FC<EventData> = (props: EventData) => {
         try {
             const url = new URL("http://localhost:5000/invite");
             url.searchParams.append("ToInvite", attendee);
-            url.searchParams.append("WhatEvent", props.id);
+            url.searchParams.append("WhatEvent", Event.id);
 
             await fetch(url.toString(), {
                 method: "POST",
@@ -48,8 +49,8 @@ const InviteModal: React.FC<EventData> = (props: EventData) => {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h1 className="modal-title fs-5" id="exampleModalLabel">Invite a Coworker!</h1>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            {props.id}
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}></button>
+                            {Event.id}
                         </div>
                         <div className="modal-body">
                             <h2>Invite an Employee</h2>
@@ -67,7 +68,7 @@ const InviteModal: React.FC<EventData> = (props: EventData) => {
                             )}
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={onClose}>Close</button>
                             <button type="button" className="btn btn-primary">Save changes</button>
                             <button type="button" className="btn btn-primary" onClick={() => handleInvitation()}>Show Attendees</button>
                         </div>

@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { EventData } from './UserDashboard';
 import axiosInstance from '../axiosInstance';
 
-interface ModalProps {
-    ToAttend: EventData
+export interface ModalProps {
+    Event: EventData
     onClose: () => void;
   }
 
-const AttendanceModal: React.FC<ModalProps> = ({ ToAttend, onClose }) => {
+const AttendanceModal: React.FC<ModalProps> = ({ Event, onClose }) => {
 
     const [loading, setLoading] = useState(false);
-    const [time, setTime] = useState(ToAttend.start_time);
-    const [selectedTime, setSelectedTime] = React.useState<string>(ToAttend.start_time);
+    const [time, setTime] = useState(Event.start_time);
+    const [selectedTime, setSelectedTime] = React.useState<string>(Event.start_time);
 
     const generateTimeOptions = (start: string, end: string): string[] => {
         const options: string[] = [];
@@ -43,7 +43,7 @@ const AttendanceModal: React.FC<ModalProps> = ({ ToAttend, onClose }) => {
             console.log(localStorage.getItem('userId'))
             const response = await axiosInstance.post("/api/Attendance/attend", {
                 UserId: localStorage.getItem('userId'),
-                EventId: ToAttend.id,
+                EventId: Event.id,
                 AttendAt: selectedTime
               });
             alert(response.data)
@@ -63,7 +63,7 @@ const AttendanceModal: React.FC<ModalProps> = ({ ToAttend, onClose }) => {
                         <div className="modal-header">
                             <h1 className="modal-title fs-5" id="exampleModalLabel">Attend</h1>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}></button>
-                            {ToAttend.title} on {ToAttend.date} at {ToAttend.start_time}-{ToAttend.end_time}
+                            {Event.title} on {Event.date} at {Event.start_time}-{Event.end_time}
                         </div>
                         <div className="modal-body">
                             <h2>Attend this event</h2>
@@ -74,7 +74,7 @@ const AttendanceModal: React.FC<ModalProps> = ({ ToAttend, onClose }) => {
                                 <>
                                     <label htmlFor="time-select">Select a time to attend:</label>
                                     <select id="time-select" onChange={(e) => setSelectedTime(e.target.value)}>
-                                    {generateTimeOptions(ToAttend.start_time, ToAttend.end_time).map((time) => (
+                                    {generateTimeOptions(Event.start_time, Event.end_time).map((time) => (
                                         <option key={time} value={time}>
                                         {time}
                                         </option>
