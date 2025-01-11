@@ -149,7 +149,6 @@ const Calendar: React.FC = () => {
           }
         </div >
       </div >
-      );
 
     </div >
   );
