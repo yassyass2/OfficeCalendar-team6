@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Event } from './UserDashboard';
+import { EventData } from './UserDashboard';
 import axiosInstance from '../axiosInstance';
 
-interface attendee {id: string, first_name: string, last_name: string}
+interface attendee { id: string, first_name: string, last_name: string }
 
-const InviteModal: React.FC<Event> = (props: Event) => {
+const InviteModal: React.FC<EventData> = (props: EventData) => {
 
     const [attendees, setAttendees] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);
@@ -15,7 +15,8 @@ const InviteModal: React.FC<Event> = (props: Event) => {
             const response = await axiosInstance.get("/api/Attendance/attendees", {
                 params: {
                     eventId: props.id
-            }});
+                }
+            });
             setAttendees(response.data);
 
         } catch (error) {
@@ -68,7 +69,7 @@ const InviteModal: React.FC<Event> = (props: Event) => {
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="button" className="btn btn-primary">Save changes</button>
-                            <button type="button" className="btn btn-primary" onClick= {() => handleInvitation()}>Show Attendees</button>
+                            <button type="button" className="btn btn-primary" onClick={() => handleInvitation()}>Show Attendees</button>
                         </div>
                     </div>
                 </div>

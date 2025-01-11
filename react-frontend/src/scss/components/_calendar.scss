@@ -52,6 +52,21 @@
                 cursor: pointer;
                 background-color: $secondary-color;
             }
+
+            .event-dots {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                gap: 4px;
+                margin: -8px auto 3px;
+
+                .event-dot {
+                    width: 6px;
+                    height: 6px;
+                    background-color: $primary-color;
+                    border-radius: 100%;
+                }
+            }
         }
     }
 }

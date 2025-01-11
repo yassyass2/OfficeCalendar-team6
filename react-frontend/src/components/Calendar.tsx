@@ -1,29 +1,65 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axiosInstance from "axiosInstance";
+
+interface Event {
+    id: string,
+    date: string,
+}
 
 // Utility function to get the number of days in a month
 const getDaysInMonth = (year: number, month: number): number => {
     return new Date(year, month + 1, 0).getDate();
 };
 
-// Utility function to get the first day of the month (0 = Sunday, 1 = Monday, etc.)
+// Utility function to get the first day of the month
 const getFirstDayOfMonth = (year: number, month: number): number => {
     return new Date(year, month, 0).getDay();
+};
+
+// Utility function to parse "DD-MM-YYYY" to a JavaScript Date object
+const parseDate = (dateString: string): Date => {
+    const [day, month, year] = dateString.split("-").map(Number);
+    return new Date(year, month - 1, day);
 };
 
 const Calendar: React.FC = () => {
     const today = new Date();
     const [currentYear, setCurrentYear] = useState(today.getFullYear());
     const [currentMonth, setCurrentMonth] = useState(today.getMonth());
+    const [events, setEvents] = useState<Event[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchEvents = async () => {
+            try {
+                const response = await axiosInstance.get("http://localhost:5000/events")
+                setEvents(response.data);
+            } catch (err: any) {
+                setError(err.response?.data?.message || err.message || "An error occurred");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchEvents();
+    }, []);
+
+    // Filter events for the current month and year
+    const filteredEvents = events.filter((event) => {
+        const eventDate = parseDate(event.date);
+        return (
+            eventDate.getFullYear() === currentYear &&
+            eventDate.getMonth() === currentMonth
+        );
+    });
 
     // Generate array of days for the current month
     const daysInMonth = getDaysInMonth(currentYear, currentMonth);
     const firstDay = getFirstDayOfMonth(currentYear, currentMonth);
-
-    // Create an array to represent days of the week (Monaday to Sunday)
     const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-    // Create an array with empty slots for the first row if the month doesn't start on Sunday
+    // Create an array with empty slots for the first row if the month doesn't start on Monday
     const emptySlots = Array(firstDay).fill(null);
 
     // Create an array of day numbers for the current month
@@ -52,7 +88,6 @@ const Calendar: React.FC = () => {
     return (
         <div className="row">
             <div className="calendar-container">
-
                 <div className="calendar-header">
                     <div className="current-date">
                         <span>
@@ -61,7 +96,6 @@ const Calendar: React.FC = () => {
                         &nbsp;
                         <span>{currentYear}</span>
                     </div>
-
                     <div className="calendar-button-group">
                         <a onClick={() => switchMonth(-1)} className="btn-simple p-2">{<i className="fa-solid fa-chevron-left"></i>}</a>
                         <a onClick={() => switchMonth(1)} className="btn-simple p-2">{<i className="fa-solid fa-chevron-right"></i>}</a>
@@ -69,12 +103,14 @@ const Calendar: React.FC = () => {
                 </div>
 
                 {/* Render the days of the week */}
-                <div className="weekday-names-header">
-                    {daysOfWeek.map((day) => (
-                        <div key={day}>
-                            {day}
-                        </div>
-                    ))}
+                <div className="weekday-names-header" >
+                    {
+                        daysOfWeek.map((day) => (
+                            <div key={day} >
+                                {day}
+                            </div>
+                        ))
+                    }
                 </div>
 
                 {/* Render the calendar days */}
@@ -85,12 +121,37 @@ const Calendar: React.FC = () => {
                             currentMonth === today.getMonth() &&
                             currentYear === today.getFullYear();
 
+                        // Count the number of events for the current day
+                        const eventsForDay = filteredEvents.filter((event) => {
+                            const [eventDay, eventMonth, eventYear] = event.date.split("-").map(Number);
+                            return (
+                                eventDay === day &&
+                                eventMonth - 1 === currentMonth &&
+                                eventYear === currentYear
+                            );
+                        });
+
+                        const eventCount = Math.min(eventsForDay.length, 3);
+
                         return (
                             <div
                                 className={`weekdays-numbers ${isToday ? "current-day" : ""}`}
                                 key={index}
                             >
-                                {day ? day : ""}
+                                {day ? (
+                                    <>
+                                        {day}
+                                        {eventCount > 0 && (
+                                            <div className="event-dots">
+                                                {Array.from({ length: eventCount }).map((_, i) => (
+                                                    <div key={i} className="event-dot"></div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </>
+                                ) : (
+                                    ""
+                                )}
                             </div>
                         );
                     })}
