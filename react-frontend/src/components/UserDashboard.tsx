@@ -4,7 +4,7 @@ import Calendar from './Calendar';
 import SidePanel from './SidePanel';
 import InviteModal from './InviteModal';
 
-export interface Event {
+export interface EventData {
   id: string;
   title: string;
   date: string;

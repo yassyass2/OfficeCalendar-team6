@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Event } from './UserDashboard';
+import { EventData } from './UserDashboard';
 import axiosInstance from '../axiosInstance';
 
 interface attendee {id: string, first_name: string, last_name: string}

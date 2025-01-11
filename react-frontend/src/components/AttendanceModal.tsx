@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Event } from './UserDashboard';
+import { EventData } from './UserDashboard';
 
 const AttendanceModal: React.FC<Event> = (props: Event) => {
     // Handle Attendance
