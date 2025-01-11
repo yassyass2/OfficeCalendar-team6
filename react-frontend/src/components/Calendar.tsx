@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axiosInstance from "axiosInstance";
-import { getMonth } from "date-fns";
 
 interface Event {
   id: string,
