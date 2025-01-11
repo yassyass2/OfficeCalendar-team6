@@ -6,45 +6,6 @@ using System.Text;
 
 namespace Services
 {
-    public class JsonUserService : IUserService
-    {
-        public Task<bool> Register(UserRegisterRequest request)
-        {
-            return Task.FromResult(true);
-
-        }
-
-        public async Task<bool> CheckUser(User user)
-        {
-            return true;
-        }
-
-        public async Task<LoginResult> Login(UserLoginRequest request)
-        {
-            return new LoginResult { Success = true, Message = "To be implemented" };
-        }
-
-        public async Task<LoginResult> VerifyAccount(string token)
-        {
-
-            return new LoginResult { Success = true, Message = "To be implemented" };
-        }
-
-        public async Task<LoginResult> ForgotPassword(string email)
-        {
-
-            return new LoginResult { Success = true, Message = "To be implemented" };
-        }
-
-        public async Task<LoginResult> ResetPassword(ResetPasswordRequest request)
-        {
-            return new LoginResult { Success = true, Message = "To be implemented" };
-        }
-        public async Task<string> GetEmail(Guid id){
-            return "";
-        }
-    }
-
     public class UserService : IUserService
     {
         private readonly MyContext _context;

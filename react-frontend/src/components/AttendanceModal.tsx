@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { EventData } from './UserDashboard';
+import axiosInstance from '../axiosInstance';
 
 const AttendanceModal: React.FC<EventData> = (ToAttend: EventData) => {
 
@@ -31,8 +32,20 @@ const AttendanceModal: React.FC<EventData> = (ToAttend: EventData) => {
       };
 
     // Handle Attendance
-    const handleAttend = () => {
+    const handleAttend = async () => {
+        setLoading(true);
+        try {
+            const response = await axiosInstance.post("/api/Attendance/attend", {
+                UserId: localStorage.getItem('userId'),
+                EventId: ToAttend.id,
+                AttendAt: time
+              });
 
+        } catch (error) {
+            console.error("Error attending event:", error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
