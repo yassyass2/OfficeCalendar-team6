@@ -3,24 +3,24 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axiosInstance from "axiosInstance";
 
 interface Event {
-  id: string,
-  date: string,
+    id: string,
+    date: string,
 }
 
 // Utility function to get the number of days in a month
 const getDaysInMonth = (year: number, month: number): number => {
-  return new Date(year, month + 1, 0).getDate();
+    return new Date(year, month + 1, 0).getDate();
 };
 
 // Utility function to get the first day of the month
 const getFirstDayOfMonth = (year: number, month: number): number => {
-  return new Date(year, month, 0).getDay();
+    return new Date(year, month, 0).getDay();
 };
 
 // Utility function to parse "DD-MM-YYYY" to a JavaScript Date object
 const parseDate = (dateString: string): Date => {
-  const [day, month, year] = dateString.split("-").map(Number);
-  return new Date(year, month - 1, day);
+    const [day, month, year] = dateString.split("-").map(Number);
+    return new Date(year, month - 1, day);
 };
 
 const Calendar: React.FC = () => {
@@ -102,16 +102,16 @@ const Calendar: React.FC = () => {
           </div>
         </div>
 
-        {/* Render the days of the week */}
-        <div className="weekday-names-header" >
-          {
-            daysOfWeek.map((day) => (
-              <div key={day} >
-                {day}
-              </div>
-            ))
-          }
-        </div>
+                {/* Render the days of the week */}
+                <div className="weekday-names-header" >
+                    {
+                        daysOfWeek.map((day) => (
+                            <div key={day} >
+                                {day}
+                            </div>
+                        ))
+                    }
+                </div>
 
         {/* Render the calendar days */}
         <div className="weekdays-numbers-wrapper" >
