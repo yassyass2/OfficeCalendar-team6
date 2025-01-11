@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axiosInstance from "axiosInstance";
 
 interface Event {
   id: string,
-  title: string,
-  description: string,
   date: string,
-  start_time: string,
-  end_time: string,
-  location: string,
-  admin_approval: boolean
 }
 
 // Utility function to get the number of days in a month
@@ -33,14 +28,10 @@ const Calendar: React.FC = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch("http://localhost:5000/events")
-        if (!response.ok) {
-          throw new Error(`Fetch error. Statuscode: ${response.status}`)
-        }
-        const data: Event[] = await response.json();
-        setEvents(data);
+        const response = await axiosInstance.get("http://localhost:5000/events")
+        setEvents(response.data);
       } catch (err: any) {
-        setError(err.message);
+        setError(err.response?.data?.message || err.message || "An error occurred");
       } finally {
         setLoading(false);
       }
@@ -137,11 +128,7 @@ const Calendar: React.FC = () => {
               <ul>
                 {events.map((event) => (
                   <li key={event.id}>
-                    <h3>{event.title}</h3>
-                    <p><strong>Date:</strong> {event.date}</p>
-                    <p><strong>Time:</strong> {event.start_time} - {event.end_time}</p>
-                    <p><strong>Location:</strong> {event.location}</p>
-                    <p>{event.description}</p>
+                    <li>{event.date}</li>
                   </li>
                 ))}
               </ul>
