@@ -46,7 +46,6 @@ const Calendar: React.FC = () => {
     fetchEvents();
   }, []);
 
-
   // Filter events for the current month and year
   const filteredEvents = events.filter((event) => {
     const eventDate = parseDate(event.date);
@@ -55,7 +54,6 @@ const Calendar: React.FC = () => {
       eventDate.getMonth() === currentMonth
     );
   });
-
 
   // Generate array of days for the current month
   const daysInMonth = getDaysInMonth(currentYear, currentMonth);
@@ -88,11 +86,9 @@ const Calendar: React.FC = () => {
     setCurrentYear(newYear);
   };
 
-
   return (
     <div className="row">
       <div className="calendar-container">
-
         <div className="calendar-header">
           <div className="current-date">
             <span>
@@ -101,7 +97,6 @@ const Calendar: React.FC = () => {
             &nbsp;
             <span>{currentYear}</span>
           </div>
-
           <div className="calendar-button-group">
             <a onClick={() => switchMonth(-1)} className="btn-simple p-2">{<i className="fa-solid fa-chevron-left"></i>}</a>
             <a onClick={() => switchMonth(1)} className="btn-simple p-2">{<i className="fa-solid fa-chevron-right"></i>}</a>
@@ -163,7 +158,6 @@ const Calendar: React.FC = () => {
       </div >
     </div >
   );
-
 };
 
 export default Calendar;
