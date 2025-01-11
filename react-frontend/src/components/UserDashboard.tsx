@@ -57,7 +57,11 @@ const UserDashboard: React.FC = () => {
                   onClick={() => handleEventClick(event)}
                 >
                   <span className="event-title">{event.title}</span>
-                  <p className="event-description">{event.description}</p>
+                  <p className="event-description">
+                    {event.description.length > 125
+                      ? `${event.description.slice(0, 125)}...`
+                      : event.description}
+                  </p>
                 </div>
               ))
             )}
