@@ -8,12 +8,11 @@ import InviteModal from './InviteModal';
 export interface EventData {
   id: string;
   title: string;
+  description: string;
   date: string;
   start_time: string;
   end_time: string;
   location: string;
-  description: string;
-}
 
 interface Attendance {
   eventId: string;
