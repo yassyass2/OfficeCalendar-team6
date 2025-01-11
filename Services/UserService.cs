@@ -267,6 +267,26 @@ namespace Services
             {
                 return "yassinabde@outlook.com";
             }
+            
+        }
+
+        public async Task<Guid> GetId(string mail){
+            try
+            {
+                var existingUser = await _context.Users
+                    .FirstOrDefaultAsync(x => x.Email == mail);
+
+                if (existingUser != null)
+                {
+                    return existingUser.Id;
+                }
+                return Guid.Empty;
+            }
+            catch
+            {
+                return Guid.Empty;
+            }
+            
         }
     }
 }

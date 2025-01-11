@@ -8,5 +8,6 @@ namespace Services{
         Task<LoginResult> ForgotPassword(string email);
         Task<LoginResult> ResetPassword(ResetPasswordRequest request);
         Task<string> GetEmail(Guid id);
+        Task<Guid> GetId(string mail);
     }
 }

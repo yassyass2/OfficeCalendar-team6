@@ -34,7 +34,7 @@ namespace Controllers
             if (await _adminService.CheckAdmin(new Admin { Email = model.Email, Password = model.Password }))
             {
                 // 2. Generate Admin token
-                var token = _tokenService.GenerateToken(model.Email, "Admin");
+                var token = _tokenService.GenerateToken(model.Email, "Admin", Guid.Empty);
 
                 // 3. Return token in JSON
                 return Ok(new
@@ -52,7 +52,7 @@ namespace Controllers
             }
 
             // Generate user token
-            var userToken = _tokenService.GenerateToken(model.Email, "User");
+            var userToken = _tokenService.GenerateToken(model.Email, "User", await _userService.GetId(model.Email));
 
             return Ok(new
             {
@@ -126,5 +126,6 @@ namespace Controllers
 
             return Ok(result.Message);
         }
+        
     }
 }
