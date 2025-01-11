@@ -7,7 +7,7 @@ const AttendanceModal: React.FC<Event> = (props: Event) => {
 
     };
 
-    return(<>
+    return (<>
     </>)
 }
 
