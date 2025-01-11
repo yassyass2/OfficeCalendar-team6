@@ -13,9 +13,10 @@ interface EventData {
 type Props = {
     selectedEvent: EventData | null;
     openInviteModal: () => void;
+    openAttendanceModal: () => void;
 };
 
-const SidePanel: React.FC<Props> = ({ selectedEvent, openInviteModal }) => {
+const SidePanel: React.FC<Props> = ({ selectedEvent, openInviteModal, openAttendanceModal }) => {
     if (!selectedEvent) {
         return (
             <div className="sidepanel-container">
@@ -50,7 +51,13 @@ const SidePanel: React.FC<Props> = ({ selectedEvent, openInviteModal }) => {
                     </div>
 
                     <div className="button-group">
-                        <button className="btn-primary">
+                        <button
+                            onClick={openAttendanceModal}
+                            className="btn-primary"
+                            type="button"
+                            data-bs-toggle="modal"
+                            data-bs-target="#exampleModal"
+                        >
                             ATTEND EVENT
                             <i className="fa-solid fa-caret-right"></i>
                         </button>

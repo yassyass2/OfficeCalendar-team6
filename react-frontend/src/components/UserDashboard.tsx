@@ -4,6 +4,7 @@ import axiosInstance from '../axiosInstance';
 import Calendar from './Calendar';
 import SidePanel from './SidePanel';
 import InviteModal from './InviteModal';
+import AttendanceModal from './AttendanceModal';
 
 export interface EventData {
   id: string;
@@ -84,6 +85,18 @@ const UserDashboard: React.FC = () => {
 
       {selectedEvent && (
         <InviteModal
+          id={selectedEvent.id}
+          title={selectedEvent.title}
+          description={selectedEvent.description}
+          date={selectedEvent.date}
+          start_time={selectedEvent.start_time}
+          end_time={selectedEvent.end_time}
+          location={selectedEvent.location}
+        />
+      )}
+
+      {attendanceScreen && selectedEvent && (
+        <AttendanceModal
           id={selectedEvent.id}
           title={selectedEvent.title}
           description={selectedEvent.description}
