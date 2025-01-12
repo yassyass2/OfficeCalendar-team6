@@ -50,6 +50,25 @@ const UserDashboard: React.FC = () => {
     setInviteModal(false);
   };
 
+  const [currentEventIndex, setCurrentEventIndex] = useState(0);
+  const [currentEvent, setCurrentEvent] = useState<EventData>(eventData[currentEventIndex]);
+
+  const goToNextEvent = () => {
+    setCurrentEventIndex((prevIndex) => {
+      const nextIndex = Math.min(prevIndex + 1, eventData.length - 1);
+      setSelectedEvent(eventData[nextIndex]);
+      return nextIndex;
+    });
+  };
+
+  const goToPreviousEvent = () => {
+    setCurrentEventIndex((prevIndex) => {
+      const prevIndexUpdated = Math.max(prevIndex - 1, 0);
+      setSelectedEvent(eventData[prevIndexUpdated]);
+      return prevIndexUpdated;
+    });
+  };
+
   return (
     <section className="row">
       <div className="row">
@@ -84,6 +103,8 @@ const UserDashboard: React.FC = () => {
             selectedEvent={selectedEvent}
             openInviteModal={() => setInviteModal(true)}
             openAttendanceModal={() => setAttendanceModal(true)}
+            goToNextEvent={goToNextEvent}
+            goToPreviousEvent={goToPreviousEvent}
           />
         </div>
       </div>

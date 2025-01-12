@@ -14,9 +14,11 @@ type Props = {
     selectedEvent: EventData | null;
     openInviteModal: () => void;
     openAttendanceModal: () => void;
+    goToNextEvent: () => void;
+    goToPreviousEvent: () => void;
 };
 
-const SidePanel: React.FC<Props> = ({ selectedEvent, openInviteModal, openAttendanceModal }) => {
+const SidePanel: React.FC<Props> = ({ selectedEvent, openInviteModal, openAttendanceModal, goToNextEvent, goToPreviousEvent }) => {
     if (!selectedEvent) {
         return (
             <div className="sidepanel-container">
@@ -72,6 +74,12 @@ const SidePanel: React.FC<Props> = ({ selectedEvent, openInviteModal, openAttend
                             <i className="fa-solid fa-caret-right"></i>
                         </button>
                     </div>
+                </div>
+            </div>
+            <div className="row g-0">
+                <div className="event-navigation">
+                    <button className="prev-btn" onClick={goToPreviousEvent}><i className="fa-solid fa-chevron-left"></i></button>
+                    <button className="next-btn" onClick={goToNextEvent}><i className="fa-solid fa-chevron-right"></i></button>
                 </div>
             </div>
         </div>
