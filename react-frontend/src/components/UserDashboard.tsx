@@ -87,17 +87,17 @@ const UserDashboard: React.FC = () => {
           />
         </div>
       </div>
-      
-      {selectedEvent && attendanceScreen && (
+
+      {selectedEvent && (
         <AttendanceModal
           Event={selectedEvent}
           onClose={handleModalClose}
         />)}
-        
-      {selectedEvent && inviteScreen && (
+
+      {selectedEvent && (
         <InviteModal
-        Event={selectedEvent}
-        onClose={handleModalClose}/>)}
+          Event={selectedEvent}
+          onClose={handleModalClose} />)}
     </section>
   );
 };
