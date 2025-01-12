@@ -9,6 +9,7 @@ const InviteModal: React.FC<ModalProps> = ({ Event, onClose }) => {
 
     const [attendees, setAttendees] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);
+    const [currAttendee, setCurrAttendee] = useState("");
 
     const handleInvitation = async () => {
         setLoading(true);
@@ -29,16 +30,16 @@ const InviteModal: React.FC<ModalProps> = ({ Event, onClose }) => {
 
     const sendInvitation = async (attendee: string) => {
         try {
-            const url = new URL("http://localhost:5000/invite");
-            url.searchParams.append("ToInvite", attendee);
-            url.searchParams.append("WhatEvent", Event.id);
-
-            await fetch(url.toString(), {
-                method: "POST",
+            const response = await axiosInstance.post("/invite", {
+                params: {
+                    ToInvite: attendee,
+                    WhatEvent: Event.id
+                }
             });
-            alert(`Invitation sent to ${attendee}`);
+
+            alert(response.data);
         } catch (error) {
-            console.error("Error sending invitation:", error);
+            alert("Error sending invitation:" + error);
         }
     };
 
@@ -48,12 +49,11 @@ const InviteModal: React.FC<ModalProps> = ({ Event, onClose }) => {
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="inviteModalLabel">Invite a Coworker!</h1>
+                            <h1 className="modal-title fs-5" id="inviteModalLabel">Notify a Coworker!</h1>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}></button>
-                            {Event.id}
                         </div>
                         <div className="modal-body">
-                            <h2>Invite an Employee</h2>
+                            <h2>Notify an attendee</h2>
 
                             {loading ? (
                                 <p>Loading attendees...</p>

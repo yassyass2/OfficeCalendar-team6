@@ -101,10 +101,12 @@ const UserDashboard: React.FC = () => {
         <div className="col-7 g-0">
           <SidePanel
             selectedEvent={selectedEvent}
-            openInviteModal={() => setInviteModal(true)}
-            openAttendanceModal={() => setAttendanceModal(true)}
+            openModal1={() => setInviteModal(true)}
+            openModal2={() => setAttendanceModal(true)}
+            openModal3 ={() => undefined}
             goToNextEvent={goToNextEvent}
             goToPreviousEvent={goToPreviousEvent}
+            isAdmin={false}
           />
         </div>
       </div>

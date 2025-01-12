@@ -38,11 +38,6 @@ const AttendanceModal: React.FC<ModalProps> = ({ Event, onClose }) => {
 
     // Handle Attendance
     const handleAttend = async () => {
-        console.log("Payload:", {
-            UserId: localStorage.getItem("userId"),
-            EventId: Event.id,
-            AttendAt: selectedTime,
-        });
         setLoading(true);
         const userId = localStorage.getItem('userId');
     const payload = {
