@@ -23,7 +23,6 @@ namespace Controllers
         public async Task<IActionResult> AttendEvent([FromBody] EventAttendance? request)
         {
             if (request == null) return BadRequest("No body given");
-            Console.WriteLine(request.EventId);
 
             if (await _attendanceService.CreateAttendance(request))
             {

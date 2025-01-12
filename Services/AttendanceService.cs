@@ -19,10 +19,17 @@ namespace Services
         {
             Event? eventToAttend = _context.Events
                 .FirstOrDefault(e => e.Id == request.EventId);
-
-            if (eventToAttend == null || DateTime.Parse(eventToAttend.Date) < DateTime.Now)
+            if (eventToAttend == null)
             {
-                return false; // Event not found or has already started
+                return false;
+            }
+
+            DateTime? date = DateTime.ParseExact(eventToAttend.Date, "dd-MM-yyyy", null);
+            if (date == null) return false;
+
+            if (date < DateTime.Now)
+            {
+                return false; // Event has already started
             }
 
             var existingAttendance = await _context.Attendances
