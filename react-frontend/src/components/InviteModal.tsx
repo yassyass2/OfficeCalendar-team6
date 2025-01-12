@@ -30,11 +30,11 @@ const InviteModal: React.FC<ModalProps> = ({ Event, onClose }) => {
 
     const sendInvitation = async (attendee: string) => {
         try {
-            const response = await axiosInstance.post("/invite", {
+            const response = await axiosInstance.post("/invite", null, {
                 params: {
                     ToInvite: attendee,
-                    WhatEvent: Event.id
-                }
+                    WhatEvent: Event.id,
+                },
             });
 
             alert(response.data);
