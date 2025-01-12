@@ -12,6 +12,18 @@ button {
     }
 }
 
+.button-group-modal-footer {
+    padding: 15px;
+
+    button {
+        display: inline-block;
+
+        &:not(:first-child) {
+            margin-left: 15px;
+        }
+    }
+}
+
 .btn-primary {
     display: flex;
     align-items: center;
@@ -36,6 +48,26 @@ button {
     i {
         color: $white;
         margin-left: 10px;
+    }
+
+    &-delete {
+        background-color: $delete-red !important;
+        border: 1px solid red;
+        transition: background-color .15s ease-in-out;
+
+        &:hover {
+            background-color: $delete-red-hover !important;
+        }
+    }
+
+    &-close {
+        background-color: $delete-red !important;
+        border: 1px solid red;
+        transition: background-color .15s ease-in-out;
+
+        &:hover {
+            background-color: $delete-red-hover !important;
+        }
     }
 }
 
