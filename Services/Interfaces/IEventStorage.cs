@@ -5,5 +5,6 @@ namespace Services{
         Task CreateEvent(Event e);
         Task<bool> DeleteEvent(Guid Id);
         Task<bool> Put(Guid Id, Event ev);
+        Task<Event> OneEvent(Guid eventId);
     }
 }

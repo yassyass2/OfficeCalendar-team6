@@ -118,6 +118,16 @@ const SidePanel: React.FC<Props> = ({
                                     ATTEND EVENT
                                     <i className="fa-solid fa-caret-right"></i>
                                 </button>
+                                <button
+                                    onClick={openModal3}
+                                    className="btn-primary"
+                                    type="button"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#MyEventsModal"
+                                >
+                                    MY PLANNED EVENTS
+                                    <i className="fa-solid fa-caret-right"></i>
+                                </button>
                             </>
                         )}
                     </div>

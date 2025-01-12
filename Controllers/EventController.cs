@@ -31,6 +31,16 @@ namespace Controllers
             return Ok(await _eventStorage.ReadEvents());
         }
 
+        [HttpGet("{eventId}")]
+        [Authorize] // Allow any authenticated user (both admins and regular users)
+        public async Task<IActionResult> GetEvent([FromRoute] Guid eventId)
+        {
+            if (eventId == Guid.Empty) return BadRequest("No valid Guid was given");
+            var ev = await _eventStorage.OneEvent(eventId);
+            if (ev == null) return BadRequest("No such event exists");
+            return Ok(ev);
+        }
+
         // Only Admins can create/delete/update events
         [HttpPost]
         [Authorize(Roles = "Admin")]

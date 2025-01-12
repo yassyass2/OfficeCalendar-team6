@@ -38,18 +38,13 @@ const AttendanceModal: React.FC<ModalProps> = ({ Event, onClose }) => {
 
     // Handle Attendance
     const handleAttend = async () => {
-        console.log("Payload:", {
-            UserId: localStorage.getItem("userId"),
-            EventId: Event.id,
-            AttendAt: selectedTime,
-        });
         setLoading(true);
         const userId = localStorage.getItem('userId');
-    const payload = {
-        UserId: userId,
-        EventId: Event.id,
-        AttendAt: selectedTime,
-    };
+        const payload = {
+            UserId: userId,
+            EventId: Event.id,
+            AttendAt: selectedTime,
+        };
         try {
             console.log("Sending payload:", payload);
             const response = await axiosInstance.post("/api/Attendance/attend", payload);
@@ -100,8 +95,8 @@ const AttendanceModal: React.FC<ModalProps> = ({ Event, onClose }) => {
                             )}
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={onClose}>Close</button>
-                            <button type="button" className="btn btn-primary" onClick={handleAttend}>Sign me up!</button>
+                        <button type="button" className="btn-primary btn-primary-close" data-bs-dismiss="modal" onClick={onClose}>Close</button>
+                        <button type="button" className="btn-primary" onClick={handleAttend}>Sign me up!</button>
                         </div>
                     </div>
                 </div>
