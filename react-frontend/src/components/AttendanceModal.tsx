@@ -40,11 +40,11 @@ const AttendanceModal: React.FC<ModalProps> = ({ Event, onClose }) => {
     const handleAttend = async () => {
         setLoading(true);
         const userId = localStorage.getItem('userId');
-    const payload = {
-        UserId: userId,
-        EventId: Event.id,
-        AttendAt: selectedTime,
-    };
+        const payload = {
+            UserId: userId,
+            EventId: Event.id,
+            AttendAt: selectedTime,
+        };
         try {
             console.log("Sending payload:", payload);
             const response = await axiosInstance.post("/api/Attendance/attend", payload);
