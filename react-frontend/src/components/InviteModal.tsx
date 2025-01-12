@@ -67,10 +67,10 @@ const InviteModal: React.FC<ModalProps> = ({ Event, onClose }) => {
                                 </ul>
                             )}
                         </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={onClose}>Close</button>
-                            <button type="button" className="btn btn-primary">Save changes</button>
-                            <button type="button" className="btn btn-primary" onClick={() => handleInvitation()}>Show Attendees</button>
+                        <div className="button-group-modal-footer">
+                            <button type="button" className="btn-primary btn-primary-close" data-bs-dismiss="modal" onClick={onClose}>Close</button>
+                            <button type="button" className="btn-primary">Save changes</button>
+                            <button type="button" className="btn-primary" onClick={() => handleInvitation()}>Show Attendees</button>
                         </div>
                     </div>
                 </div>
