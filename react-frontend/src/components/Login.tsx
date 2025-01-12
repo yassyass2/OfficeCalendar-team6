@@ -5,7 +5,7 @@ import {jwtDecode, JwtPayload} from 'jwt-decode';
 
 
 const Login: React.FC = () => {
-    const [view, setView] = useState<'login' | 'forgotPassword' | 'register'>('login');
+    const [view, setView] = useState<'login' | 'forgotPassword' | 'register' | 'resetCode'>('login');
 
     interface CustomJwtPayload extends JwtPayload {
         Name?: string;
@@ -21,6 +21,13 @@ const Login: React.FC = () => {
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
+
+    // Add state for the code
+    const [resetCode, setResetCode] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword2, setConfirmPassword2] = useState('');
+
+
 
     // For displaying errors/messages
     const [error, setError] = useState<string | null>(null);
@@ -69,6 +76,8 @@ const Login: React.FC = () => {
             const response = await axios.post('http://localhost:5000/api/login/forgot-password', { email });
             setMessage('Reset instructions have been sent to your email');
             setError(null);
+            setView('resetCode');
+
         } catch (err: unknown) {
             if (axios.isAxiosError(err)) {
                 setError(err.response?.data || 'Failed to send reset instructions');
@@ -116,17 +125,45 @@ const Login: React.FC = () => {
         }
     };
 
+
+    const verifyResetCode = async () => {
+        setError(null);
+        setMessage(null);
+    
+        try {
+          const response = await axios.post('http://localhost:5000/api/login/reset-password', {
+            code: resetCode,
+            password: newPassword,
+            confirmPassword: confirmPassword2,
+          });
+    
+          // If success:
+          setMessage(response.data.message || 'Password reset successful!');
+          // Optionally redirect to login
+          setView('login');
+        } catch (err: unknown) {
+          if (axios.isAxiosError(err)) {
+            setError(err.response?.data || 'Failed to reset password');
+          } else {
+            setError('An unexpected error occurred');
+          }
+        }
+      };
+      
+
     return (
         <section className="row">
             <div className="col-4 login-container position-absolute top-50 start-50 translate-middle text-center align-items-center">
 
                 {/* Title depends on which view we're on */}
                 <h1>
-                    {view === 'login'
-                        ? 'Login'
-                        : view === 'forgotPassword'
-                            ? 'Forgot Password'
-                            : 'Register'}
+                {view === 'login'
+                    ? 'Login'
+                    : view === 'forgotPassword'
+                    ? 'Forgot Password'
+                    : view === 'register'
+                        ? 'Register'
+                        : 'Reset Password'}
                 </h1>
 
                 {/* ----- LOGIN VIEW ----- */}
@@ -174,7 +211,7 @@ const Login: React.FC = () => {
                 {view === 'forgotPassword' && (
                     <div className="forgot-password-form">
                         <p className="forgot-password-instructions">
-                            Please enter your email address. You will receive an email with instructions to reset your password.
+                            Please enter your email address.
                         </p>
                         <div className="form-field">
                             <input
@@ -277,6 +314,62 @@ const Login: React.FC = () => {
                     </form>
                 )}
 
+                {/* ----- RESET PASSWORD (code + new password) ----- */}
+                {view === 'resetCode' && (
+                <div className="reset-code-form">
+                    <p>Please enter the 6-digit code, then choose your new password:</p>
+
+                    {/* CODE INPUT */}
+                    <div className="form-field d-flex">
+                    <input
+                        type="text"
+                        placeholder="Enter 6-digit code"
+                        value={resetCode}
+                        onChange={(e) => setResetCode(e.target.value)}
+                    />
+                    </div>
+
+                    {/* NEW PASSWORD INPUT */}
+                    <div className="form-field d-flex">
+                    <input
+                        type="password"
+                        placeholder="New Password"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                    />
+                    </div>
+
+                    {/* CONFIRM NEW PASSWORD INPUT */}
+                    <div className="form-field d-flex">
+                    <input
+                        type="password"
+                        placeholder="Confirm New Password"
+                        value={confirmPassword2}
+                        onChange={(e) => setConfirmPassword2(e.target.value)}
+                    />
+                    </div>
+
+                    <div className="container-fluid">
+                    <div className="row">
+                        <button className="btn-primary mt-3" onClick={verifyResetCode}>
+                        Reset Password
+                        </button>
+                    </div>
+                    </div>
+                    <div className="container-fluid">
+                    <div className="row">
+                        <a
+                        className="btn-simple pt-3"
+                        onClick={() => setView('login')}
+                        >
+                        Back to Login
+                        </a>
+                    </div>
+                    </div>
+                </div>
+                )}
+
+
                 {/* ----- FOOTER LINKS ----- */}
                 <div className="container-fluid">
                     <div className="row">
@@ -293,6 +386,7 @@ const Login: React.FC = () => {
                         )}
                     </div>
                 </div>
+
 
                 {/* ----- ERROR / SUCCESS MESSAGES ----- */}
                 {error && <p className="error-message">{error}</p>}
