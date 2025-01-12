@@ -64,7 +64,6 @@ namespace Services
             try
             {
                 await _emailService.SendVerificationCode(request.Email, verificationCode); // <---
-                Console.WriteLine(verificationCode);
                 return true;
             }
             catch (Exception)

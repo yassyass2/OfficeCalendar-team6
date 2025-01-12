@@ -5,7 +5,7 @@ import {jwtDecode, JwtPayload} from 'jwt-decode';
 
 
 const Login: React.FC = () => {
-    const [view, setView] = useState<'login' | 'forgotPassword' | 'register' | 'resetCode'>('login');
+    const [view, setView] = useState<'login' | 'forgotPassword' | 'register' | 'resetCode' | 'verify' | 'accountVerified'>('login');
 
     interface CustomJwtPayload extends JwtPayload {
         Name?: string;
@@ -22,12 +22,13 @@ const Login: React.FC = () => {
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
 
-    // Add state for the code
+    // state for the resetpassword code
     const [resetCode, setResetCode] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword2, setConfirmPassword2] = useState('');
 
-
+    // state for verification
+    const [verificationCode, setVerificationCode] = useState<string>('');
 
     // For displaying errors/messages
     const [error, setError] = useState<string | null>(null);
@@ -76,6 +77,7 @@ const Login: React.FC = () => {
             const response = await axios.post('http://localhost:5000/api/login/forgot-password', { email });
             setMessage('Reset instructions have been sent to your email');
             setError(null);
+            clearResetPasswordFields();
             setView('resetCode');
 
         } catch (err: unknown) {
@@ -114,8 +116,7 @@ const Login: React.FC = () => {
             } else {
                 setMessage('Registration successful!');
             }
-            // Optionally switch back to login view:
-            // setView('login');
+            setView('verify');
         } catch (err: unknown) {
             if (axios.isAxiosError(err)) {
                 setError(err.response?.data || 'Registration failed.');
@@ -124,6 +125,27 @@ const Login: React.FC = () => {
             }
         }
     };
+
+    const handleVerify = async () => {
+        setError(null);
+        setMessage(null);
+    
+        try {
+            const response = await axios.post('http://localhost:5000/api/login/verify', {
+                code: verificationCode, // Only send the code
+            });
+    
+            setMessage('Account verified successfully!');
+            setView('accountVerified');
+        } catch (err) {
+            if (axios.isAxiosError(err)) {
+                setError(err.response?.data || 'Verification failed.');
+            } else {
+                setError('An unexpected error occurred during verification.');
+            }
+        }
+    };
+    
 
 
     const verifyResetCode = async () => {
@@ -149,6 +171,31 @@ const Login: React.FC = () => {
           }
         }
       };
+
+    // ----- Reset Massege -----
+    const clearMessage = () => {
+        setMessage(null);
+        setError(null);
+    };
+
+    // ----- Reset fields for new password -----
+    const clearResetPasswordFields = () => {
+        setResetCode('');
+        setNewPassword('');
+        setConfirmPassword2('');
+    };
+
+    // ----- Reset fields for register -----
+    const clearRegisterFields = () => {
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+        setFirstName('');
+        setLastName('');
+    };
+    
+    
+    
       
 
     return (
@@ -157,12 +204,14 @@ const Login: React.FC = () => {
 
                 {/* Title depends on which view we're on */}
                 <h1>
-                {view === 'login'
-                    ? 'Login'
-                    : view === 'forgotPassword'
-                    ? 'Forgot Password'
-                    : view === 'register'
+                    {view === 'login'
+                        ? 'Login'
+                        : view === 'forgotPassword'
+                        ? 'Forgot Password'
+                        : view === 'register'
                         ? 'Register'
+                        : view === 'verify'
+                        ? 'Verify Account'
                         : 'Reset Password'}
                 </h1>
 
@@ -199,7 +248,10 @@ const Login: React.FC = () => {
                         <div className="form-options d-flex justify-content-between">
                             <a
                                 className="btn-simple"
-                                onClick={() => setView('forgotPassword')}
+                                onClick={() => {
+                                    clearMessage(); 
+                                    setView('forgotPassword');
+                                }}
                             >
                                 Forgot Password?
                             </a>
@@ -232,7 +284,11 @@ const Login: React.FC = () => {
                             <div className="row">
                                 <a
                                     className="btn-simple pt-3"
-                                    onClick={() => setView('login')}
+                                    onClick={() => {
+                                        clearMessage(); 
+                                        clearResetPasswordFields();
+                                        setView('login');
+                                    }}
                                 >
                                     Back to Login
                                 </a>
@@ -305,7 +361,11 @@ const Login: React.FC = () => {
                             <div className="row">
                                 <a
                                     className="btn-simple pt-3"
-                                    onClick={() => setView('login')}
+                                    onClick={() => {
+                                        clearMessage(); 
+                                        clearRegisterFields();
+                                        setView('login');
+                                    }}
                                 >
                                     Back to Login
                                 </a>
@@ -314,9 +374,67 @@ const Login: React.FC = () => {
                     </form>
                 )}
 
+                {/* ----- Verify Account ----- */}
+                {view === 'verify' && (
+                    <form className="login-form align-items-center">
+                        <p>Please enter the 6-digit code sent to your email:</p>
+
+                        <div className="form-field d-flex">
+                            <input
+                                type="text"
+                                placeholder="Enter verification code"
+                                value={verificationCode}
+                                onChange={(e) => setVerificationCode(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="container-fluid">
+                            <div className="row">
+                                <button className="btn-primary mt-3" onClick={handleVerify}>
+                                    Verify
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="container-fluid">
+                            <div className="row">
+                                <a
+                                    className="btn-simple pt-3"
+                                    onClick={() => {
+                                        clearMessage(); 
+                                        setView('register');
+                                    }}
+                                >
+                                    Back to Register
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                )}
+
+                {/* ----- Account verified, back to login ----- */}
+                {view === 'accountVerified' && (
+                    <section className="text-center">
+                        <h1>Account Verified</h1>
+                        <strong>Your account has been verified successfully. You can now log in to continue.</strong>
+                        <button
+                            className="btn-primary mt-3"
+                            onClick={() => {
+                                clearMessage();
+                                setView('login'); // Navigate back to the login view
+                            }}
+                        >
+                            Back to Login
+                        </button>
+                    </section>
+                )}
+
+
                 {/* ----- RESET PASSWORD (code + new password) ----- */}
                 {view === 'resetCode' && (
-                <div className="reset-code-form">
+                <form className="login-form align-items-center">
+
+                    {message && <p className="success-message">{message}</p>} 
                     <p>Please enter the 6-digit code, then choose your new password:</p>
 
                     {/* CODE INPUT */}
@@ -360,25 +478,33 @@ const Login: React.FC = () => {
                     <div className="row">
                         <a
                         className="btn-simple pt-3"
-                        onClick={() => setView('login')}
+                        onClick={() => {
+                            clearMessage(); 
+                            clearResetPasswordFields();
+                            setView('login');
+                        }}
                         >
                         Back to Login
                         </a>
                     </div>
                     </div>
-                </div>
+                </form>
                 )}
 
 
                 {/* ----- FOOTER LINKS ----- */}
                 <div className="container-fluid">
                     <div className="row">
-                        {view !== 'register' && (
+                        {view !== 'register' && view !== 'verify' &&(
                             <>
                                 <span className="mb-1">Don’t have an account?{' '}</span>
                                 <a
                                     className="btn-simple"
-                                    onClick={() => setView('register')}
+                                    onClick={() => {
+                                        clearMessage(); 
+                                        clearRegisterFields();
+                                        setView('register');
+                                    }}
                                 >
                                     Register here
                                 </a>
@@ -390,7 +516,6 @@ const Login: React.FC = () => {
 
                 {/* ----- ERROR / SUCCESS MESSAGES ----- */}
                 {error && <p className="error-message">{error}</p>}
-                {message && <p className="success-message">{message}</p>}
             </div>
         </section>
     );
