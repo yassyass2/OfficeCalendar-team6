@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import {jwtDecode, JwtPayload} from 'jwt-decode';
+import { jwtDecode, JwtPayload } from 'jwt-decode';
 
 
 const Login: React.FC = () => {
@@ -11,7 +11,7 @@ const Login: React.FC = () => {
         Name?: string;
         Role?: string;
         Sid?: string;
-      }
+    }
 
     // For login & forgot password
     const [email, setEmail] = useState<string>('');
