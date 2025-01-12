@@ -95,8 +95,8 @@ const AttendanceModal: React.FC<ModalProps> = ({ Event, onClose }) => {
                             )}
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={onClose}>Close</button>
-                            <button type="button" className="btn btn-primary" onClick={handleAttend}>Sign me up!</button>
+                        <button type="button" className="btn-primary btn-primary-close" data-bs-dismiss="modal" onClick={onClose}>Close</button>
+                        <button type="button" className="btn-primary" onClick={handleAttend}>Sign me up!</button>
                         </div>
                     </div>
                 </div>
