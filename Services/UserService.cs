@@ -4,50 +4,8 @@ using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 
-
 namespace Services
 {
-    public class JsonUserService : IUserService
-    {
-        public Task<bool> Register(UserRegisterRequest request)
-        {
-            return Task.FromResult(true);
-
-        }
-
-        public async Task<bool> CheckUser(User user)
-        {
-            return true;
-        }
-
-        public async Task<LoginResult> Login(UserLoginRequest request)
-        {
-            return new LoginResult { Success = true, Message = "To be implemented" };
-        }
-
-        public async Task<LoginResult> VerifyAccount(string token)
-        {
-
-            return new LoginResult { Success = true, Message = "To be implemented" };
-        }
-
-        public async Task<LoginResult> ForgotPassword(string email)
-        {
-
-            return new LoginResult { Success = true, Message = "To be implemented" };
-        }
-
-        public async Task<LoginResult> ResetPassword(ResetPasswordRequest request)
-        {
-            return new LoginResult { Success = true, Message = "To be implemented" };
-        }
-        public async Task<string> GetEmail(Guid id){
-            return "";
-        }
-
-    }
-
-
     public class UserService : IUserService
     {
         private readonly MyContext _context;
@@ -74,7 +32,6 @@ namespace Services
                 return Convert.ToBase64String(hashedBytes);
             }
         }
-
 
         public async Task<bool> Register(UserRegisterRequest request)
         {
@@ -106,8 +63,7 @@ namespace Services
             // Send verification email
             try
             {
-                // await _emailService.SendVerificationCode(request.Email, verificationCode);
-                Console.WriteLine(verificationCode);
+                await _emailService.SendVerificationCode(request.Email, verificationCode); // <---
                 return true;
             }
             catch (Exception)
@@ -139,9 +95,6 @@ namespace Services
 
             return new LoginResult { Success = true, Message = "Login successful" };
         }
-
-
-
 
         public async Task<LoginResult> VerifyAccount(string code)
         {
@@ -218,9 +171,6 @@ namespace Services
             return new LoginResult { Success = true, Message = "Password successfully reset!" };
         }
 
-
-
-
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
@@ -277,8 +227,26 @@ namespace Services
             {
                 return "yassinabde@outlook.com";
             }
+            
         }
 
+        public async Task<Guid> GetId(string mail){
+            try
+            {
+                var existingUser = await _context.Users
+                    .FirstOrDefaultAsync(x => x.Email == mail);
 
+                if (existingUser != null)
+                {
+                    return existingUser.Id;
+                }
+                return Guid.Empty;
+            }
+            catch
+            {
+                return Guid.Empty;
+            }
+            
+        }
     }
 }

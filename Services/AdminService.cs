@@ -35,7 +35,6 @@ namespace Services
             {
                 Console.WriteLine($"Checking Admin - Email: {admin.Email}, Password: {admin.Password}");
 
-
                 var nieuweAdmins = _context.Admins.ToList();
                 if (nieuweAdmins.FirstOrDefault(x => x.Email == admin.Email && x.Password == admin.Password) != null)
                 {

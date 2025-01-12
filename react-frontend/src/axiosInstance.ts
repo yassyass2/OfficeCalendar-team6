@@ -3,6 +3,9 @@ import axios from 'axios';
 // Create a new axios instance
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:5000', // or your actual backend URL
+  headers: {
+    "Content-Type": "application/json",
+},
 });
 
 // Add a request interceptor

@@ -18,7 +18,7 @@ namespace Services {
                 email.Body = new TextPart(TextFormat.Html) { Text = body };
 
                 using var smtp = new SmtpClient();
-                smtp.Connect("smtp.boendermaker.com", 465, SecureSocketOptions.SslOnConnect);
+                smtp.Connect("boendermaker.com", 465, SecureSocketOptions.SslOnConnect);
                 smtp.Authenticate("office@boendermaker.com", "4kp9Ky@18!");
                 await smtp.SendAsync(email);
                 smtp.Disconnect(true);

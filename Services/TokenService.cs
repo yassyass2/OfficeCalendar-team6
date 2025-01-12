@@ -10,17 +10,19 @@ namespace Services
     {
         private readonly string _secretKey = "H7zV4zJ5uQxB8eX2pT9gR1bY8fF5wQ3x";
 
-        public string GenerateToken(string email, string role)
+        public string GenerateToken(string email, string role, Guid id)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_secretKey);
+            var sid = id.ToString();
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
                 {
                 new Claim(ClaimTypes.Name, email),
-                new Claim(ClaimTypes.Role, role)
+                new Claim(ClaimTypes.Role, role),
+                new Claim("user_id", sid)
             }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

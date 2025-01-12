@@ -34,7 +34,7 @@ namespace Controllers
             if (await _adminService.CheckAdmin(new Admin { Email = model.Email, Password = model.Password }))
             {
                 // 2. Generate Admin token
-                var token = _tokenService.GenerateToken(model.Email, "Admin");
+                var token = _tokenService.GenerateToken(model.Email, "Admin", Guid.Empty);
 
                 // 3. Return token in JSON
                 return Ok(new
@@ -50,9 +50,10 @@ namespace Controllers
             {
                 return Unauthorized(loginResult.Message);
             }
-
+            Guid id = await _userService.GetId(model.Email);
+            Console.WriteLine($"the ID for this login is: {id}");
             // Generate user token
-            var userToken = _tokenService.GenerateToken(model.Email, "User");
+            var userToken = _tokenService.GenerateToken(model.Email, "User", id);
 
             return Ok(new
             {
@@ -60,8 +61,6 @@ namespace Controllers
                 Token = userToken
             });
         }
-
-
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserRegisterRequest request)
@@ -128,5 +127,6 @@ namespace Controllers
 
             return Ok(result.Message);
         }
+        
     }
 }
