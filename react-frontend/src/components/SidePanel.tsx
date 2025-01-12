@@ -51,13 +51,12 @@ const SidePanel: React.FC<Props> = ({ selectedEvent, openInviteModal, openAttend
                     </div>
 
                     <div className="button-group">
-                        
                         <button
                             onClick={openInviteModal}
                             className="btn-primary"
                             type="button"
                             data-bs-toggle="modal"
-                            data-bs-target="#exampleModal"
+                            data-bs-target="#inviteModal"
                         >
                             INVITE EMPLOYEE
                             <i className="fa-solid fa-caret-right"></i>
@@ -67,7 +66,7 @@ const SidePanel: React.FC<Props> = ({ selectedEvent, openInviteModal, openAttend
                             className="btn-primary"
                             type="button"
                             data-bs-toggle="modal"
-                            data-bs-target="#exampleModal"
+                            data-bs-target="#attendanceModal"
                         >
                             ATTEND EVENT
                             <i className="fa-solid fa-caret-right"></i>

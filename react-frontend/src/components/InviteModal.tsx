@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { EventData } from './UserDashboard';
 import axiosInstance from '../axiosInstance';
-import {ModalProps} from './AttendanceModal'
+import { ModalProps } from './AttendanceModal'
 
 interface attendee { id: string, first_name: string, last_name: string }
 
@@ -44,11 +44,11 @@ const InviteModal: React.FC<ModalProps> = ({ Event, onClose }) => {
 
     return (
         <>
-            <div className="modal fade" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal fade" id="inviteModal" tabIndex={-1} aria-labelledby="inviteModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="exampleModalLabel">Invite a Coworker!</h1>
+                            <h1 className="modal-title fs-5" id="inviteModalLabel">Invite a Coworker!</h1>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}></button>
                             {Event.id}
                         </div>
