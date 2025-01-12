@@ -10,7 +10,7 @@ const Login: React.FC = () => {
     interface CustomJwtPayload extends JwtPayload {
         Name?: string;
         Role?: string;
-        Sid?: string;
+        user_id?: string;
     }
 
     // For login & forgot password
@@ -45,7 +45,10 @@ const Login: React.FC = () => {
             if (response.data.token) {
                 localStorage.setItem('authToken', response.data.token);
                 const decoded = jwtDecode<CustomJwtPayload>(response.data.token);
-                localStorage.setItem('userId', decoded.Sid as string)
+                if (!decoded.user_id) {
+                    throw new Error("User ID (user_id) is missing in the token.");
+                }
+                localStorage.setItem('userId', decoded.user_id)
 
             } else {
                 setError('No token received. Please try again.');
@@ -58,7 +61,7 @@ const Login: React.FC = () => {
             if (axios.isAxiosError(err)) {
                 setError(err.response?.data?.message || 'Login failed. Check your credentials');
             } else {
-                setError('An unexpected error occurred');
+                setError('An unexpected error occurred' + err);
             }
         }
     };

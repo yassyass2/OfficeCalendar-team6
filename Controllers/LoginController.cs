@@ -50,9 +50,10 @@ namespace Controllers
             {
                 return Unauthorized(loginResult.Message);
             }
-
+            Guid id = await _userService.GetId(model.Email);
+            Console.WriteLine($"the ID for this login is: {id}");
             // Generate user token
-            var userToken = _tokenService.GenerateToken(model.Email, "User", await _userService.GetId(model.Email));
+            var userToken = _tokenService.GenerateToken(model.Email, "User", id);
 
             return Ok(new
             {

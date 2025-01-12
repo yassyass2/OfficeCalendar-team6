@@ -17,8 +17,8 @@ namespace Services
 
         public async Task<bool> CreateAttendance(EventAttendance request)
         {
-            var eventToAttend = await _context.Events
-                .FirstOrDefaultAsync(e => e.Id == request.EventId);
+            Event? eventToAttend = _context.Events
+                .FirstOrDefault(e => e.Id == request.EventId);
 
             if (eventToAttend == null || DateTime.Parse(eventToAttend.Date) < DateTime.Now)
             {

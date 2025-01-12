@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { EventData } from './UserDashboard';
 import axiosInstance from '../axiosInstance';
+import axios from 'axios';
 
 export interface ModalProps {
     Event: EventData
@@ -10,7 +11,6 @@ export interface ModalProps {
 const AttendanceModal: React.FC<ModalProps> = ({ Event, onClose }) => {
 
     const [loading, setLoading] = useState(false);
-    const [time, setTime] = useState(Event.start_time);
     const [selectedTime, setSelectedTime] = React.useState<string>(Event.start_time);
 
     const generateTimeOptions = (start: string, end: string): string[] => {
@@ -38,23 +38,34 @@ const AttendanceModal: React.FC<ModalProps> = ({ Event, onClose }) => {
 
     // Handle Attendance
     const handleAttend = async () => {
-        setLoading(true);
-        console.log({
-            UserId: localStorage.getItem('userId'),
+        console.log("Payload:", {
+            UserId: localStorage.getItem("userId"),
             EventId: Event.id,
             AttendAt: selectedTime,
         });
+        setLoading(true);
+        const userId = localStorage.getItem('userId');
+    const payload = {
+        UserId: userId,
+        EventId: Event.id,
+        AttendAt: selectedTime,
+    };
         try {
-            console.log(localStorage.getItem('userId'))
-            const response = await axiosInstance.post("/api/Attendance/attend", {
-                UserId: localStorage.getItem('userId'),
-                EventId: Event.id,
-                AttendAt: selectedTime
-            });
-            alert(response.data)
-
+            console.log("Sending payload:", payload);
+            const response = await axiosInstance.post("/api/Attendance/attend", payload);
+    
+            if (response.status === 200) {
+                alert(`Attendance recorded successfully: ${response.data}`);
+            } else {
+                console.warn("Unexpected response:", response);
+            }
         } catch (error) {
-            console.error("Error attending event:", error);
+            if (axios.isAxiosError(error)) {
+                console.error("API Error:", error.response?.data || error.message);
+                alert(`Error: ${error.response?.data || "Failed to attend event"}`);
+            } else {
+                console.error("Unexpected Error:", error);
+            }
         } finally {
             setLoading(false);
         }
@@ -74,7 +85,7 @@ const AttendanceModal: React.FC<ModalProps> = ({ Event, onClose }) => {
                             <h2>Attend this event</h2>
 
                             {loading ? (
-                                <p>Loading attendance screen</p>
+                                <p>Creating attendance...</p>
                             ) : (
                                 <>
                                     <label htmlFor="time-select">Select a time to attend:</label>
@@ -90,7 +101,7 @@ const AttendanceModal: React.FC<ModalProps> = ({ Event, onClose }) => {
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={onClose}>Close</button>
-                            <button type="button" className="btn btn-primary" onClick={() => handleAttend()}>Sign me up!</button>
+                            <button type="button" className="btn btn-primary" onClick={handleAttend}>Sign me up!</button>
                         </div>
                     </div>
                 </div>

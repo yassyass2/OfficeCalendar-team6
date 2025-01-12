@@ -14,6 +14,7 @@ namespace Services
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_secretKey);
+            var sid = id.ToString();
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -21,7 +22,7 @@ namespace Services
                 {
                 new Claim(ClaimTypes.Name, email),
                 new Claim(ClaimTypes.Role, role),
-                new Claim(ClaimTypes.Sid, id.ToString())
+                new Claim("user_id", sid)
             }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
