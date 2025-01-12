@@ -5,6 +5,7 @@ import Calendar from './Calendar';
 import SidePanel from './SidePanel';
 import InviteModal from './InviteModal';
 import AttendanceModal from './AttendanceModal';
+import MyEventsModal from './MyEventsModal';
 
 export interface EventData {
   id: string;
@@ -22,6 +23,7 @@ const UserDashboard: React.FC = () => {
 
   const [inviteScreen, setInviteModal] = useState(false);
   const [attendanceScreen, setAttendanceModal] = useState(false);
+  const [myEventsScreen, setMyEventsModal] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -103,7 +105,7 @@ const UserDashboard: React.FC = () => {
             selectedEvent={selectedEvent}
             openModal1={() => setInviteModal(true)}
             openModal2={() => setAttendanceModal(true)}
-            openModal3 ={() => undefined}
+            openModal3 ={() => setMyEventsModal(true)}
             goToNextEvent={goToNextEvent}
             goToPreviousEvent={goToPreviousEvent}
             isAdmin={false}
@@ -121,6 +123,11 @@ const UserDashboard: React.FC = () => {
         <InviteModal
           Event={selectedEvent}
           onClose={handleModalClose} />)}
+
+      {selectedEvent && (
+        <MyEventsModal
+          onClose={handleModalClose} />)}
+
     </section>
   );
 };

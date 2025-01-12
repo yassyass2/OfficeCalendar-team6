@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { EventData } from './UserDashboard';
 import axiosInstance from '../axiosInstance';
-import axios from 'axios';
 
 interface ModalProps {
     onClose: () => void;
@@ -57,11 +56,11 @@ const MyEventsModal: React.FC<ModalProps> = ({ onClose }) => {
       };
 
     return (<>
-        <div className="modal fade" id="attendanceModal" tabIndex={-1} aria-labelledby="attendanceModalLabel" aria-hidden="true">
+        <div className="modal fade" id="MyEventsModal" tabIndex={-1} aria-labelledby="MyEventsModalLabel" aria-hidden="true">
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h1 className="modal-title fs-5" id="attendanceModalLabel">Registered Events</h1>
+                        <h1 className="modal-title fs-5" id="MyEventsModalLabel">Registered Events</h1>
                         <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}></button>
                     </div>
                     <div className="modal-body">
