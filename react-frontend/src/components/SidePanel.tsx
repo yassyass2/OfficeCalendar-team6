@@ -136,7 +136,7 @@ const SidePanel: React.FC<Props> = ({
                                     data-bs-toggle="modal"
                                     data-bs-target="#inviteModal"
                                 >
-                                    INVITE EMPLOYEE
+                                    NOTIFY EMPLOYEE
                                     <i className="fa-solid fa-caret-right"></i>
                                 </button>
                                 <button
