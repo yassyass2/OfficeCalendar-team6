@@ -7,6 +7,7 @@ interface ModalProps {
 }
 
 const MyEventsModal: React.FC<ModalProps> = ({ onClose }) => {
+    console.log("we entered the modal")
     const [loading, setLoading] = useState(false);
     const [attendances, setAttendances] = useState<string[]>([]);
     const [events, setEvents] = useState<string[]>([]);
@@ -32,20 +33,25 @@ const MyEventsModal: React.FC<ModalProps> = ({ onClose }) => {
 
     const FetchAttendances = async () => {
         setLoading(true);
-
-        const response = await axiosInstance.get("/api/Attendance/view", {
-            params: {
+        try {
+            const response = await axiosInstance.get("/api/Attendance/view", {
+              params: {
                 userId: localStorage.getItem('userId')
-            }
-        });
-        setAttendances(response.data);
+              }
+            });
+            setAttendances(response.data);
+          } catch (error) {
+            console.error("Error fetching attendances:", error);
+          } finally {
+            setLoading(false);
+          }
     }
 
     const FetchEventTitle = async (attendanceId: string) => {
         try {
-        setLoading(true)
-          const response = await fetch(`/api/event/${attendanceId}`);
-          const event = await response.json();
+            setLoading(true)
+          const response = await axiosInstance.get(`/events/${attendanceId}`);
+          const event = response.data;
           return event.title;
         } catch (error) {
           console.error('Error fetching event title:', error);
