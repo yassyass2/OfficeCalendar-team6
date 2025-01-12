@@ -17,7 +17,7 @@ type Props = {
     openModal3: () => void; // Third modal (Delete)
     goToNextEvent: () => void;
     goToPreviousEvent: () => void;
-    isAdmin: boolean; // Determines which buttons to show
+    isAdmin: boolean;
 };
 
 const SidePanel: React.FC<Props> = ({
@@ -87,7 +87,7 @@ const SidePanel: React.FC<Props> = ({
                                 </button>
                                 <button
                                     onClick={openModal3}
-                                    className="btn-danger"
+                                    className="btn-primary btn-primary-delete"
                                     type="button"
                                     data-bs-toggle="modal"
                                     data-bs-target="#deleteEventModal"

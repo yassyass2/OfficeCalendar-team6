@@ -48,7 +48,7 @@ const AddEventModal: React.FC<AddEventModalProps> = ({ onClose, onAddEvent }) =>
                         </form>
                     </div>
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={onClose}>Close</button>
+                        <button type="button" className="btn-primary btn-primary-close" data-bs-dismiss="modal" onClick={onClose}>Close</button>
                         <button type="button" className="btn btn-primary" onClick={handleAddEvent} disabled={loading}>
                             {loading ? 'Adding...' : 'Add Event'}
                         </button>

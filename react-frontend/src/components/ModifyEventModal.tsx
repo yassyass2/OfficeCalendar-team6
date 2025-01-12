@@ -38,8 +38,8 @@ const ModifyEventModal: React.FC<ModifyEventModalProps> = ({ event, onClose, onM
                         </form>
                     </div>
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={onClose}>Close</button>
-                        <button type="button" className="btn btn-primary" onClick={handleModifyEvent}>
+                        <button type="button" className="btn-primary btn-primary-close" data-bs-dismiss="modal" onClick={onClose}>Close</button>
+                        <button type="button" className="btn-primary" onClick={handleModifyEvent}>
                             Modify Event
                         </button>
                     </div>
