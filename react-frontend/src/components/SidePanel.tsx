@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import axiosInstance from '../axiosInstance';
 
 interface EventData {
     id: string;
@@ -29,15 +30,45 @@ const SidePanel: React.FC<Props> = ({
     goToPreviousEvent,
     isAdmin,
 }) => {
-    if (!selectedEvent) {
-        return (
-            <div className="sidepanel-container">
-                <p>No event selected. Click an event to view details.</p>
-            </div>
-        );
-    }
 
-    return (
+    const [attendeeAmount, setAttendeeAmount] = useState(0)
+    
+    // wnr selectedEvent verandert, opnieuw attendees request
+    useEffect(() => {
+        GetAttendeeAmount();},
+        [selectedEvent]
+      );
+
+
+    const GetAttendeeAmount = async () => {
+      try {
+          if (!selectedEvent){
+            setAttendeeAmount(0)
+            return;
+          }
+          const response = await axiosInstance.get("/api/Attendance/attendees", {
+              params: {
+                  eventId: selectedEvent.id
+              }
+          });
+          setAttendeeAmount(response.data.length)
+
+      } catch (error) {
+          console.error("Error fetching attendees:", error);
+          setAttendeeAmount(0)
+      }
+  };
+    if (!selectedEvent) {
+      return (
+          <div className="sidepanel-container">
+              <p>No event selected. Click an event to view details.</p>
+          </div>
+      );
+  }
+
+    return !selectedEvent ? (<div className="sidepanel-container">
+      <p>No event selected. Click an event to view details.</p>
+  </div>) : (
         <div className="row g-0">
             <div className="col-auto sidepanel-container">
                 <div className="event-container">
@@ -53,7 +84,7 @@ const SidePanel: React.FC<Props> = ({
 
                         <i className="fa-solid fa-user"></i>
                         <span>
-                            <span className="attendees-number">{0}</span> {/* Placeholder */}
+                            <span className="attendees-number">{attendeeAmount}</span> {/* Placeholder */}
                             attending
                         </span>
                     </div>
@@ -105,7 +136,7 @@ const SidePanel: React.FC<Props> = ({
                                     data-bs-toggle="modal"
                                     data-bs-target="#inviteModal"
                                 >
-                                    INVITE EMPLOYEE
+                                    NOTIFY EMPLOYEE
                                     <i className="fa-solid fa-caret-right"></i>
                                 </button>
                                 <button
