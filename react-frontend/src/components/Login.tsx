@@ -8,8 +8,8 @@ const Login: React.FC = () => {
     const [view, setView] = useState<'login' | 'forgotPassword' | 'register' | 'resetCode' | 'verify' | 'accountVerified'>('login');
 
     interface CustomJwtPayload extends JwtPayload {
-        Email?: string;
-        Role?: string;
+        email?: string;
+        role?: string;
         user_id?: string;
     }
 
@@ -53,12 +53,12 @@ const Login: React.FC = () => {
             if (response.data.token) {
                 localStorage.setItem('authToken', response.data.token);
                 const decoded = jwtDecode<CustomJwtPayload>(response.data.token);
-                if (!decoded.user_id || !decoded.Email || !decoded.Role) {
-                    throw new Error("(user_id) or (Email) or (Role) is missing in the token.");
+                if (!decoded.user_id || !decoded.email || !decoded.role) {
+                    throw new Error("(user_id) or (email) or (role) is missing in the token.");
                 }
                 localStorage.setItem('userId', decoded.user_id)
-                localStorage.setItem('CurrentUserEmail', decoded.Email)
-                localStorage.setItem('CurrentUserRole', decoded.Role)
+                localStorage.setItem('CurrentUserEmail', decoded.email)
+                localStorage.setItem('CurrentUserRole', decoded.role)
 
             } else {
                 setError('No token received. Please try again.');
