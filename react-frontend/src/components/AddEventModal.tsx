@@ -1,5 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { EventData } from './AdminMenu';
+
+declare global {
+  interface Window {
+    bootstrap: any;
+  }
+}
 
 interface AddEventModalProps {
   onClose: () => void;
@@ -15,6 +21,16 @@ const AddEventModal: React.FC<AddEventModalProps> = ({ onClose, onAddEvent }) =>
     end_time: '',
     location: '',
   });
+
+  useEffect(() => {
+    const modalElement = document.getElementById('addEventModal');
+    const modal = new window.bootstrap.Modal(modalElement!);
+    modal.show();
+
+    return () => {
+      modal.hide();
+    };
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;

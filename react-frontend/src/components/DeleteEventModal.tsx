@@ -1,5 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { EventData } from './AdminMenu';
+
+declare global {
+  interface Window {
+    bootstrap: any;
+  }
+}
 
 interface DeleteEventModalProps {
   event: EventData;
@@ -8,6 +14,16 @@ interface DeleteEventModalProps {
 }
 
 const DeleteEventModal: React.FC<DeleteEventModalProps> = ({ event, onClose, onDeleteEvent }) => {
+  useEffect(() => {
+    const modalElement = document.getElementById('deleteEventModal');
+    const modal = new window.bootstrap.Modal(modalElement!);
+    modal.show();
+
+    return () => {
+      modal.hide();
+    };
+  }, []);
+
   const handleDelete = () => {
     onDeleteEvent(event.id);
     onClose();

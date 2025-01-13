@@ -1,5 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { EventData } from './AdminMenu';
+
+declare global {
+  interface Window {
+    bootstrap: any;
+  }
+}
 
 interface ModifyEventModalProps {
   event: EventData;
@@ -9,6 +15,16 @@ interface ModifyEventModalProps {
 
 const ModifyEventModal: React.FC<ModifyEventModalProps> = ({ event, onClose, onModifyEvent }) => {
   const [updatedEvent, setUpdatedEvent] = useState<EventData>(event);
+
+  useEffect(() => {
+    const modalElement = document.getElementById('modifyEventModal');
+    const modal = new window.bootstrap.Modal(modalElement!);
+    modal.show();
+
+    return () => {
+      modal.hide();
+    };
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
