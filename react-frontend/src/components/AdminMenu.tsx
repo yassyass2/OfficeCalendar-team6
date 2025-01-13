@@ -108,20 +108,20 @@ const AdminMenu: React.FC = () => {
             openModal3={() => setDeleteEventModal(true)}
             goToNextEvent={goToNextEvent}
             goToPreviousEvent={goToPreviousEvent}
-            isAdmin={true} // Set to true for admin functionality
+            isAdmin={true} // Enable admin functionality
           />
         </div>
       </div>
 
       {/* Modals */}
-      {selectedEvent && (
+      {addEventModal && (
         <AddEventModal
           onClose={handleModalClose}
           onAddEvent={(newEvent) => setEventData([...eventData, newEvent])}
         />
       )}
 
-      {selectedEvent && (
+      {selectedEvent && modifyEventModal && (
         <ModifyEventModal
           event={selectedEvent}
           onClose={handleModalClose}
@@ -131,11 +131,12 @@ const AdminMenu: React.FC = () => {
                 event.id === updatedEvent.id ? updatedEvent : event
               )
             );
+            setSelectedEvent(updatedEvent); // Update the selected event
           }}
         />
       )}
 
-      {selectedEvent && (
+      {selectedEvent && deleteEventModal && (
         <DeleteEventModal
           event={selectedEvent}
           onClose={handleModalClose}
