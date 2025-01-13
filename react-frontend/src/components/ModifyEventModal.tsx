@@ -1,118 +1,68 @@
 import React, { useState } from 'react';
-import axiosInstance from '../axiosInstance'; // Import axiosInstance
-import { EventData } from './AdminMenu'; // Ensure correct import path for EventData
+import { EventData } from './AdminMenu';
 
 interface ModifyEventModalProps {
-    event: EventData;
-    onClose: () => void;
-    onModifyEvent: (updatedEvent: EventData) => void;
+  event: EventData;
+  onClose: () => void;
+  onModifyEvent: (updatedEvent: EventData) => void;
 }
 
 const ModifyEventModal: React.FC<ModifyEventModalProps> = ({ event, onClose, onModifyEvent }) => {
-    const [loading, setLoading] = useState(false);
-    const [updatedEventData, setUpdatedEventData] = useState<EventData>(event);
+  const [updatedEvent, setUpdatedEvent] = useState<EventData>(event);
 
-    // Handle input changes
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setUpdatedEventData((prev: EventData) => ({ ...prev, [name]: value }));
-    };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setUpdatedEvent((prev) => ({ ...prev, [name]: value }));
+  };
 
-    // Handle modifying the event
-    const handleModifyEvent = async () => {
-        setLoading(true);
-        try {
-            const response = await axiosInstance.put(`/api/events/${event.id}`, updatedEventData); // PUT request
-            if (response.status === 200) {
-                onModifyEvent(response.data); // Notify parent with updated event
-                alert('Event modified successfully!');
-                onClose();
-            } else {
-                console.warn('Unexpected response:', response);
-            }
-        } catch (error) {
-            console.error('Error modifying event:', error);
-            alert('Failed to modify event.');
-        } finally {
-            setLoading(false);
-        }
-    };
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onModifyEvent(updatedEvent);
+    onClose();
+  };
 
-    return (
-        <div className="modal fade" id="modifyEventModal" tabIndex={-1} aria-labelledby="modifyEventModalLabel" aria-hidden="true">
-            <div className="modal-dialog">
-                <div className="modal-content">
-                    <div className="modal-header">
-                        <h1 className="modal-title fs-5" id="modifyEventModalLabel">Modify Event</h1>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}></button>
-                    </div>
-                    <div className="modal-body">
-                        <form>
-                            <label>Title:
-                                <input
-                                    type="text"
-                                    name="title"
-                                    value={updatedEventData.title}
-                                    onChange={handleInputChange}
-                                    required
-                                />
-                            </label>
-                            <label>Description:
-                                <textarea
-                                    name="description"
-                                    value={updatedEventData.description}
-                                    onChange={handleInputChange}
-                                    required
-                                />
-                            </label>
-                            <label>Date:
-                                <input
-                                    type="date"
-                                    name="date"
-                                    value={updatedEventData.date}
-                                    onChange={handleInputChange}
-                                    required
-                                />
-                            </label>
-                            <label>Start Time:
-                                <input
-                                    type="time"
-                                    name="start_time"
-                                    value={updatedEventData.start_time}
-                                    onChange={handleInputChange}
-                                    required
-                                />
-                            </label>
-                            <label>End Time:
-                                <input
-                                    type="time"
-                                    name="end_time"
-                                    value={updatedEventData.end_time}
-                                    onChange={handleInputChange}
-                                    required
-                                />
-                            </label>
-                            <label>Location:
-                                <input
-                                    type="text"
-                                    name="location"
-                                    value={updatedEventData.location}
-                                    onChange={handleInputChange}
-                                    required
-                                />
-                            </label>
-                        </form>
-                    </div>
-                    <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={onClose}>Close</button>
-                        <button type="button" className="btn btn-primary" onClick={handleModifyEvent} disabled={loading}>
-                            {loading ? 'Saving...' : 'Save Changes'}
-                        </button>
-                    </div>
-                </div>
-            </div>
+  return (
+    <div className="modal fade" id="modifyEventModal" tabIndex={-1} aria-labelledby="modifyEventModalLabel" aria-hidden="true">
+      <div className="modal-dialog">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h1 className="modal-title fs-5" id="modifyEventModalLabel">Modify Event</h1>
+            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}></button>
+          </div>
+          <div className="modal-body">
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label>Title</label>
+                <input name="title" value={updatedEvent.title} onChange={handleChange} required className="form-control" />
+              </div>
+              <div className="form-group">
+                <label>Description</label>
+                <textarea name="description" value={updatedEvent.description} onChange={handleChange} required className="form-control" />
+              </div>
+              <div className="form-group">
+                <label>Date</label>
+                <input name="date" type="date" value={updatedEvent.date} onChange={handleChange} required className="form-control" />
+              </div>
+              <div className="form-group">
+                <label>Start Time</label>
+                <input name="start_time" type="time" value={updatedEvent.start_time} onChange={handleChange} required className="form-control" />
+              </div>
+              <div className="form-group">
+                <label>End Time</label>
+                <input name="end_time" type="time" value={updatedEvent.end_time} onChange={handleChange} required className="form-control" />
+              </div>
+              <div className="form-group">
+                <label>Location</label>
+                <input name="location" value={updatedEvent.location} onChange={handleChange} required className="form-control" />
+              </div>
+              <button type="submit" className="btn btn-primary">Save Changes</button>
+              <button type="button" className="btn btn-secondary" onClick={onClose}>Close</button>
+            </form>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default ModifyEventModal;
