@@ -20,8 +20,8 @@ namespace Services
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                new Claim(ClaimTypes.Name, email),
-                new Claim(ClaimTypes.Role, role),
+                new Claim("Email", email),
+                new Claim("Role", role),
                 new Claim("user_id", sid)
             }),
                 Expires = DateTime.UtcNow.AddHours(1),
