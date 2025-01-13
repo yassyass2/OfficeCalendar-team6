@@ -1,62 +1,68 @@
 import React, { useState } from 'react';
+import axiosInstance from '../axiosInstance';
 
-export interface AddEventModalProps {
-    onClose: () => void;
-    onAddEvent: (event: { id: string; title: string; description: string; date: string; start_time: string; end_time: string; location: string }) => void;
+interface Props {
+  onClose: () => void;
+  onAddEvent: (newEvent: any) => void;
 }
 
-const AddEventModal: React.FC<AddEventModalProps> = ({ onClose, onAddEvent }) => {
-    const [loading, setLoading] = useState(false);
-    const [formData, setFormData] = useState({
-        title: '',
-        description: '',
-        date: '',
-        start_time: '',
-        end_time: '',
-        location: '',
-    });
+const AddEventModal: React.FC<Props> = ({ onClose, onAddEvent }) => {
+  const [eventData, setEventData] = useState({
+    title: '',
+    description: '',
+    date: '',
+    start_time: '',
+    end_time: '',
+    location: '',
+  });
+  const [loading, setLoading] = useState(false);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setEventData((prev) => ({ ...prev, [name]: value }));
+  };
 
-    const handleAddEvent = () => {
-        setLoading(true);
-        const newEvent = { id: Date.now().toString(), ...formData };
-        onAddEvent(newEvent);
+  const handleAddEvent = async () => {
+    setLoading(true);
+    try {
+        const response = await axiosInstance.post('/api/events', eventData); // POST request to add a new event
+        if (response.status === 201) {
+            onAddEvent(response.data); // Update state in AdminMenu
+            alert('Event added successfully!');
+            onClose();
+        } else {
+            console.warn('Unexpected response:', response);
+        }
+    } catch (error) {
+        console.error('Error adding event:', error);
+        alert('Failed to add event.');
+    } finally {
         setLoading(false);
-        onClose();
-    };
+    }
+};
 
-    return (
-        <div className="modal fade" id="addEventModal" tabIndex={-1} aria-labelledby="addEventModalLabel" aria-hidden="true">
-            <div className="modal-dialog">
-                <div className="modal-content">
-                    <div className="modal-header">
-                        <h5 className="modal-title" id="addEventModalLabel">Add Event</h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}></button>
-                    </div>
-                    <div className="modal-body">
-                        <form>
-                            <input name="title" placeholder="Title" onChange={handleChange} required />
-                            <textarea name="description" placeholder="Description" onChange={handleChange} required />
-                            <input type="date" name="date" onChange={handleChange} required />
-                            <input type="time" name="start_time" onChange={handleChange} required />
-                            <input type="time" name="end_time" onChange={handleChange} required />
-                            <input name="location" placeholder="Location" onChange={handleChange} required />
-                        </form>
-                    </div>
-                    <div className="modal-footer">
-                        <button type="button" className="btn-primary btn-primary-close" data-bs-dismiss="modal" onClick={onClose}>Close</button>
-                        <button type="button" className="btn btn-primary" onClick={handleAddEvent} disabled={loading}>
-                            {loading ? 'Adding...' : 'Add Event'}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+  return (
+    <div className="modal">
+      <div className="modal-content">
+        <h3>Add Event</h3>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleAddEvent();
+          }}
+        >
+          <label>Title: <input type="text" name="title" value={eventData.title} onChange={handleChange} required /></label>
+          <label>Description: <textarea name="description" value={eventData.description} onChange={handleChange} required /></label>
+          <label>Date: <input type="date" name="date" value={eventData.date} onChange={handleChange} required /></label>
+          <label>Start Time: <input type="time" name="start_time" value={eventData.start_time} onChange={handleChange} required /></label>
+          <label>End Time: <input type="time" name="end_time" value={eventData.end_time} onChange={handleChange} required /></label>
+          <label>Location: <input type="text" name="location" value={eventData.location} onChange={handleChange} required /></label>
+          <button type="submit" disabled={loading}>Add Event</button>
+          <button type="button" onClick={onClose}>Close</button>
+        </form>
+      </div>
+    </div>
+  );
 };
 
 export default AddEventModal;

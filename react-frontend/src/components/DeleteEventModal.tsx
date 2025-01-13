@@ -1,38 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axiosInstance from '../axiosInstance';
 
-export interface DeleteEventModalProps {
-    event: { id: string; title: string };
-    onClose: () => void;
-    onDeleteEvent: (eventId: string) => void;
+interface Props {
+  event: any;
+  onClose: () => void;
+  onDeleteEvent: (eventId: string) => void;
 }
 
-const DeleteEventModal: React.FC<DeleteEventModalProps> = ({ event, onClose, onDeleteEvent }) => {
-    const handleDeleteEvent = () => {
-        onDeleteEvent(event.id);
-        onClose();
-    };
+const DeleteEventModal: React.FC<Props> = ({ event, onClose, onDeleteEvent }) => {
+  const [loading, setLoading] = useState(false);
 
-    return (
-        <div className="modal fade" id="deleteEventModal" tabIndex={-1} aria-labelledby="deleteEventModalLabel" aria-hidden="true">
-            <div className="modal-dialog">
-                <div className="modal-content">
-                    <div className="modal-header">
-                        <h5 className="modal-title" id="deleteEventModalLabel">Delete Event</h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}></button>
-                    </div>
-                    <div className="modal-body">
-                        <p>Are you sure you want to delete the event <strong>{event.title}</strong>?</p>
-                    </div>
-                    <div className="modal-footer">
-                        <button type="button" className="btn-primary btn-primary-close" data-bs-dismiss="modal" onClick={onClose}>Close</button>
-                        <button type="button" className="btn-primary" onClick={handleDeleteEvent}>
-                            Delete Event
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+  const handleDeleteEvent = async () => {
+    setLoading(true);
+    try {
+        const response = await axiosInstance.delete(`/api/events/${event.id}`); // DELETE request with event ID
+        if (response.status === 200) {
+            onDeleteEvent(event.id); // Update state in AdminMenu
+            alert('Event deleted successfully!');
+            onClose();
+        } else {
+            console.warn('Unexpected response:', response);
+        }
+    } catch (error) {
+        console.error('Error deleting event:', error);
+        alert('Failed to delete event.');
+    } finally {
+        setLoading(false);
+    }
+};
+
+  return (
+    <div className="modal">
+      <div className="modal-content">
+        <h3>Delete Event</h3>
+        <p>Are you sure you want to delete the event "{event.title}"?</p>
+        <button onClick={handleDeleteEvent} disabled={loading}>Yes, Delete</button>
+        <button onClick={onClose}>Cancel</button>
+      </div>
+    </div>
+  );
 };
 
 export default DeleteEventModal;
