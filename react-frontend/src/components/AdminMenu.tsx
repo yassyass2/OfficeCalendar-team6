@@ -53,22 +53,50 @@ const AdminMenu: React.FC = () => {
     setDeleteEventModal(false);
   };
 
-  const [currentEventIndex, setCurrentEventIndex] = useState(0);
+  const handleAddEvent = async (newEvent: EventData) => {
+    try {
+      const response = await axiosInstance.post('/events', newEvent);
+      setEventData([...eventData, response.data]);
+    } catch (error) {
+      console.error('Error adding event:', error);
+    }
+  };
+
+  const handleModifyEvent = async (updatedEvent: EventData) => {
+    try {
+      const response = await axiosInstance.put(`/events/${updatedEvent.id}`, updatedEvent);
+      setEventData((prev) =>
+        prev.map((event) => (event.id === updatedEvent.id ? response.data : event))
+      );
+    } catch (error) {
+      console.error('Error modifying event:', error);
+    }
+  };
+
+  const handleDeleteEvent = async (eventId: string) => {
+    try {
+      await axiosInstance.delete(`/events/${eventId}`);
+      setEventData((prev) => prev.filter((event) => event.id !== eventId));
+      setSelectedEvent(null);
+    } catch (error) {
+      console.error('Error deleting event:', error);
+    }
+  };
 
   const goToNextEvent = () => {
-    setCurrentEventIndex((prevIndex) => {
-      const nextIndex = Math.min(prevIndex + 1, eventData.length - 1);
+    if (selectedEvent) {
+      const currentIndex = eventData.findIndex((e) => e.id === selectedEvent.id);
+      const nextIndex = (currentIndex + 1) % eventData.length;
       setSelectedEvent(eventData[nextIndex]);
-      return nextIndex;
-    });
+    }
   };
 
   const goToPreviousEvent = () => {
-    setCurrentEventIndex((prevIndex) => {
-      const prevIndexUpdated = Math.max(prevIndex - 1, 0);
-      setSelectedEvent(eventData[prevIndexUpdated]);
-      return prevIndexUpdated;
-    });
+    if (selectedEvent) {
+      const currentIndex = eventData.findIndex((e) => e.id === selectedEvent.id);
+      const prevIndex = (currentIndex - 1 + eventData.length) % eventData.length;
+      setSelectedEvent(eventData[prevIndex]);
+    }
   };
 
   return (
@@ -108,42 +136,31 @@ const AdminMenu: React.FC = () => {
             openModal3={() => setDeleteEventModal(true)}
             goToNextEvent={goToNextEvent}
             goToPreviousEvent={goToPreviousEvent}
-            isAdmin={true} // Enable admin functionality
+            isAdmin={true}
           />
         </div>
       </div>
 
-      {/* Modals */}
-      {addEventModal && (
-        <AddEventModal
-          onClose={handleModalClose}
-          onAddEvent={(newEvent) => setEventData([...eventData, newEvent])}
-        />
-      )}
-
-      {selectedEvent && modifyEventModal && (
+      {selectedEvent && (
         <ModifyEventModal
           event={selectedEvent}
           onClose={handleModalClose}
-          onModifyEvent={(updatedEvent) => {
-            setEventData((prev) =>
-              prev.map((event) =>
-                event.id === updatedEvent.id ? updatedEvent : event
-              )
-            );
-            setSelectedEvent(updatedEvent); // Update the selected event
-          }}
+          onModifyEvent={handleModifyEvent}
         />
       )}
 
-      {selectedEvent && deleteEventModal && (
+      {selectedEvent && (
         <DeleteEventModal
           event={selectedEvent}
           onClose={handleModalClose}
-          onDeleteEvent={(eventId) => {
-            setEventData((prev) => prev.filter((event) => event.id !== eventId));
-            setSelectedEvent(null);
-          }}
+          onDeleteEvent={handleDeleteEvent}
+        />
+      )}
+
+      {selectedEvent && (
+        <AddEventModal
+          onClose={handleModalClose}
+          onAddEvent={handleAddEvent}
         />
       )}
     </section>
