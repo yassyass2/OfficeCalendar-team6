@@ -4,7 +4,7 @@ import { EventData } from "./UserDashboard";
 interface AttendanceActionsProps {
   event: EventData;
   onUpdateAttendance: (newTime: string) => void;
-  onDeleteAttendance: () => void;
+  onDeleteAttendance: (event: EventData) => void;
 }
 
 const AttendanceActions: React.FC<AttendanceActionsProps> = ({
@@ -45,7 +45,7 @@ const AttendanceActions: React.FC<AttendanceActionsProps> = ({
       "Are you sure you want to remove your attendance?"
     );
     if (confirmDelete) {
-      onDeleteAttendance();
+      onDeleteAttendance(event);
     }
   };
 

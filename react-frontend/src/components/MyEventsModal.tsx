@@ -7,6 +7,11 @@ interface ModalProps {
   onClose: () => void;
 }
 
+    interface DeleteConfig{
+        UserId: string;
+        EventId: string;
+    }
+
 const MyEventsModal: React.FC<ModalProps> = ({ onClose }) => {
   const [loading, setLoading] = useState(false);
   const [attendances, setAttendances] = useState<string[]>([]);
@@ -65,7 +70,19 @@ const MyEventsModal: React.FC<ModalProps> = ({ onClose }) => {
     console.log("Updated time:", newTime);
   };
 
-  const handleDeleteAttendance = () => {
+  const handleDeleteAttendance = async (event: EventData) => {
+    try {
+      const response = await axiosInstance.delete("/api/Attendance/attend", {
+        data: {
+            UserId: localStorage.getItem('userId'),
+            EventId: event.id
+        }});
+      alert(response.data);
+    } catch (error) {
+      console.error("Error deleting attendance:", error);
+    } finally {
+      setLoading(false);
+    }
     console.log("Deleted attendance");
   };
 
