@@ -139,7 +139,8 @@ const Login: React.FC = () => {
             const response = await axios.post('http://localhost:5000/api/login/verify', {
                 code: verificationCode, // Only send the code
             });
-    
+     
+            
             setMessage('Account verified successfully!');
             setView('accountVerified');
         } catch (err) {
