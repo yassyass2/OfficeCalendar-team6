@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
-import axiosInstance from '../axiosInstance';
+import React, { useState, useEffect } from 'react';
+import { EventData } from './AdminMenu';
 
-interface Props {
-  onClose: () => void;
-  onAddEvent: (newEvent: any) => void;
+declare global {
+  interface Window {
+    bootstrap: any;
+  }
 }
 
-const AddEventModal: React.FC<Props> = ({ onClose, onAddEvent }) => {
-  const [eventData, setEventData] = useState({
+interface AddEventModalProps {
+  onClose: () => void;
+  onAddEvent: (newEvent: EventData) => void;
+}
+
+const AddEventModal: React.FC<AddEventModalProps> = ({ onClose, onAddEvent }) => {
+  const [newEvent, setNewEvent] = useState<Omit<EventData, 'id'>>({
     title: '',
     description: '',
     date: '',
@@ -15,51 +21,68 @@ const AddEventModal: React.FC<Props> = ({ onClose, onAddEvent }) => {
     end_time: '',
     location: '',
   });
-  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const modalElement = document.getElementById('addEventModal');
+    const modal = new window.bootstrap.Modal(modalElement!);
+    modal.show();
+
+    return () => {
+      modal.hide();
+    };
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setEventData((prev) => ({ ...prev, [name]: value }));
+    setNewEvent((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleAddEvent = async () => {
-    setLoading(true);
-    try {
-        const response = await axiosInstance.post('/api/events', eventData); // POST request to add a new event
-        if (response.status === 201) {
-            onAddEvent(response.data); // Update state in AdminMenu
-            alert('Event added successfully!');
-            onClose();
-        } else {
-            console.warn('Unexpected response:', response);
-        }
-    } catch (error) {
-        console.error('Error adding event:', error);
-        alert('Failed to add event.');
-    } finally {
-        setLoading(false);
-    }
-};
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const eventWithId = { id: crypto.randomUUID(), ...newEvent };
+    onAddEvent(eventWithId);
+    onClose();
+  };
 
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <h3>Add Event</h3>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleAddEvent();
-          }}
-        >
-          <label>Title: <input type="text" name="title" value={eventData.title} onChange={handleChange} required /></label>
-          <label>Description: <textarea name="description" value={eventData.description} onChange={handleChange} required /></label>
-          <label>Date: <input type="date" name="date" value={eventData.date} onChange={handleChange} required /></label>
-          <label>Start Time: <input type="time" name="start_time" value={eventData.start_time} onChange={handleChange} required /></label>
-          <label>End Time: <input type="time" name="end_time" value={eventData.end_time} onChange={handleChange} required /></label>
-          <label>Location: <input type="text" name="location" value={eventData.location} onChange={handleChange} required /></label>
-          <button type="submit" disabled={loading}>Add Event</button>
-          <button type="button" onClick={onClose}>Close</button>
-        </form>
+    <div className="modal fade" id="addEventModal" tabIndex={-1} aria-labelledby="addEventModalLabel" aria-hidden="true">
+      <div className="modal-dialog">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h1 className="modal-title fs-5" id="addEventModalLabel">Add Event</h1>
+            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}></button>
+          </div>
+          <div className="modal-body">
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label>Title</label>
+                <input name="title" value={newEvent.title} onChange={handleChange} required className="form-control" />
+              </div>
+              <div className="form-group">
+                <label>Description</label>
+                <textarea name="description" value={newEvent.description} onChange={handleChange} required className="form-control" />
+              </div>
+              <div className="form-group">
+                <label>Date</label>
+                <input name="date" type="date" value={newEvent.date} onChange={handleChange} required className="form-control" />
+              </div>
+              <div className="form-group">
+                <label>Start Time</label>
+                <input name="start_time" type="time" value={newEvent.start_time} onChange={handleChange} required className="form-control" />
+              </div>
+              <div className="form-group">
+                <label>End Time</label>
+                <input name="end_time" type="time" value={newEvent.end_time} onChange={handleChange} required className="form-control" />
+              </div>
+              <div className="form-group">
+                <label>Location</label>
+                <input name="location" value={newEvent.location} onChange={handleChange} required className="form-control" />
+              </div>
+              <button type="submit" className="btn-primary">Add Event</button>
+              <button type="button" className="btn-primary btn-primary-close" data-bs-dismiss="modal" onClick={onClose}>Close</button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );
