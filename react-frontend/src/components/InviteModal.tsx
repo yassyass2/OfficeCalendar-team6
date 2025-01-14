@@ -20,8 +20,13 @@ const InviteModal: React.FC<ModalProps> = ({ Event, onClose }) => {
                 }
             });
 
-            
-            setAttendees(response.data);
+            const responseMails = await axiosInstance.get("/invite/emails", {
+                params: {
+                    guids: response.data.join(',')
+                }
+            });
+
+            setAttendees(responseMails.data);
 
         } catch (error) {
             console.error("Error fetching attendees:", error);
