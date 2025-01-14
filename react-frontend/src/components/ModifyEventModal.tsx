@@ -17,17 +17,6 @@ const ModifyEventModal: React.FC<ModifyEventModalProps> = ({ event, onClose, onM
   // Start with the current event as the default
   const [updatedEvent, setUpdatedEvent] = useState<EventData>(event);
 
-  // Show the Bootstrap modal on mount
-  useEffect(() => {
-    const modalElement = document.getElementById('modifyEventModal');
-    const modal = new window.bootstrap.Modal(modalElement!);
-    modal.show();
-
-    return () => {
-      modal.hide();
-    };
-  }, []);
-
   // Update local state whenever `event` prop changes (important if user picks a different event)
   useEffect(() => {
     setUpdatedEvent(event);

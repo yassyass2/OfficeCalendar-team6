@@ -145,32 +145,24 @@ const AdminMenu: React.FC = () => {
         </div>
       </div>
 
-      {/* 
-        Only render the modals if the respective modal boolean is true.
-        This ensures we don't always mount the modal for the selectedEvent.
-      */}
-      {addEventModal && (
+      {(selectedEvent &&
         <AddEventModal
           onClose={handleModalClose}
           onAddEvent={handleAddEvent}
         />
       )}
 
-      {modifyEventModal && selectedEvent && (
-        <ModifyEventModal
-          event={selectedEvent}
-          onClose={handleModalClose}
-          onModifyEvent={handleModifyEvent}
-        />
-      )}
+      {(selectedEvent && <ModifyEventModal
+        event={selectedEvent}
+        onClose={handleModalClose}
+        onModifyEvent={handleModifyEvent}
+      />)}
 
-      {deleteEventModal && selectedEvent && (
-        <DeleteEventModal
-          event={selectedEvent}
-          onClose={handleModalClose}
-          onDeleteEvent={handleDeleteEvent}
-        />
-      )}
+      {(selectedEvent && <DeleteEventModal
+        event={selectedEvent}
+        onClose={handleModalClose}
+        onDeleteEvent={handleDeleteEvent}
+      />)}
     </section>
   );
 };
