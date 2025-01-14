@@ -3,7 +3,7 @@ import { EventData } from "./UserDashboard";
 
 interface AttendanceActionsProps {
   event: EventData;
-  onUpdateAttendance: (newTime: string) => void;
+  onUpdateAttendance: (event: EventData, newTime: string) => void;
   onDeleteAttendance: (event: EventData) => void;
 }
 
@@ -50,7 +50,7 @@ const AttendanceActions: React.FC<AttendanceActionsProps> = ({
   };
 
   const handleSaveEdit = () => {
-    onUpdateAttendance(newTime);
+    onUpdateAttendance(event, newTime);
     setEditMode(false);
   };
 

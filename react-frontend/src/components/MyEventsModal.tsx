@@ -7,10 +7,10 @@ interface ModalProps {
   onClose: () => void;
 }
 
-    interface DeleteConfig{
-        UserId: string;
-        EventId: string;
-    }
+interface DeleteConfig {
+  UserId: string;
+  EventId: string;
+}
 
 const MyEventsModal: React.FC<ModalProps> = ({ onClose }) => {
   const [loading, setLoading] = useState(false);
@@ -66,18 +66,35 @@ const MyEventsModal: React.FC<ModalProps> = ({ onClose }) => {
     }
   };
 
-  const handleUpdateAttendance = async (newTime: string) => {
-    console.log("Updated time:", newTime);
+  const handleUpdateAttendance = async (event: EventData, newTime: string) => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.put("/api/ModifyAttendance", {
+        UserId: localStorage.getItem("userId"),
+        EventId: event.id,
+        AttendAt: newTime,
+      });
+
+      alert("Attendance updated successfully!");
+      FetchAttendances();
+    } catch (error) {
+      console.error("Error updating attendance:", error);
+      alert("Failed to update attendance. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDeleteAttendance = async (event: EventData) => {
     try {
       const response = await axiosInstance.delete("/api/Attendance/attend", {
         data: {
-            UserId: localStorage.getItem('userId'),
-            EventId: event.id
-        }});
+          UserId: localStorage.getItem('userId'),
+          EventId: event.id
+        }
+      });
       alert(response.data);
+      FetchAttendances();
     } catch (error) {
       console.error("Error deleting attendance:", error);
     } finally {
