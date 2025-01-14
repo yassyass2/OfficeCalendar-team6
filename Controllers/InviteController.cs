@@ -30,7 +30,7 @@ namespace Controllers
             return Ok("Invitation to the Event has been sent");
         }
 
-        [HttpGet("/emails")]
+        [HttpGet("emails")]
         [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> GetUserEmails([FromQuery] string guids)
         {
