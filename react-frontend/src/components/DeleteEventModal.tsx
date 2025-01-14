@@ -41,6 +41,8 @@ const DeleteEventModal: React.FC<DeleteEventModalProps> = ({ event, onClose, onD
             <p>Are you sure you want to delete the event titled "{event.title}"?</p>
           </div>
           <div className="modal-footer">
+            <button onClick={handleDelete} data-bs-dismiss="modal" className="btn-primary btn-primary-close">Yes, Delete</button>
+            <button onClick={onClose} data-bs-dismiss="modal" className="btn-primary">Cancel</button>
           </div>
         </div>
       </div>
