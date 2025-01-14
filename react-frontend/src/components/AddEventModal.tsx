@@ -22,16 +22,6 @@ const AddEventModal: React.FC<AddEventModalProps> = ({ onClose, onAddEvent }) =>
     location: '',
   });
 
-  useEffect(() => {
-    const modalElement = document.getElementById('addEventModal');
-    const modal = new window.bootstrap.Modal(modalElement!);
-    modal.show();
-
-    return () => {
-      modal.hide();
-    };
-  }, []);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setNewEvent((prev) => ({ ...prev, [name]: value }));
