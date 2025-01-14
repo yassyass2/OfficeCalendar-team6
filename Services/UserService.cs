@@ -221,11 +221,11 @@ namespace Services
                 {
                     return existingUser.Email;
                 }
-                return "yassinabde@outlook.com";
+                return "This email was null for some reason";
             }
             catch
             {
-                return "yassinabde@outlook.com";
+                return "This email was null for some reason";
             }
             
         }

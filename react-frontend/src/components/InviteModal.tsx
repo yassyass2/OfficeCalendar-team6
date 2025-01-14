@@ -19,6 +19,8 @@ const InviteModal: React.FC<ModalProps> = ({ Event, onClose }) => {
                     eventId: Event.id
                 }
             });
+
+            
             setAttendees(response.data);
 
         } catch (error) {

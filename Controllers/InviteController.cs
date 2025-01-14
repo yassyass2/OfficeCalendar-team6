@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Crypto;
 using Services;
 
 namespace Controllers
@@ -28,6 +29,24 @@ namespace Controllers
             var mail = await _user.GetEmail(ToInvite);
             await _mail.SendEmail(mail, $"You have been invited to event {WhatEvent}! log in to see details");
             return Ok("Invitation to the Event has been sent");
+        }
+
+        [HttpPost()]
+        [Authorize(Roles = "User,Admin")]
+        public async Task<IActionResult> GetUserEmails([FromQuery] String guids)
+        {
+            if (guids == null) return BadRequest("no guids given");
+
+            List<string> mails = new List<string>();
+            string[] ids = guids.Split(',');
+            
+            foreach (string id in ids){
+                var mail = await _user.GetEmail(Guid.Parse(id));
+                if (!mail.Contains("null")){
+                    mails.Add(mail);
+                }
+            }
+            return Ok(mails);
         }
     }
 }
