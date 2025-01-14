@@ -93,11 +93,10 @@ namespace Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Guid>> GetAttendedEvents(Guid userId)
+        public async Task<IEnumerable<EventAttendance>> GetAttendedEvents(Guid userId)
         {
             return await _context.Attendances
                 .Where(a => a.UserId == userId)
-                .Select(a => a.EventId)
                 .ToListAsync();
         }
     }

@@ -10,6 +10,6 @@ namespace Services
         Task<bool> ModifyEventAttendance(EventAttendance newAtt);
         Task<bool> DeleteAttendance(EventAttendance request);
         Task<IEnumerable<Guid>> GetAttending(Guid eventId);
-        Task<IEnumerable<Guid>> GetAttendedEvents(Guid userId);
+        Task<IEnumerable<EventAttendance>> GetAttendedEvents(Guid userId);
     }
 }

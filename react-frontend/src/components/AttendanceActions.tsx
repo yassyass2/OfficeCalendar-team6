@@ -5,12 +5,14 @@ interface AttendanceActionsProps {
   event: EventData;
   onUpdateAttendance: (event: EventData, newTime: string) => void;
   onDeleteAttendance: (event: EventData) => void;
+  AttendanceTime: string
 }
 
 const AttendanceActions: React.FC<AttendanceActionsProps> = ({
   event,
   onUpdateAttendance,
   onDeleteAttendance,
+  AttendanceTime,
 }) => {
   const [editMode, setEditMode] = useState(false);
   const [newTime, setNewTime] = useState<string>(event.start_time);
@@ -69,7 +71,7 @@ const AttendanceActions: React.FC<AttendanceActionsProps> = ({
 
       {editMode && (
         <div>
-          <select value={newTime} onChange={(e) => setNewTime(e.target.value)}>
+          <select value={AttendanceTime} onChange={(e) => setNewTime(e.target.value)}>
             {generateTimeOptions(event.start_time, event.end_time).map(
               (time) => (
                 <option key={time} value={time}>

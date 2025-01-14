@@ -7,9 +7,15 @@ interface ModalProps {
   onClose: () => void;
 }
 
+interface Attendance {
+  userId: string,
+  eventId: string,
+  attendAt: string
+}
+
 const MyEventsModal: React.FC<ModalProps> = ({ onClose }) => {
   const [loading, setLoading] = useState(false);
-  const [attendances, setAttendances] = useState<string[]>([]);
+  const [attendances, setAttendances] = useState<Attendance[]>([]);
   const [events, setEvents] = useState<EventData[]>([]);
 
   useEffect(() => {
@@ -20,7 +26,7 @@ const MyEventsModal: React.FC<ModalProps> = ({ onClose }) => {
     const fetchTitles = async () => {
       if (attendances.length > 0) {
         const titles = await Promise.all(
-          attendances.map((attendance) => FetchEventTitle(attendance))
+          attendances.map((attendance) => FetchEventTitle(attendance.eventId))
         );
         setEvents(titles);
       }
@@ -47,10 +53,10 @@ const MyEventsModal: React.FC<ModalProps> = ({ onClose }) => {
     }
   };
 
-  const FetchEventTitle = async (attendanceId: string) => {
+  const FetchEventTitle = async (EventId: string) => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get(`/events/${attendanceId}`);
+      const response = await axiosInstance.get(`/events/${EventId}`);
       const event = response.data;
       return event;
     } catch (error) {
@@ -134,6 +140,7 @@ const MyEventsModal: React.FC<ModalProps> = ({ onClose }) => {
                         event={event}
                         onUpdateAttendance={handleUpdateAttendance}
                         onDeleteAttendance={handleDeleteAttendance}
+                        AttendanceTime={attendances[index].attendAt}
                       />
                     </li>
                   ))}
