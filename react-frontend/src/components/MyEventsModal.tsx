@@ -76,7 +76,6 @@ const MyEventsModal: React.FC<ModalProps> = ({ onClose }) => {
       });
 
       alert("Attendance updated successfully!");
-      FetchAttendances();
     } catch (error) {
       console.error("Error updating attendance:", error);
       alert("Failed to update attendance. Please try again.");
