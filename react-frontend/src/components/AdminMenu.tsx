@@ -21,6 +21,7 @@ const AdminMenu: React.FC = () => {
   const [eventData, setEventData] = useState<EventData[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<EventData | null>(null);
 
+  // Controls which modal is open
   const [addEventModal, setAddEventModal] = useState(false);
   const [modifyEventModal, setModifyEventModal] = useState(false);
   const [deleteEventModal, setDeleteEventModal] = useState(false);
@@ -53,10 +54,12 @@ const AdminMenu: React.FC = () => {
     setDeleteEventModal(false);
   };
 
+  // --- Issue #2 (ModifyEvent) & #3 (Re-fetch) fixes below ---
   const handleAddEvent = async (newEvent: EventData) => {
     try {
-      const response = await axiosInstance.post('/events', newEvent);
-      setEventData([...eventData, response.data]);
+      await axiosInstance.post('/events', newEvent);
+      // Re-fetch so the frontend data stays in sync
+      await fetchEventData();
     } catch (error) {
       console.error('Error adding event:', error);
     }
@@ -64,10 +67,9 @@ const AdminMenu: React.FC = () => {
 
   const handleModifyEvent = async (updatedEvent: EventData) => {
     try {
-      const response = await axiosInstance.put(`/events/${updatedEvent.id}`, updatedEvent);
-      setEventData((prev) =>
-        prev.map((event) => (event.id === updatedEvent.id ? response.data : event))
-      );
+      await axiosInstance.put(`/events/${updatedEvent.id}`, updatedEvent);
+      // Re-fetch so the frontend data stays in sync
+      await fetchEventData();
     } catch (error) {
       console.error('Error modifying event:', error);
     }
@@ -76,15 +78,17 @@ const AdminMenu: React.FC = () => {
   const handleDeleteEvent = async (eventId: string) => {
     try {
       await axiosInstance.delete(`/events/${eventId}`);
-      setEventData((prev) => prev.filter((event) => event.id !== eventId));
+      // Re-fetch so the frontend data stays in sync
+      await fetchEventData();
       setSelectedEvent(null);
     } catch (error) {
       console.error('Error deleting event:', error);
     }
   };
 
+  // Basic “Next/Previous” navigation for selectedEvent
   const goToNextEvent = () => {
-    if (selectedEvent) {
+    if (selectedEvent && eventData.length) {
       const currentIndex = eventData.findIndex((e) => e.id === selectedEvent.id);
       const nextIndex = (currentIndex + 1) % eventData.length;
       setSelectedEvent(eventData[nextIndex]);
@@ -92,7 +96,7 @@ const AdminMenu: React.FC = () => {
   };
 
   const goToPreviousEvent = () => {
-    if (selectedEvent) {
+    if (selectedEvent && eventData.length) {
       const currentIndex = eventData.findIndex((e) => e.id === selectedEvent.id);
       const prevIndex = (currentIndex - 1 + eventData.length) % eventData.length;
       setSelectedEvent(eventData[prevIndex]);
@@ -141,7 +145,18 @@ const AdminMenu: React.FC = () => {
         </div>
       </div>
 
-      {selectedEvent && (
+      {/* 
+        Only render the modals if the respective modal boolean is true.
+        This ensures we don't always mount the modal for the selectedEvent.
+      */}
+      {addEventModal && (
+        <AddEventModal
+          onClose={handleModalClose}
+          onAddEvent={handleAddEvent}
+        />
+      )}
+
+      {modifyEventModal && selectedEvent && (
         <ModifyEventModal
           event={selectedEvent}
           onClose={handleModalClose}
@@ -149,18 +164,11 @@ const AdminMenu: React.FC = () => {
         />
       )}
 
-      {selectedEvent && (
+      {deleteEventModal && selectedEvent && (
         <DeleteEventModal
           event={selectedEvent}
           onClose={handleModalClose}
           onDeleteEvent={handleDeleteEvent}
-        />
-      )}
-
-      {selectedEvent && (
-        <AddEventModal
-          onClose={handleModalClose}
-          onAddEvent={handleAddEvent}
         />
       )}
     </section>
