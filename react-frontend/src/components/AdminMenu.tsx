@@ -141,7 +141,7 @@ const AdminMenu: React.FC = () => {
         </div>
       </div>
 
-      {selectedEvent && modifyEventModal && (
+      {selectedEvent && (
         <ModifyEventModal
           event={selectedEvent}
           onClose={handleModalClose}
@@ -149,7 +149,7 @@ const AdminMenu: React.FC = () => {
         />
       )}
 
-      {selectedEvent && deleteEventModal && (
+      {selectedEvent && (
         <DeleteEventModal
           event={selectedEvent}
           onClose={handleModalClose}
@@ -157,7 +157,7 @@ const AdminMenu: React.FC = () => {
         />
       )}
 
-      {addEventModal && (
+      {selectedEvent && (
         <AddEventModal
           onClose={handleModalClose}
           onAddEvent={handleAddEvent}
