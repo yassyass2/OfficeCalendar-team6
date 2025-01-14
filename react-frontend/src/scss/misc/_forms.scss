@@ -25,11 +25,12 @@ input {
 
 textarea {
     border-radius: $corner-radius;
-    padding: 10px 0px 10px 15px;
+    padding: 10px 10px 10px 15px;
     border: 1px solid $primary-color;
     box-shadow: $box-shadow;
-    min-height: 250px;
-    max-height: 400px;
+    min-height: 150px;
+    max-height: 150px;
+    resize: none;
 
     &:focus {
         outline: 1px solid $secondary-light;
@@ -54,4 +55,6 @@ select {
 
 .required-notice {
     color: $text-color-50;
+    margin-top: -15px;
+    margin-bottom: -25px;
 }

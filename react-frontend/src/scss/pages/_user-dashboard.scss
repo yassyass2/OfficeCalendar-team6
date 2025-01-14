@@ -1,8 +1,13 @@
 .event-list-container {
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 20px;
     margin-top: 25px;
+    max-height: 43vh;
+    overflow-x: scroll;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-right: 10px;
 
     .event {
         padding: 8px;
