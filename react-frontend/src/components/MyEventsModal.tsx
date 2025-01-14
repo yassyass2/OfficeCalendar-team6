@@ -7,11 +7,6 @@ interface ModalProps {
   onClose: () => void;
 }
 
-interface DeleteConfig {
-  UserId: string;
-  EventId: string;
-}
-
 const MyEventsModal: React.FC<ModalProps> = ({ onClose }) => {
   const [loading, setLoading] = useState(false);
   const [attendances, setAttendances] = useState<string[]>([]);
