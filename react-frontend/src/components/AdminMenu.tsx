@@ -67,13 +67,26 @@ const AdminMenu: React.FC = () => {
 
   const handleModifyEvent = async (updatedEvent: EventData) => {
     try {
-      await axiosInstance.put(`/events/${updatedEvent.id}`, updatedEvent);
-      // Re-fetch so the frontend data stays in sync
+      // Split the date string that looks like "yyyy-mm-dd"
+      const [year, month, day] = updatedEvent.date.split('-');
+  
+      // Turn it into "dd/mm/yyyy" format
+      const convertedDate = `${day}/${month}/${year}`;
+  
+      // 3. Update the event to match badkend format
+      const eventToSend = {
+        ...updatedEvent,
+        date: convertedDate
+      };
+  
+      // 4. Now send `eventToSend` instead of `updatedEvent`
+      await axiosInstance.put(`/events/${updatedEvent.id}`, eventToSend);
+  
       await fetchEventData();
     } catch (error) {
       console.error('Error modifying event:', error);
     }
-  };
+  };  
 
   const handleDeleteEvent = async (eventId: string) => {
     try {
