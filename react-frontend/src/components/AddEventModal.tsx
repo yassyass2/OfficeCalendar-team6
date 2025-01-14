@@ -78,8 +78,6 @@ const AddEventModal: React.FC<AddEventModalProps> = ({ onClose, onAddEvent }) =>
                 <label>Location</label>
                 <input name="location" value={newEvent.location} onChange={handleChange} required className="form-control" />
               </div>
-              <button type="submit" className="btn btn-primary">Add Event</button>
-              <button type="button" className="btn btn-secondary" onClick={onClose}>Close</button>
             </form>
           </div>
         </div>
