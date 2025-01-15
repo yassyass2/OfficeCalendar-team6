@@ -74,7 +74,7 @@ namespace Controllers
 
             if (!result)
             {
-                return BadRequest("User registration failed. Email might already be registered.");
+                return BadRequest("Verify first, to complete registration");
             }
 
             return Ok("Registration successful! Please check your email for the verification code.");
